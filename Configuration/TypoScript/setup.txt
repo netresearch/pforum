@@ -1,0 +1,88 @@
+config.tx_extbase{
+	persistence{
+		classes{
+			JWeiland\Pforum\Domain\Model\FrontendUser {
+				mapping {
+					tableName = fe_users
+				}
+			}
+		}
+	}
+}
+
+# Plugin configuration
+plugin.tx_pforum {
+	view {
+		templateRootPath = {$plugin.tx_pforum.view.templateRootPath}
+		partialRootPath = {$plugin.tx_pforum.view.partialRootPath}
+		layoutRootPath = {$plugin.tx_pforum.view.layoutRootPath}
+	}
+	persistence {
+		storagePid = {$plugin.tx_pforum.persistence.storagePid}
+		classes {
+			Tx_Pforum_Domain_Model_FrontendUser {
+				mapping {
+					tableName = fe_users
+					recordType =
+				}
+			}
+		}
+	}
+	features {
+		# uncomment the following line to enable the new Property Mapper.
+		rewrittenPropertyMapper = 1
+	}
+	settings {
+		auth = {$plugin.tx_pforum.settings.auth}
+		useImages = 0
+		emailIsMandatory = {$plugin.tx_pforum.settings.emailIsMandatory}
+		usernameIsMandatory = {$plugin.tx_pforum.settings.usernameIsMandatory}
+		uidOfAdminGroup = {$plugin.tx_pforum.settings.uidOfAdminGroup}
+		uidOfUserGroup = {$plugin.tx_pforum.settings.uidOfUserGroup}
+		pidOfDetailPage = {$plugin.tx_pforum.settings.pidOfDetailPage}
+		topic {
+			hideAtCreation = 1
+			activateByAdmin = 0
+		}
+		post {
+			hideAtCreation = 1
+			activateByAdmin = 0
+		}
+		image {
+			width = 120c
+			height= 90c
+			minWidth = 120
+			maxWidth = 120
+			minHeight = 90
+			maxHeight = 90
+		}
+		pageBrowser {
+			itemsPerPage = {$plugin.tx_pforum.settings.pageBrowser.itemsPerPage}
+			insertAbove = {$plugin.tx_pforum.settings.pageBrowser.insertAbove}
+			insertBelow = {$plugin.tx_pforum.settings.pageBrowser.insertBelow}
+			maximumNumberOfLinks = {$plugin.tx_pforum.settings.pageBrowser.maximumNumberOfLinks}
+		}
+	}
+}
+
+# Module configuration
+module.tx_pforum.view {
+	templateRootPath = {$module.tx_pforum.view.templateRootPath}
+	partialRootPath = {$module.tx_pforum.view.partialRootPath}
+	layoutRootPath = {$module.tx_pforum.view.layoutRootPath}
+}
+module.tx_pforum.persistence < plugin.tx_pforum.persistence
+module.tx_pforum.features < plugin.tx_pforum.features
+module.tx_pforum.features.ignoreAllEnableFieldsInBe = 1
+
+plugin.tx_pforum._CSS_DEFAULT_STYLE (
+	textarea.f3-form-error {
+		background-color:#FF9F9F;
+		border: 1px #FF0000 solid;
+	}
+
+	input.f3-form-error {
+		background-color:#FF9F9F;
+		border: 1px #FF0000 solid;
+	}
+)

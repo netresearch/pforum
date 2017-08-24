@@ -1,0 +1,26 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+
+	<div class="breadcrumb">
+		<f:link.action action="show" controller="Forum" arguments="{forum: forum}">{forum.title} »</f:link.action> <f:translate key="newTopic"/>
+	</div>
+
+	<f:form action="create" name="newTopic" object="{newTopic}" arguments="{forum: forum}" class="tx-comments-comment-form" enctype="multipart/form-data">
+		<f:render partial="FormErrors" arguments="{object: 'newTopic'}" />
+
+		<f:if condition="{settings.auth} == 1">
+			<f:render partial="User/FormFields" arguments="{object: 'newTopic'}" />
+		</f:if>
+		<f:render partial="Topic/FormFields" arguments="{object: 'newTopic'}" />
+		<fieldset class="marginbottom2">
+			<div class="submitwrap submitwrap2">
+				<f:form.submit value="{f:translate(key: 'newTopic')}" />
+			</div>
+			<div class="submitwrap submitwrap2">
+				<f:form.submit name="preview" value="{f:translate(key: 'preview')}" />
+			</div>
+		</fieldset>
+		<p class="clearer"><span class="error">*</span><f:translate key='LLL:fileadmin/templates/language/locallang.xml:mandatory'/></p>
+	</f:form>
+</f:section>

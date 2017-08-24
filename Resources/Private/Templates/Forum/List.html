@@ -1,0 +1,35 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+	<f:flashMessages renderMode="div" class="info-box2" />
+	<f:if condition="{settings.homepageTeaser} != 1">
+		<div class="breadcrumb"><f:translate key="tx_pforum_domain_model_forum"/></div>
+	</f:if>
+
+	<f:if condition="{settings.homepageTeaser} != 1">
+		<f:then>
+			<f:for each="{forums}" as="forum">
+				<div class="marginbottom borderbottom scroll-item">
+					<header>
+						<h2 class="noborder nomargin">
+							<f:link.action pageUid="{settings.pidOfDetailPage}" action="show" arguments="{forum: forum}">{forum.title}</f:link.action>
+						</h2>
+					</header>
+					<f:if condition="{forum.teaser}"><p class="marginbottom">{forum.teaser}</p></f:if>
+					<div>
+						<f:link.action pageUid="{settings.pidOfDetailPage}" action="show" arguments="{forum: forum}">{forum.topics -> f:count()} <f:translate key="tx_pforum_domain_model_forum.topics"/></f:link.action>
+					</div>
+				</div>
+			</f:for>
+		</f:then>
+		<f:else>
+			<ul class="extul rulerbefore4 rulerafter">
+				<f:for each="{forums}" as="forum">
+					<li class="extli">
+						<f:link.action pageUid="{settings.pidOfDetailPage}" action="show" arguments="{forum: forum}">{forum.title}</f:link.action>
+					</li>
+				</f:for>
+			</ul>
+		</f:else>
+	</f:if>
+</f:section>

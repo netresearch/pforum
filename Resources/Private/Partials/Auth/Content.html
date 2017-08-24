@@ -1,0 +1,10 @@
+<f:if condition="{settings.auth} == 1">
+	<f:then>
+		<f:render partial="Auth/{subpartial}" arguments="{data: data}" />
+	</f:then>
+	<f:else>
+		<f:security.ifHasRole role="{settings.uidOfUserGroup}">
+			<f:render partial="Auth/{subpartial}" arguments="{data: data}" />
+		</f:security.ifHasRole>
+	</f:else>
+</f:if>

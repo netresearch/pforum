@@ -1,0 +1,15 @@
+<f:if condition="{user.name}">
+	<f:then>
+		{user.name}
+	</f:then>
+	<f:else>
+		<f:if condition="{user.username}">
+			<f:then>
+				{user.username}
+			</f:then>
+			<f:else>
+				{f:translate(key: 'anonymous')}
+			</f:else>
+		</f:if>
+	</f:else>
+</f:if>

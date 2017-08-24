@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2013-08-32T14:44:32Z" product-name="pforum">
+		<header/>
+		<body>
+
+			<trans-unit id="plugin.title">
+				<source>Forum</source>
+				<target>Forum</target>
+			</trans-unit>
+
+			<trans-unit id="tx_pforum_domain_model_forum">
+				<source>Forum Theme</source>
+				<target>Thema</target>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_forum.title">
+				<source>Title</source>
+				<target>Titel</target>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_forum.teaser">
+				<source>Teaser</source>
+				<target>Teaser</target>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_forum.topics">
+				<source>Topics</source>
+				<target>Beitrag</target>
+			</trans-unit>
+
+			<trans-unit id="tx_pforum_domain_model_topic">
+				<source>Topic</source>
+				<target>Beitrag</target>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_topic.crdate">
+				<source>Creation date</source>
+				<target>Erstelldatum</target>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_topic.title">
+				<source>Title</source>
+				<target>Titel</target>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_topic.description">
+				<source>Description</source>
+				<target>Beschreibung</target>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_topic.posts">
+				<source>Posts</source>
+				<target>Antworten</target>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_topic.user">
+				<source>User</source>
+				<target>Benutzer</target>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_topic.images">
+				<source>Images</source>
+				<target>Bilder</target>
+			</trans-unit>
+
+			<trans-unit id="tx_pforum_domain_model_post">
+				<source>Post</source>
+				<target>Antwort</target>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_post.crdate">
+				<source>Creation date</source>
+				<target>Erstelldatum</target>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_post.title">
+				<source>Title</source>
+				<target>Titel</target>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_post.description">
+				<source>Description</source>
+				<target>Beschreibung</target>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_post.user">
+				<source>User</source>
+				<target>Benutzer</target>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_post.images">
+				<source>Images</source>
+				<target>Bilder</target>
+			</trans-unit>
+
+			<trans-unit id="tx_pforum_domain_model_anonymoususer">
+				<source>User</source>
+				<target>Benutzer</target>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_anonymoususer.name">
+				<source>Name</source>
+				<target>Name</target>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_anonymoususer.username">
+				<source>Username</source>
+				<target>Benutzername</target>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_anonymoususer.email">
+				<source>E-Mail</source>
+				<target>E-Mail</target>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>

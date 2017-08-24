@@ -1,0 +1,45 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+	<f:flashMessages renderMode="div" class="info-box2"/>
+	<h3 class="marginbottom borderbottom">
+		<f:translate key="preview"/>
+	</h3>
+
+	<div class="marginbottom">
+		<header><h1>{topic.title}</h1></header>
+		<div class="csc-textpic csc-textpic-intext-left">
+			<f:if condition="{topic.images}">
+				<div class="csc-textpic-imagewrap">
+					<f:for each="{topic.images}" as="image">
+						<div class="csc-textpic-imagerow imagecol1">
+							<figure>
+								<f:image image="{image}" alt="{image.title}" width="{settings.image.width}" height="{settings.image.height}" minWidth="{settings.image.minWidth}" maxWidth="{settings.image.maxWidth}" minHeight="{settings.image.minHeight}" maxHeight="{settings.image.maxHeight}"/>
+							</figure>
+						</div>
+					</f:for>
+				</div>
+			</f:if>
+			<div class="csc-textpic-text"><p>{topic.description -> f:format.html(parseFuncTSPath: 'lib.parseFunc')->f:format.nl2br()}</p></div>
+		</div>
+	</div>
+	<header>
+		<h2>
+			<f:translate key="editTopic"/>
+		</h2>
+	</header>
+	<f:form action="update" name="topic" object="{topic}" class="tx-comments-comment-form" enctype="multipart/form-data">
+		<f:render partial="FormErrors" arguments="{object: 'topic'}" />
+
+		<f:if condition="{isNew}">
+			<f:form.hidden name="isNew" value="{isNew}" />
+		</f:if>
+		<f:if condition="{settings.auth} == 1">
+			<f:render partial="User/FormFields" arguments="{object: 'topic', topic: topic}" />
+		</f:if>
+		<f:render partial="Topic/FormFields" arguments="{object: 'topic'}" />
+		<div class="submitwrap">
+			<f:form.submit value="<f:translate key='save'/>" />
+		</div>
+	</f:form>
+</f:section>

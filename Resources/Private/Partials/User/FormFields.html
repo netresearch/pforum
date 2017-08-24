@@ -1,0 +1,29 @@
+<fieldset class="grid_6">
+	<f:if condition="{topic.anonymousUser.uid}">
+		<f:form.hidden name="anonymousUser[__identity]" value="{topic.anonymousUser.uid}"/>
+	</f:if>
+	<div class="extdiv">
+		<label for="name" class="margintop">
+			<f:translate key="tx_pforum_domain_model_anonymoususer.name"/>
+		</label>
+		<f:form.textfield property="anonymousUser.name"/>
+	</div>
+	<div class="extdiv">
+		<label for="username" class="margintop">
+			<f:translate key="tx_pforum_domain_model_anonymoususer.username"/>
+			<f:if condition="{settings.usernameIsMandatory}">
+				<span class="required">*</span>
+			</f:if>
+		</label>
+		<f:form.textfield property="anonymousUser.username"/>
+	</div>
+	<div class="extdiv">
+		<label for="email" class="margintop">
+			<f:translate key="tx_pforum_domain_model_anonymoususer.email"/>
+			<f:if condition="{settings.emailIsMandatory}">
+				<span class="required">*</span>
+			</f:if>
+		</label>
+		<f:form.textfield property="anonymousUser.email"/>
+	</div>
+</fieldset>

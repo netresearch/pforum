@@ -1,0 +1,4 @@
+# cat=basic; type=string; label = LLL:EXT:pforum/Resources/Private/Language/ExtConf.xlf:emailFromAddress
+emailFromAddress =
+# cat=basic; type=string; label = LLL:EXT:pforum/Resources/Private/Language/ExtConf.xlf:emailFromName
+emailFromName =

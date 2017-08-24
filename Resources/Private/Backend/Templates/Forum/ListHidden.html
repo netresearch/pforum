@@ -1,0 +1,89 @@
+<f:layout name="Default" />
+
+<f:section name="content">
+	<script type="text/javascript">
+		jQuery( document ).ready( function() {
+			oTable = jQuery( "table.tx_pforum" ).dataTable({
+				"bJQueryUI": true,
+				"sPaginationType": "full_numbers",
+				"bProcessing": true,
+				"bAutoWidth": false,
+				"oLanguage": {
+					"sLengthMenu": "Zeige _MENU_ Datensätze pro Seite",
+					"sZeroRecords": "Keine Daten gefunden",
+					"sInfo": "Zeige _START_ bis _END_ von _TOTAL_ Datensätzen",
+					"sSearch": "Suche",
+					"sInfoEmpty": "Zeige 0 bis 0 von 0 Datensätzen",
+					"sInfoFiltered": "(gefiltert von _MAX_ Datensätzen insgesamt)",
+					"oPaginate": {
+						"sFirst": "Erste",
+						"sPrevious": "Vorherige",
+						"sNext": "Nächste",
+						"sLast": "Letzte"
+					}
+				},
+				"iDisplayLength": 25,
+				"aaSorting": [[ 0, "asc" ]],
+				"aoColumnDefs": [
+					{ "bSortable": false, "bSearchable": false, "sWidth": "100px", "aTargets": [ 2 ] }
+				]
+			});
+
+			// hide description col
+			oTable.fnSetColumnVis( 1, false );
+
+			// show/hide description by click on title
+			$( "table.tx_pforum tbody tr td:eq(0)").on("click", function () {
+				var nTr = $( this ).parents( "tr" )[0];
+				if ( oTable.fnIsOpen(nTr) ) {
+					oTable.fnClose( nTr );
+				} else {
+					var aData = oTable.fnGetData( nTr );
+					oTable.fnOpen( nTr, "<table width=\"100%\"><tr><td>" + aData[1] + "</td></tr></table>", "details" );
+				}
+			});
+		});
+	</script>
+
+	<h3><f:translate key="tx_pforum_domain_model_topic" /></h3>
+
+	<table class="tx_pforum" width="100%">
+		<thead>
+		<tr>
+			<td><f:translate key="tx_pforum_domain_model_topic.title" /></td>
+			<td><f:translate key="tx_pforum_domain_model_topic.description" /></td>
+			<td>&nbsp;</td>
+		</tr>
+		</thead>
+		<tbody>
+		<f:for each="{topics}" as="topic">
+			<tr>
+				<td>{topic.title}</td>
+				<td>{topic.description}</td>
+				<td><f:link.action action="activate" arguments="{topic: topic}"><f:translate key="activate" /></f:link.action></td>
+			</tr>
+		</f:for>
+		</tbody>
+	</table>
+
+	<h3><f:translate key="tx_pforum_domain_model_post" /></h3>
+
+	<table class="tx_pforum" width="100%">
+		<thead>
+		<tr>
+			<td><f:translate key="tx_pforum_domain_model_post.title" /></td>
+			<td><f:translate key="tx_pforum_domain_model_post.description" /></td>
+			<td>&nbsp;</td>
+		</tr>
+		</thead>
+		<tbody>
+		<f:for each="{posts}" as="post">
+			<tr>
+				<td>{post.title}</td>
+				<td>{post.description}</td>
+				<td><f:link.action action="activate" arguments="{post: post}"><f:translate key="activate" /></f:link.action></td>
+			</tr>
+		</f:for>
+		</tbody>
+	</table>
+</f:section>

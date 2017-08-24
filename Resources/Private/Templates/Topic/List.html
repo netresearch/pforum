@@ -1,0 +1,27 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+	<h1>Listing for Topic</h1>
+
+	<f:flashMessages />
+
+	<table  class="tx_pforum" >
+		<tr>
+			<th><f:translate key="tx_pforum_domain_model_topic.title" /></th>
+			<th><f:translate key="tx_pforum_domain_model_topic.description" /></th>
+			<th> </th>
+			<th> </th>
+		</tr>
+
+		<f:for each="{topics}" as="topic">
+			<tr>
+				<td><f:link.action action="show" arguments="{topic : topic}"> {topic.title}</f:link.action></td>
+				<td><f:link.action action="show" arguments="{topic : topic}"> {topic.description}</f:link.action></td>
+				<td><f:link.action action="edit" arguments="{topic : topic}">Edit</f:link.action></td>
+				<td><f:link.action action="delete" arguments="{topic : topic}">Delete</f:link.action></td>
+			</tr>
+		</f:for>
+	</table>
+
+	<f:link.action action="new">New Topic</f:link.action>
+</f:section>

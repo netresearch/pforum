@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2013-08-32T14:44:32Z" product-name="pforum">
+		<header/>
+		<body>
+
+			<trans-unit id="tx_pforum_domain_model_forum">
+				<source>Forum</source>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_forum.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_forum.teaser">
+				<source>Teaser</source>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_forum.topics">
+				<source>Topics</source>
+			</trans-unit>
+
+			<trans-unit id="tx_pforum_domain_model_topic">
+				<source>Topic</source>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_topic.crdate">
+				<source>Creation date</source>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_topic.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_topic.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_topic.posts">
+				<source>Posts</source>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_topic.user">
+				<source>User</source>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_topic.images">
+				<source>Images</source>
+			</trans-unit>
+
+			<trans-unit id="tx_pforum_domain_model_post">
+				<source>Post</source>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_post.crdate">
+				<source>Creation date</source>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_post.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_post.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_post.user">
+				<source>User</source>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_post.images">
+				<source>Images</source>
+			</trans-unit>
+
+			<trans-unit id="tx_pforum_domain_model_anonymoususer">
+				<source>User</source>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_anonymoususer.name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_anonymoususer.username">
+				<source>Username</source>
+			</trans-unit>
+			<trans-unit id="tx_pforum_domain_model_anonymoususer.email">
+				<source>E-Mail</source>
+			</trans-unit>
+
+			<trans-unit id="noResults">
+				<source>No results found</source>
+			</trans-unit>
+			<trans-unit id="noPosts">
+				<source>There are no posts to this topic yet.</source>
+			</trans-unit>
+			<trans-unit id="noTopics">
+				<source>There are no topics to this forum yet.</source>
+			</trans-unit>
+			<trans-unit id="newTopic">
+				<source>Create new Topic</source>
+			</trans-unit>
+			<trans-unit id="topicCreated">
+				<source>Your new Topic was created.</source>
+			</trans-unit>
+			<trans-unit id="hiddenTopicCreatedAndActivateByAdmin">
+				<source>New Topic was created, but must be reviewed by an administrator.</source>
+			</trans-unit>
+			<trans-unit id="hiddenTopicCreatedAndActivateByUser">
+				<source>New Topic was created. We have send an email to you to activate, edit and delete your topic.</source>
+			</trans-unit>
+			<trans-unit id="topicUpdated">
+				<source>Topic was updated.</source>
+			</trans-unit>
+			<trans-unit id="topicDeleted">
+				<source>Topic was deleted.</source>
+			</trans-unit>
+			<trans-unit id="newPost">
+				<source>Create new Post</source>
+			</trans-unit>
+			<trans-unit id="postCreated">
+				<source>Your new Post was created.</source>
+			</trans-unit>
+			<trans-unit id="hiddenPostCreatedAndActivateByAdmin">
+				<source>New Topic was created, but must be reviewed by an administrator.</source>
+			</trans-unit>
+			<trans-unit id="hiddenPostCreatedAndActivateByUser">
+				<source>New Post was created. We have send an email to you to activate, edit and delete your post.</source>
+			</trans-unit>
+			<trans-unit id="postUpdated">
+				<source>Post was updated.</source>
+			</trans-unit>
+			<trans-unit id="postDeleted">
+				<source>Post was deleted.</source>
+			</trans-unit>
+			<trans-unit id="anonymous">
+				<source>Anonymous User</source>
+			</trans-unit>
+			<trans-unit id="activate">
+				<source>Activate</source>
+			</trans-unit>
+			<trans-unit id="activateTopic">
+				<source>Activate Topic</source>
+			</trans-unit>
+			<trans-unit id="activatePost">
+				<source>Activate Post</source>
+			</trans-unit>
+			<trans-unit id="editTopic">
+				<source>Edit Topic</source>
+			</trans-unit>
+			<trans-unit id="editPost">
+				<source>Edit Post</source>
+			</trans-unit>
+			<trans-unit id="deleteTopic">
+				<source>Delete Topic</source>
+			</trans-unit>
+			<trans-unit id="deletePost">
+				<source>Delete Post</source>
+			</trans-unit>
+			<trans-unit id="topicActivated">
+				<source>Topic was successfully activated</source>
+			</trans-unit>
+			<trans-unit id="postActivated">
+				<source>Post was successfully activated</source>
+			</trans-unit>
+			<trans-unit id="preview">
+				<source>Preview</source>
+			</trans-unit>
+
+			<trans-unit id="validator.anonymousUser.email">
+				<source>The email of user object is mandatory</source>
+			</trans-unit>
+			<trans-unit id="validator.anonymousUser.validEmail">
+				<source>The email of user object is not a valid email</source>
+			</trans-unit>
+			<trans-unit id="validator.anonymousUser.username">
+				<source>The username of user object is mandatory</source>
+			</trans-unit>
+
+			<trans-unit id="email.topic.subject">
+				<source>Manage your newly created topic</source>
+			</trans-unit>
+			<trans-unit id="email.post.subject">
+				<source>Manage your newly created post</source>
+			</trans-unit>
+			<trans-unit id="email.post.subject.newPost">
+				<source>New post at your topic: %1$s</source>
+			</trans-unit>
+			<trans-unit id="email.topic.text">
+				<source>You have created a new topic. Now you have following options</source>
+			</trans-unit>
+			<trans-unit id="email.post.text">
+				<source>You have created a new posting. Now you have following options</source>
+			</trans-unit>
+			<trans-unit id="email.post.text.newPost">
+				<source><![CDATA[<p>Hello %1$s</p><p>There is a new post for your topic %2$s with following content:</p><pre>%3$s</pre>]]></source>
+			</trans-unit>
+			<trans-unit id="error.activateFirst">
+				<source>Sorry. This entry can't be edited or deleted as long as this record was not activated first.</source>
+			</trans-unit>
+			<trans-unit id="from">
+				<source>from</source>
+			</trans-unit>
+			<trans-unit id="save">
+				<source>save</source>
+			</trans-unit>
+			<trans-unit id="reset">
+				<source>Reset</source>
+			</trans-unit>
+
+			<trans-unit id="error.upload">
+				<source>Something went wrong with your uploaded files. Please try again. Error: </source>
+				<target>Ein Fehler ist beim Upload der Dateien aufgetreten. Bitte versuchen Sie es zunächst erneut. Fehlermeldung: </target>
+			</trans-unit>
+			<trans-unit id="error.fileExtension">
+				<source>You only can upload files with following file extensions: %1$s</source>
+				<target>Sie können nur Bilder mit folgenden Dateiendungen hochladen: %1$s</target>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>
