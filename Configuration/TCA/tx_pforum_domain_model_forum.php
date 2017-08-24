@@ -1,16 +1,34 @@
 <?php
-
-if (!defined('TYPO3_MODE')) {
-    die('Access denied.');
-}
-
-$TCA['tx_pforum_domain_model_post'] = array(
-    'ctrl' => $TCA['tx_pforum_domain_model_post']['ctrl'],
+return array(
+    'ctrl' => array(
+        'title' => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_forum',
+        'label' => 'title',
+        'tstamp' => 'tstamp',
+        'crdate' => 'crdate',
+        'cruser_id' => 'cruser_id',
+        'dividers2tabs' => true,
+        'sortby' => 'sorting',
+        'versioningWS' => 2,
+        'versioning_followPages' => true,
+        'origUid' => 't3_origuid',
+        'languageField' => 'sys_language_uid',
+        'transOrigPointerField' => 'l10n_parent',
+        'transOrigDiffSourceField' => 'l10n_diffsource',
+        'delete' => 'deleted',
+        'enablecolumns' => array(
+            'disabled' => 'hidden',
+            'starttime' => 'starttime',
+            'endtime' => 'endtime',
+        ),
+        'searchFields' => 'title,teaser,topics,',
+        'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/Forum.php',
+        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_pforum_domain_model_forum.gif',
+    ),
     'interface' => array(
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, title, description, anonymous_user, frontend_user, images',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, title, teaser, topics',
     ),
     'types' => array(
-        '1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, title, description, anonymous_user, frontend_user, images,--div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,starttime, endtime'),
+        '1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, title, teaser, topics,--div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,starttime, endtime'),
     ),
     'palettes' => array(
         '1' => array('showitem' => ''),
@@ -38,8 +56,8 @@ $TCA['tx_pforum_domain_model_post'] = array(
                 'items' => array(
                     array('', 0),
                 ),
-                'foreign_table' => 'tx_pforum_domain_model_post',
-                'foreign_table_where' => 'AND tx_pforum_domain_model_post.pid=###CURRENT_PID### AND tx_pforum_domain_model_post.sys_language_uid IN (-1,0)',
+                'foreign_table' => 'tx_pforum_domain_model_forum',
+                'foreign_table_where' => 'AND tx_pforum_domain_model_forum.pid=###CURRENT_PID### AND tx_pforum_domain_model_forum.sys_language_uid IN (-1,0)',
             ),
         ),
         'l10n_diffsource' => array(
@@ -94,65 +112,39 @@ $TCA['tx_pforum_domain_model_post'] = array(
                 ),
             ),
         ),
-        'crdate' => array(
-            'config' => array(
-                'type' => 'passthrough',
-            ),
-        ),
         'title' => array(
             'exclude' => 1,
-            'label' => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_post.title',
+            'label' => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_forum.title',
             'config' => array(
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim',
+                'eval' => 'trim,required',
             ),
         ),
-        'description' => array(
+        'teaser' => array(
             'exclude' => 1,
-            'label' => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_post.description',
+            'label' => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_forum.teaser',
             'config' => array(
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
             ),
         ),
-        'anonymous_user' => array(
+        'topics' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_post.user',
+            'label' => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_forum.topics',
             'config' => array(
-                'type' => 'select',
-                'foreign_table' => 'tx_pforum_domain_model_anonymoususer',
-                'minitems' => 0,
-                'maxitems' => 1,
-            ),
-        ),
-        'frontend_user' => array(
-            'exclude' => 0,
-            'label' => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_post.user',
-            'config' => array(
-                'type' => 'select',
-                'foreign_table' => 'fe_users',
-                'items' => array(
-                    array('', '')
+                'type' => 'inline',
+                'foreign_table' => 'tx_pforum_domain_model_topic',
+                'foreign_field' => 'forum',
+                'maxitems' => 9999,
+                'appearance' => array(
+                    'collapseAll' => 0,
+                    'levelLinksPosition' => 'top',
+                    'showSynchronizationLink' => 1,
+                    'showPossibleLocalizationRecords' => 1,
+                    'showAllLocalizationLink' => 1,
                 ),
-                'minitems' => 0,
-                'maxitems' => 1,
-            ),
-        ),
-        'images' => array(
-            'exclude' => 1,
-            'label' => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_post.images',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-                'images', array(
-                    'minitems' => 0,
-                    'maxitems' => 5,
-                )
-            ),
-        ),
-        'topic' => array(
-            'config' => array(
-                'type' => 'passthrough',
             ),
         ),
     ),
