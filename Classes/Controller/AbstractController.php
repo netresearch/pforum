@@ -24,52 +24,52 @@ class AbstractController extends ActionController
     /**
      * @var \JWeiland\Pforum\Configuration\ExtConf
      */
-    protected $extConf = null;
+    protected $extConf;
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\Session
      */
-    protected $session = null;
+    protected $session;
 
     /**
      * forumRepository.
      *
      * @var \JWeiland\Pforum\Domain\Repository\ForumRepository
      */
-    protected $forumRepository = null;
+    protected $forumRepository;
 
     /**
      * topicRepository.
      *
      * @var \JWeiland\Pforum\Domain\Repository\TopicRepository
      */
-    protected $topicRepository = null;
+    protected $topicRepository;
 
     /**
      * postRepository.
      *
      * @var \JWeiland\Pforum\Domain\Repository\PostRepository
      */
-    protected $postRepository = null;
+    protected $postRepository;
 
     /**
      * anonymousUserRepository.
      *
      * @var \JWeiland\Pforum\Domain\Repository\AnonymousUserRepository
      */
-    protected $anonymousUserRepository = null;
+    protected $anonymousUserRepository;
 
     /**
      * frontendUserRepository.
      *
      * @var \JWeiland\Pforum\Domain\Repository\FrontendUserRepository
      */
-    protected $frontendUserRepository = null;
+    protected $frontendUserRepository;
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
      */
-    protected $persistenceManager = null;
+    protected $persistenceManager;
 
     /**
      * inject extConf
@@ -171,9 +171,11 @@ class AbstractController extends ActionController
         $mergedSettings = $this->configurationManager->getConfiguration(
             \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
         );
-        foreach ($mergedSettings as $key => $value) {
-            if (!is_array($value) && empty($value)) {
-                $mergedSettings[$key] = $tsSettings[$key];
+        if (is_array($mergedSettings)) {
+            foreach ($mergedSettings as $key => $value) {
+                if (!is_array($value) && empty($value)) {
+                    $mergedSettings[$key] = $tsSettings[$key];
+                }
             }
         }
         $this->settings = $mergedSettings;

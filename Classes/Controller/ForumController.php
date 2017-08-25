@@ -15,6 +15,7 @@ namespace JWeiland\Pforum\Controller;
  */
 
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 
 /**
  * Class ForumController
@@ -71,7 +72,11 @@ class ForumController extends \JWeiland\Pforum\Controller\AbstractController
     {
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $topics */
         $topics = $this->topicRepository->findByForum($forum);
-        if (!empty($this->settings['uidOfAdminGroup']) && is_array($GLOBALS['TSFE']->fe_user->groupData['uid']) && in_array($this->settings['uidOfAdminGroup'], $GLOBALS['TSFE']->fe_user->groupData['uid'])) {
+        if (
+            !empty($this->settings['uidOfAdminGroup']) &&
+            is_array($GLOBALS['TSFE']->fe_user->groupData['uid']) &&
+            in_array($this->settings['uidOfAdminGroup'], $GLOBALS['TSFE']->fe_user->groupData['uid'])
+        ) {
             $topics->getQuery()
                 ->getQuerySettings()
                 ->setIgnoreEnableFields(true)
@@ -86,11 +91,9 @@ class ForumController extends \JWeiland\Pforum\Controller\AbstractController
      */
     public function initializeListHiddenAction()
     {
-        $path = ExtensionManagementUtility::extRelPath('pforum').'Resources/Public/JavaScript/';
-        $this->pageRenderer->addJsFile($path.'jquery-1.9.1.min.js');
-        $this->pageRenderer->addJsFile($path.'jquery.dataTables.min.js');
-
-        $path = ExtensionManagementUtility::extRelPath('pforum').'Resources/Public/Css/';
+        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Pforum/Forum');
+        $path = PathUtility::getAbsoluteWebPath(ExtensionManagementUtility::extPath('pforum')) .
+            'Resources/Public/Css/';
         $this->pageRenderer->addCssFile($path.'demo_page.css');
         $this->pageRenderer->addCssFile($path.'demo_table_jui.css');
         $this->pageRenderer->addCssFile($path.'smoothness/jquery-ui-1.10.3.custom.min.css');

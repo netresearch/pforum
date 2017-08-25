@@ -26,8 +26,8 @@ $TCA['tx_pforum_domain_model_post'] = array(
             'endtime' => 'endtime',
         ),
         'searchFields' => 'title,description,user,',
-        'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/Post.php',
-        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_pforum_domain_model_post.gif',
+        'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('pforum') . 'Configuration/TCA/Post.php',
+        'iconfile' => 'EXT:pforum/Resources/Public/Icons/tx_pforum_domain_model_post.gif',
     ),
     'interface' => array(
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, title, description, anonymous_user, frontend_user, images',

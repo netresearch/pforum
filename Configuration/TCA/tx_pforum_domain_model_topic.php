@@ -21,8 +21,8 @@ return array(
             'endtime' => 'endtime',
         ),
         'searchFields' => 'title,description,posts,user,',
-        'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/Topic.php',
-        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_pforum_domain_model_topic.gif',
+        'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('pforum') . 'Configuration/TCA/Topic.php',
+        'iconfile' => 'EXT:pforum/Resources/Public/Icons/tx_pforum_domain_model_topic.gif',
     ),
     'interface' => array(
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, title, description, posts, anonymous_user, frontend_user, images',
