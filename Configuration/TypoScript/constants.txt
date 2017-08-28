@@ -21,6 +21,8 @@ plugin.tx_pforum {
     emailIsMandatory = 0
     # cat=plugin.tx_pforum//c; type=boolean; label=Username is mandatory
     usernameIsMandatory = 0
+    # cat=plugin.tx_pforum//c; type=boolean; label=Enable the image uploads field
+    useImages = 0
     # cat=plugin.tx_pforum/basic/dims; type=int+; label=UID of Admin Group: Which FE-Group should act as the admin group
     uidOfAdminGroup =
     # cat=plugin.tx_pforum/basic/dims; type=int+; label=UID of User Group: Which FE-Group should act as forum members
