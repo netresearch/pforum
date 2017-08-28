@@ -14,8 +14,13 @@ namespace JWeiland\Pforum\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Pforum\Controller\AbstractController;
+use JWeiland\Pforum\Domain\Model\FrontendUser;
 use JWeiland\Pforum\Domain\Model\Post;
+use JWeiland\Pforum\Domain\Model\Topic;
+use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -23,10 +28,10 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 /**
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class AbstractPostController extends \JWeiland\Pforum\Controller\AbstractController
+class AbstractPostController extends AbstractController
 {
     /**
-     * @var \TYPO3\CMS\Core\Page\PageRenderer
+     * @var PageRenderer
      * @inject
      */
     protected $pageRenderer;
@@ -53,14 +58,14 @@ class AbstractPostController extends \JWeiland\Pforum\Controller\AbstractControl
     /**
      * add current fe_user to post.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Topic $topic
-     * @param \JWeiland\Pforum\Domain\Model\Post  $newPost
+     * @param Topic $topic
+     * @param Post  $newPost
      * @return void
      */
-    protected function addFeUserToPost(\JWeiland\Pforum\Domain\Model\Topic $topic, \JWeiland\Pforum\Domain\Model\Post $newPost)
+    protected function addFeUserToPost(Topic $topic, Post $newPost)
     {
         if (is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid']) {
-            /** @var \JWeiland\Pforum\Domain\Model\FrontendUser $user */
+            /** @var FrontendUser $user */
             $user = $this->frontendUserRepository->findByUid((int) $GLOBALS['TSFE']->fe_user->user['uid']);
             $newPost->setFrontendUser($user);
         } else {
@@ -73,12 +78,12 @@ class AbstractPostController extends \JWeiland\Pforum\Controller\AbstractControl
     /**
      * send mail to user to confirm, edit or delete his entry.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Post $post
+     * @param Post $post
      * @return void
      */
-    protected function mailToUser(\JWeiland\Pforum\Domain\Model\Post $post)
+    protected function mailToUser(Post $post)
     {
-        $mail = $this->objectManager->get('TYPO3\\CMS\\Core\\Mail\\MailMessage');
+        $mail = $this->objectManager->get(MailMessage::class);
         $mail->setFrom($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName());
         $mail->setTo($post->getUser()->getEmail(), $post->getUser()->getName());
         $mail->setSubject(LocalizationUtility::translate('email.post.subject', 'pforum'));
@@ -95,7 +100,7 @@ class AbstractPostController extends \JWeiland\Pforum\Controller\AbstractControl
      */
     protected function getContent(Post $post)
     {
-        /** @var \TYPO3\CMS\Fluid\View\StandaloneView $view */
+        /** @var StandaloneView $view */
         $view = $this->objectManager->get(StandaloneView::class);
         $view->setTemplatePathAndFilename(
             ExtensionManagementUtility::extPath('pforum') .

@@ -14,18 +14,22 @@ namespace JWeiland\Pforum\Domain\Repository;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Pforum\Domain\Model\Post;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\Repository;
+
 /**
  * Class PostRepository
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class PostRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class PostRepository extends Repository
 {
     /**
      * @var array
      */
     protected $defaultOrderings = array(
-        'crdate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING,
+        'crdate' => QueryInterface::ORDER_DESCENDING,
     );
 
     /**
@@ -45,7 +49,7 @@ class PostRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param int $postUid
      *
-     * @return \JWeiland\Pforum\Domain\Model\Post
+     * @return Post
      */
     public function findHiddenEntryByUid($postUid)
     {

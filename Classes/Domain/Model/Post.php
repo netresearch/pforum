@@ -14,12 +14,19 @@ namespace JWeiland\Pforum\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Pforum\Domain\Model\AnonymousUser;
+use JWeiland\Pforum\Domain\Model\FrontendUser;
+use JWeiland\Pforum\Domain\Model\Topic;
+use JWeiland\Pforum\Domain\Model\User;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
 /**
  * Class Post
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Post extends AbstractEntity
 {
     /**
      * Hidden.
@@ -38,7 +45,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Topic.
      *
-     * @var \JWeiland\Pforum\Domain\Model\Topic
+     * @var Topic
      */
     protected $topic;
 
@@ -60,7 +67,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * AnonymousUser.
      *
-     * @var \JWeiland\Pforum\Domain\Model\AnonymousUser
+     * @var AnonymousUser
      * @lazy
      */
     protected $anonymousUser;
@@ -68,7 +75,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * FrontendUser.
      *
-     * @var \JWeiland\Pforum\Domain\Model\FrontendUser
+     * @var FrontendUser
      * @lazy
      */
     protected $frontendUser;
@@ -76,7 +83,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Images.
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     * @var ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
      */
     protected $images;
 
@@ -99,7 +106,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
          * It will be rewritten on each save in the extension builder
          * You may modify the constructor of this class instead
          */
-        $this->images = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->images = new ObjectStorage();
     }
 
     /**
@@ -145,7 +152,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the topic.
      *
-     * @return \JWeiland\Pforum\Domain\Model\Topic $topic
+     * @return Topic $topic
      */
     public function getTopic()
     {
@@ -155,9 +162,9 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the topic.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Topic $topic
+     * @param Topic $topic
      */
-    public function setTopic(\JWeiland\Pforum\Domain\Model\Topic $topic)
+    public function setTopic(Topic $topic)
     {
         $this->topic = $topic;
     }
@@ -205,7 +212,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the anonymous user.
      *
-     * @return \JWeiland\Pforum\Domain\Model\AnonymousUser $anonymousUser
+     * @return AnonymousUser $anonymousUser
      */
     public function getAnonymousUser()
     {
@@ -215,9 +222,9 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the anonymous user.
      *
-     * @param \JWeiland\Pforum\Domain\Model\AnonymousUser $anonymousUser
+     * @param AnonymousUser $anonymousUser
      */
-    public function setAnonymousUser(\JWeiland\Pforum\Domain\Model\AnonymousUser $anonymousUser)
+    public function setAnonymousUser(AnonymousUser $anonymousUser)
     {
         $this->anonymousUser = $anonymousUser;
     }
@@ -225,7 +232,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the frontend user.
      *
-     * @return \JWeiland\Pforum\Domain\Model\FrontendUser $frontendUser
+     * @return FrontendUser $frontendUser
      */
     public function getFrontendUser()
     {
@@ -235,9 +242,9 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the frontend user.
      *
-     * @param \JWeiland\Pforum\Domain\Model\FrontendUser $frontendUser
+     * @param FrontendUser $frontendUser
      */
-    public function setFrontendUser(\JWeiland\Pforum\Domain\Model\FrontendUser $frontendUser)
+    public function setFrontendUser(FrontendUser $frontendUser)
     {
         $this->frontendUser = $frontendUser;
     }
@@ -245,7 +252,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Helper method to get user.
      *
-     * @return \JWeiland\Pforum\Domain\Model\User $user
+     * @return User $user
      */
     public function getUser()
     {
@@ -278,9 +285,9 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the images.
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $images A minimized Array from $_FILES
+     * @param ObjectStorage $images A minimized Array from $_FILES
      */
-    public function setImages(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $images)
+    public function setImages(ObjectStorage $images)
     {
         $this->images = $images;
     }

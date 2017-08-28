@@ -14,18 +14,22 @@ namespace JWeiland\Pforum\Domain\Repository;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Pforum\Domain\Model\Topic;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\Repository;
+
 /**
  * Class TopicRepository
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class TopicRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class TopicRepository extends Repository
 {
     /**
      * @var array
      */
     protected $defaultOrderings = array(
-        'crdate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING,
+        'crdate' => QueryInterface::ORDER_DESCENDING,
     );
 
     /**
@@ -45,7 +49,7 @@ class TopicRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param int $topicUid
      *
-     * @return \JWeiland\Pforum\Domain\Model\Topic
+     * @return Topic
      */
     public function findHiddenEntryByUid($topicUid)
     {

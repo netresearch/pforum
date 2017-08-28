@@ -14,6 +14,11 @@ namespace JWeiland\Pforum\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Pforum\Controller\AbstractController;
+use JWeiland\Pforum\Domain\Model\Forum;
+use JWeiland\Pforum\Domain\Model\FrontendUser;
+use JWeiland\Pforum\Domain\Model\Topic;
+use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -22,7 +27,7 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 /**
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class AbstractTopicController extends \JWeiland\Pforum\Controller\AbstractController
+class AbstractTopicController extends AbstractController
 {
     /**
      * This is a workaround to help controller actions to find (hidden) topics.
@@ -45,13 +50,13 @@ class AbstractTopicController extends \JWeiland\Pforum\Controller\AbstractContro
     /**
      * add current fe_user to topic.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Forum $forum
-     * @param \JWeiland\Pforum\Domain\Model\Topic $newTopic
+     * @param Forum $forum
+     * @param Topic $newTopic
      */
-    protected function addFeUserToTopic(\JWeiland\Pforum\Domain\Model\Forum $forum, \JWeiland\Pforum\Domain\Model\Topic $newTopic)
+    protected function addFeUserToTopic(Forum $forum, Topic $newTopic)
     {
         if (is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid']) {
-            /** @var \JWeiland\Pforum\Domain\Model\FrontendUser $user */
+            /** @var FrontendUser $user */
             $user = $this->frontendUserRepository->findByUid((int) $GLOBALS['TSFE']->fe_user->user['uid']);
             $newTopic->setFrontendUser($user);
         } else {
@@ -64,11 +69,11 @@ class AbstractTopicController extends \JWeiland\Pforum\Controller\AbstractContro
     /**
      * send mail to user to confirm, edit or delete his entry.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Topic $topic
+     * @param Topic $topic
      */
-    protected function mailToUser(\JWeiland\Pforum\Domain\Model\Topic $topic)
+    protected function mailToUser(Topic $topic)
     {
-        $mail = $this->objectManager->get('TYPO3\\CMS\\Core\\Mail\\MailMessage');
+        $mail = $this->objectManager->get(MailMessage::class);
         $mail->setFrom($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName());
         $mail->setTo($topic->getUser()->getEmail(), $topic->getUser()->getName());
         $mail->setSubject(LocalizationUtility::translate('email.topic.subject', 'pforum'));
@@ -80,11 +85,11 @@ class AbstractTopicController extends \JWeiland\Pforum\Controller\AbstractContro
     /**
      * get content for mailing.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Topic $topic
+     * @param Topic $topic
      *
      * @return string
      */
-    protected function getContent(\JWeiland\Pforum\Domain\Model\Topic $topic)
+    protected function getContent(Topic $topic)
     {
         /** @var StandaloneView $view */
         $view = $this->objectManager->get(StandaloneView::class);

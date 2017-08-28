@@ -14,8 +14,10 @@ namespace JWeiland\Pforum\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Pforum\Controller\AbstractPostController;
 use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
+use JWeiland\Pforum\Domain\Model\User;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -25,7 +27,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class PostController extends \JWeiland\Pforum\Controller\AbstractPostController
+class PostController extends AbstractPostController
 {
     /**
      * action new.
@@ -94,7 +96,7 @@ class PostController extends \JWeiland\Pforum\Controller\AbstractPostController
         }
         if (
             $newPost->getHidden() === false &&
-            $topic->getUser() instanceof \JWeiland\Pforum\Domain\Model\User &&
+            $topic->getUser() instanceof User &&
             $topic->getUser()->getEmail() != ''
         ) {
             // send an email to creator of topic to inform him about new comments/posts

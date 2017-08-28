@@ -14,6 +14,8 @@ namespace JWeiland\Pforum\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Pforum\Controller\AbstractController;
+use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -24,7 +26,7 @@ use TYPO3\CMS\Core\Utility\PathUtility;
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class ForumController extends \JWeiland\Pforum\Controller\AbstractController
+class ForumController extends AbstractController
 {
     /**
      * forumRepository.
@@ -68,9 +70,9 @@ class ForumController extends \JWeiland\Pforum\Controller\AbstractController
     /**
      * action show.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Forum $forum
+     * @param Forum $forum
      */
-    public function showAction(\JWeiland\Pforum\Domain\Model\Forum $forum)
+    public function showAction(Forum $forum)
     {
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $topics */
         $topics = $this->topicRepository->findByForum($forum);

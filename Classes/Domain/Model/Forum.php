@@ -14,10 +14,14 @@ namespace JWeiland\Pforum\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Pforum\Domain\Model\Topic;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
 /**
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Forum extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Forum extends AbstractEntity
 {
     /**
      * Title.
@@ -37,7 +41,7 @@ class Forum extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Topics.
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Pforum\Domain\Model\Topic>
+     * @var ObjectStorage<\JWeiland\Pforum\Domain\Model\Topic>
      * @lazy
      */
     protected $topics;
@@ -61,7 +65,7 @@ class Forum extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
          * It will be rewritten on each save in the extension builder
          * You may modify the constructor of this class instead
          */
-        $this->topics = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->topics = new ObjectStorage();
     }
 
     /**
@@ -107,9 +111,9 @@ class Forum extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Adds a Topic.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Topic $topic
+     * @param Topic $topic
      */
-    public function addTopic(\JWeiland\Pforum\Domain\Model\Topic $topic)
+    public function addTopic(Topic $topic)
     {
         $this->topics->attach($topic);
     }
@@ -117,9 +121,9 @@ class Forum extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Removes a Topic.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Topic $topicToRemove The Topic to be removed
+     * @param Topic $topicToRemove The Topic to be removed
      */
-    public function removeTopic(\JWeiland\Pforum\Domain\Model\Topic $topicToRemove)
+    public function removeTopic(Topic $topicToRemove)
     {
         $this->topics->detach($topicToRemove);
     }
@@ -127,7 +131,7 @@ class Forum extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the topics.
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage $topics
+     * @return ObjectStorage $topics
      */
     public function getTopics()
     {
@@ -137,9 +141,9 @@ class Forum extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the topics.
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $topics
+     * @param ObjectStorage $topics
      */
-    public function setTopics(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $topics)
+    public function setTopics(ObjectStorage $topics)
     {
         $this->topics = $topics;
     }

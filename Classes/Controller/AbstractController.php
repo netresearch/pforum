@@ -15,6 +15,7 @@ namespace JWeiland\Pforum\Controller;
  */
 
 use JWeiland\Pforum\Configuration\ExtConf;
+use JWeiland\Pforum\Domain\Model\Topic;
 use JWeiland\Pforum\Domain\Repository\AnonymousUserRepository;
 use JWeiland\Pforum\Domain\Repository\ForumRepository;
 use JWeiland\Pforum\Domain\Repository\FrontendUserRepository;
@@ -31,52 +32,52 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Session;
 class AbstractController extends ActionController
 {
     /**
-     * @var \JWeiland\Pforum\Configuration\ExtConf
+     * @var ExtConf
      */
     protected $extConf;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\Generic\Session
+     * @var Session
      */
     protected $session;
 
     /**
      * forumRepository.
      *
-     * @var \JWeiland\Pforum\Domain\Repository\ForumRepository
+     * @var ForumRepository
      */
     protected $forumRepository;
 
     /**
      * topicRepository.
      *
-     * @var \JWeiland\Pforum\Domain\Repository\TopicRepository
+     * @var TopicRepository
      */
     protected $topicRepository;
 
     /**
      * postRepository.
      *
-     * @var \JWeiland\Pforum\Domain\Repository\PostRepository
+     * @var PostRepository
      */
     protected $postRepository;
 
     /**
      * anonymousUserRepository.
      *
-     * @var \JWeiland\Pforum\Domain\Repository\AnonymousUserRepository
+     * @var AnonymousUserRepository
      */
     protected $anonymousUserRepository;
 
     /**
      * frontendUserRepository.
      *
-     * @var \JWeiland\Pforum\Domain\Repository\FrontendUserRepository
+     * @var FrontendUserRepository
      */
     protected $frontendUserRepository;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
+     * @var PersistenceManager
      */
     protected $persistenceManager;
 
@@ -247,7 +248,7 @@ class AbstractController extends ActionController
     protected function deleteUploadedFilesOnValidationErrors($argument)
     {
         if ($this->getControllerContext()->getRequest()->hasArgument($argument)) {
-            /** @var \JWeiland\Pforum\Domain\Model\Topic $topic */
+            /** @var Topic $topic */
             $topic = $this->getControllerContext()->getRequest()->getArgument($argument);
             $images = $topic->getImages();
             if (count($images)) {

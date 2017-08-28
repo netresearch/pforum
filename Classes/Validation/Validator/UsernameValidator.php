@@ -14,6 +14,7 @@ namespace JWeiland\Pforum\Validation\Validator;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Pforum\Validation\Validator\AbstractValidator;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -21,7 +22,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class UsernameValidator extends \JWeiland\Pforum\Validation\Validator\AbstractValidator
+class UsernameValidator extends AbstractValidator
 {
     /**
      * Checks if the username is given if configured in settings.

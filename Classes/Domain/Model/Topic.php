@@ -14,7 +14,13 @@ namespace JWeiland\Pforum\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Pforum\Domain\Model\AnonymousUser;
+use JWeiland\Pforum\Domain\Model\Forum;
+use JWeiland\Pforum\Domain\Model\FrontendUser;
+use JWeiland\Pforum\Domain\Model\Post;
+use JWeiland\Pforum\Domain\Model\User;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * Class Topic
@@ -40,7 +46,7 @@ class Topic extends AbstractEntity
     /**
      * Forum.
      *
-     * @var \JWeiland\Pforum\Domain\Model\Forum
+     * @var Forum
      */
     protected $forum;
 
@@ -63,7 +69,7 @@ class Topic extends AbstractEntity
     /**
      * Posts.
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Pforum\Domain\Model\Post>
+     * @var ObjectStorage<\JWeiland\Pforum\Domain\Model\Post>
      * @cascade remove
      * @lazy
      */
@@ -72,7 +78,7 @@ class Topic extends AbstractEntity
     /**
      * AnonymousUser.
      *
-     * @var \JWeiland\Pforum\Domain\Model\AnonymousUser
+     * @var AnonymousUser
      * @cascade remove
      * @lazy
      */
@@ -81,7 +87,7 @@ class Topic extends AbstractEntity
     /**
      * FrontendUser.
      *
-     * @var \JWeiland\Pforum\Domain\Model\FrontendUser
+     * @var FrontendUser
      * @lazy
      */
     protected $frontendUser;
@@ -89,7 +95,7 @@ class Topic extends AbstractEntity
     /**
      * Images.
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     * @var ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
      * @lazy
      */
     protected $images;
@@ -113,8 +119,8 @@ class Topic extends AbstractEntity
          * It will be rewritten on each save in the extension builder
          * You may modify the constructor of this class instead
          */
-        $this->posts = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-        $this->images = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->posts = new ObjectStorage();
+        $this->images = new ObjectStorage();
     }
 
     /**
@@ -160,7 +166,7 @@ class Topic extends AbstractEntity
     /**
      * Returns the forum.
      *
-     * @return \JWeiland\Pforum\Domain\Model\Forum $forum
+     * @return Forum $forum
      */
     public function getForum()
     {
@@ -170,9 +176,9 @@ class Topic extends AbstractEntity
     /**
      * Sets the forum.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Forum $forum
+     * @param Forum $forum
      */
-    public function setForum(\JWeiland\Pforum\Domain\Model\Forum $forum)
+    public function setForum(Forum $forum)
     {
         $this->forum = $forum;
     }
@@ -220,9 +226,9 @@ class Topic extends AbstractEntity
     /**
      * Adds a Post.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Post $post
+     * @param Post $post
      */
-    public function addPost(\JWeiland\Pforum\Domain\Model\Post $post)
+    public function addPost(Post $post)
     {
         $this->posts->attach($post);
     }
@@ -230,9 +236,9 @@ class Topic extends AbstractEntity
     /**
      * Removes a Post.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Post $postToRemove The Post to be removed
+     * @param Post $postToRemove The Post to be removed
      */
-    public function removePost(\JWeiland\Pforum\Domain\Model\Post $postToRemove)
+    public function removePost(Post $postToRemove)
     {
         $this->posts->detach($postToRemove);
     }
@@ -240,7 +246,7 @@ class Topic extends AbstractEntity
     /**
      * Returns the posts.
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage $posts
+     * @return ObjectStorage $posts
      */
     public function getPosts()
     {
@@ -250,9 +256,9 @@ class Topic extends AbstractEntity
     /**
      * Sets the posts.
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $posts
+     * @param ObjectStorage $posts
      */
-    public function setPosts(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $posts)
+    public function setPosts(ObjectStorage $posts)
     {
         $this->posts = $posts;
     }
@@ -260,7 +266,7 @@ class Topic extends AbstractEntity
     /**
      * Returns the anonymous user.
      *
-     * @return \JWeiland\Pforum\Domain\Model\AnonymousUser $anonymousUser
+     * @return AnonymousUser $anonymousUser
      */
     public function getAnonymousUser()
     {
@@ -270,9 +276,9 @@ class Topic extends AbstractEntity
     /**
      * Sets the anonymous user.
      *
-     * @param \JWeiland\Pforum\Domain\Model\AnonymousUser $anonymousUser
+     * @param AnonymousUser $anonymousUser
      */
-    public function setAnonymousUser(\JWeiland\Pforum\Domain\Model\AnonymousUser $anonymousUser)
+    public function setAnonymousUser(AnonymousUser $anonymousUser)
     {
         $this->anonymousUser = $anonymousUser;
     }
@@ -280,7 +286,7 @@ class Topic extends AbstractEntity
     /**
      * Returns the frontend user.
      *
-     * @return \JWeiland\Pforum\Domain\Model\FrontendUser $frontendUser
+     * @return FrontendUser $frontendUser
      */
     public function getFrontendUser()
     {
@@ -290,9 +296,9 @@ class Topic extends AbstractEntity
     /**
      * Sets the frontend user.
      *
-     * @param \JWeiland\Pforum\Domain\Model\FrontendUser $frontendUser
+     * @param FrontendUser $frontendUser
      */
-    public function setFrontendUser(\JWeiland\Pforum\Domain\Model\FrontendUser $frontendUser)
+    public function setFrontendUser(FrontendUser $frontendUser)
     {
         $this->frontendUser = $frontendUser;
     }
@@ -300,7 +306,7 @@ class Topic extends AbstractEntity
     /**
      * Helper method to get user.
      *
-     * @return \JWeiland\Pforum\Domain\Model\User $user
+     * @return User $user
      */
     public function getUser()
     {
@@ -333,9 +339,9 @@ class Topic extends AbstractEntity
     /**
      * Sets the images.
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $images A minimized Array from $_FILES
+     * @param ObjectStorage $images A minimized Array from $_FILES
      */
-    public function setImages(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $images)
+    public function setImages(ObjectStorage $images)
     {
         $this->images = $images;
     }

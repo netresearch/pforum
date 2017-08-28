@@ -159,7 +159,7 @@ class TopicController extends AbstractTopicController
     {
         $this->registerTopicFromRequest('topic');
         $argument = $this->request->getArgument('topic');
-        /** @var \JWeiland\Pforum\Domain\Model\Topic $topic */
+        /** @var Topic $topic */
         $topic = $this->topicRepository->findByIdentifier($argument['__identity']);
         if ($this->settings['useImages']) {
             /** @var UploadMultipleFilesConverter $multipleFilesTypeConverter */
