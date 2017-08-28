@@ -168,7 +168,7 @@ class TopicController extends AbstractTopicController
                 ->getPropertyMappingConfiguration()
                 ->forProperty('images')
                 ->setTypeConverter($multipleFilesTypeConverter)
-                ->setTypeConverterOptions('JWeiland\\Pforum\\Property\\TypeConverter\\UploadMultipleFilesConverter',
+                ->setTypeConverterOptions(UploadMultipleFilesConverter::class,
                     array(
                         'IMAGES' => $topic->getImages()
                     )

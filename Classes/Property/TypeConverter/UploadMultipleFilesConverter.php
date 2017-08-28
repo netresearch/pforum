@@ -15,8 +15,13 @@ namespace JWeiland\Pforum\Property\TypeConverter;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Resource\DuplicationBehavior;
+use TYPO3\CMS\Extbase\Domain\Model\AbstractFileFolder;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Error\Error;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Property\Exception;
+use TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface;
 use TYPO3\CMS\Extbase\Property\TypeConverter\AbstractTypeConverter;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -30,12 +35,12 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
     /**
      * @var array<string>
      */
-    protected $sourceTypes = array('array');
+    protected $sourceTypes = ['array'];
 
     /**
      * @var string
      */
-    protected $targetType = 'TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage';
+    protected $targetType = ObjectStorage::class;
 
     /**
      * @var int
@@ -43,7 +48,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
     protected $priority = 2;
 
     /**
-     * @var \TYPO3\CMS\Core\Resource\ResourceFactory
+     * @var ResourceFactory
      * @inject
      */
     protected $fileFactory;
@@ -81,20 +86,19 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
      * @param array $source
      * @param string $targetType
      * @param array $convertedChildProperties
-     * @param \TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface $configuration
-     * @throws \TYPO3\CMS\Extbase\Property\Exception
-     * @return \TYPO3\CMS\Extbase\Domain\Model\AbstractFileFolder|Error
+     * @param PropertyMappingConfigurationInterface $configuration
+     * @throws Exception
+     * @return AbstractFileFolder|Error
      * @api
      */
     public function convertFrom(
         $source,
         $targetType,
         array $convertedChildProperties = array(),
-        \TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface $configuration = null
+        PropertyMappingConfigurationInterface $configuration = null
     ) {
         $alreadyPersistedImages = $configuration->getConfigurationValue(
-            'JWeiland\\Pforum\\Property\\TypeConverter\\UploadMultipleFilesConverter',
-            'IMAGES'
+            UploadMultipleFilesConverter::class, 'IMAGES'
         );
         $originalSource = $source;
         foreach ($originalSource as $key => $uploadedFile) {
@@ -116,7 +120,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
             }
             // check if uploaded file returns an error
             if (!$uploadedFile['error'] === 0) {
-                return new \TYPO3\CMS\Extbase\Error\Error(
+                return new Error(
                     LocalizationUtility::translate(
                         'error.upload',
                         'pforum'
@@ -127,7 +131,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
             // check if file extension is allowed
             $fileParts = GeneralUtility::split_fileref($uploadedFile['name']);
             if (!GeneralUtility::inList($GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'], $fileParts['fileext'])) {
-                return new \TYPO3\CMS\Extbase\Error\Error(
+                return new Error(
                     LocalizationUtility::translate(
                         'error.fileExtension',
                         'pforum',
@@ -140,7 +144,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
             }
             // OK...we have a valid file and the user has the rights. It's time to check, if an old file can be deleted
             if (!empty($alreadyPersistedImages) && $alreadyPersistedImages[$key] instanceof FileReference) {
-                /** @var \TYPO3\CMS\Extbase\Domain\Model\FileReference $oldFile */
+                /** @var FileReference $oldFile */
                 $oldFile = $alreadyPersistedImages[$key];
                 $oldFile->getOriginalResource()->getOriginalFile()->delete();
             }
@@ -149,10 +153,10 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
         // I will do two foreach here. First: everything must be OK, before files will be uploaded
 
         // upload file and add it to ObjectStorage
-        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $references */
-        $references = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage');
+        /** @var ObjectStorage $references */
+        $references = $this->objectManager->get(ObjectStorage::class);
         foreach ($source as $uploadedFile) {
-            if ($uploadedFile instanceof \TYPO3\CMS\Extbase\Domain\Model\FileReference) {
+            if ($uploadedFile instanceof FileReference) {
                 $references->attach($uploadedFile);
             } else {
                 $references->attach($this->getExtbaseFileReference($uploadedFile));
@@ -166,11 +170,11 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
      * upload file and get a file reference object.
      *
      * @param array $source
-     * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference
+     * @return FileReference
      */
     protected function getExtbaseFileReference($source)
     {
-        /** @var \TYPO3\CMS\Extbase\Domain\Model\FileReference $extbaseFileReference */
+        /** @var FileReference $extbaseFileReference */
         $extbaseFileReference = $this->objectManager->get(FileReference::class);
         $extbaseFileReference->setOriginalResource($this->getCoreFileReference($source));
 
@@ -187,7 +191,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
     {
         // upload file
         $uploadFolder = ResourceFactory::getInstance()->retrieveFileOrFolderObject('uploads/tx_pforum/');
-        $uploadedFile = $uploadFolder->addUploadedFile($source, 'changeName');
+        $uploadedFile = $uploadFolder->addUploadedFile($source, DuplicationBehavior::RENAME);
         // create Core FileReference
         return ResourceFactory::getInstance()->createFileReferenceObject(
             array(
