@@ -72,6 +72,7 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface
      * setter for email from address.
      *
      * @param string $emailFromAddress
+     * @return void
      */
     public function setEmailFromAddress($emailFromAddress)
     {
@@ -96,6 +97,7 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface
      * setter for emailFromName.
      *
      * @param string $emailFromName
+     * @return void
      */
     public function setEmailFromName($emailFromName)
     {

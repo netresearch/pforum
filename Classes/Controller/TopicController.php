@@ -14,6 +14,9 @@ namespace JWeiland\Pforum\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Pforum\Domain\Model\Forum;
+use JWeiland\Pforum\Domain\Model\Topic;
+use JWeiland\Pforum\Property\TypeConverter\UploadMultipleFilesConverter;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -22,18 +25,23 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class TopicController extends \JWeiland\Pforum\Controller\AbstractTopicController
+class TopicController extends AbstractTopicController
 {
     /**
      * action show.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Topic $topic
+     * @param Topic $topic
+     * @return void
      */
-    public function showAction(\JWeiland\Pforum\Domain\Model\Topic $topic)
+    public function showAction(Topic $topic)
     {
         /* @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $topics */
         $posts = $this->postRepository->findByTopic($topic);
-        if (!empty($this->settings['uidOfAdminGroup']) && is_array($GLOBALS['TSFE']->fe_user->groupData['uid']) && in_array($this->settings['uidOfAdminGroup'], $GLOBALS['TSFE']->fe_user->groupData['uid'])) {
+        if (
+            !empty($this->settings['uidOfAdminGroup']) &&
+            is_array($GLOBALS['TSFE']->fe_user->groupData['uid']) &&
+            in_array($this->settings['uidOfAdminGroup'], $GLOBALS['TSFE']->fe_user->groupData['uid'])
+        ) {
             $posts->getQuery()
                 ->getQuerySettings()
                 ->setIgnoreEnableFields(true)
@@ -46,13 +54,14 @@ class TopicController extends \JWeiland\Pforum\Controller\AbstractTopicControlle
     /**
      * action new.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Forum $forum
+     * @param Forum $forum
+     * @return void
      */
-    public function newAction(\JWeiland\Pforum\Domain\Model\Forum $forum)
+    public function newAction(Forum $forum)
     {
         $this->deleteUploadedFilesOnValidationErrors('newTopic');
         $this->view->assign('forum', $forum);
-        $this->view->assign('newTopic', $this->objectManager->get('JWeiland\\Pforum\\Domain\\Model\\Topic'));
+        $this->view->assign('newTopic', $this->objectManager->get(Topic::class));
     }
 
     /**
@@ -63,10 +72,8 @@ class TopicController extends \JWeiland\Pforum\Controller\AbstractTopicControlle
     public function initializeCreateAction()
     {
         if ($this->settings['useImages']) {
-            /** @var \JWeiland\Pforum\Property\TypeConverter\UploadMultipleFilesConverter $multipleFilesTypeConverter */
-            $multipleFilesTypeConverter = $this->objectManager->get(
-                'JWeiland\\Pforum\\Property\\TypeConverter\\UploadMultipleFilesConverter'
-            );
+            /** @var UploadMultipleFilesConverter $multipleFilesTypeConverter */
+            $multipleFilesTypeConverter = $this->objectManager->get(UploadMultipleFilesConverter::class);
             $this->arguments->getArgument('newTopic')
                 ->getPropertyMappingConfiguration()
                 ->forProperty('images')
@@ -77,10 +84,11 @@ class TopicController extends \JWeiland\Pforum\Controller\AbstractTopicControlle
     /**
      * action create.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Forum $forum
-     * @param \JWeiland\Pforum\Domain\Model\Topic $newTopic
+     * @param Forum $forum
+     * @param Topic $newTopic
+     * @return void
      */
-    public function createAction(\JWeiland\Pforum\Domain\Model\Forum $forum, \JWeiland\Pforum\Domain\Model\Topic $newTopic)
+    public function createAction(Forum $forum, Topic $newTopic)
     {
         /* if auth = frontend user */
         if ($this->settings['auth'] == 2) {
@@ -116,6 +124,8 @@ class TopicController extends \JWeiland\Pforum\Controller\AbstractTopicControlle
     /**
      * initialize action edit
      * hidden record throws an exception. Thats why I check it here before calling editAction.
+     *
+     * @return void
      */
     public function initializeEditAction()
     {
@@ -125,12 +135,14 @@ class TopicController extends \JWeiland\Pforum\Controller\AbstractTopicControlle
     /**
      * action edit.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Topic $topic
-     * @param bool                                $isPreview If is preview there will be an additional output above edit form
-     * @param bool                                $isNew     We need the information if updateAction was called from createAction. If so we have to passthrough this information
+     * @param Topic $topic
+     * @param bool $isPreview If is preview there will be an additional output above edit form
+     * @param bool $isNew We need the information if updateAction was called from createAction.
+     *                    If so we have to passthrough this information
      * @dontvalidate $topic
+     * @return void
      */
-    public function editAction(\JWeiland\Pforum\Domain\Model\Topic $topic = null, $isPreview = false, $isNew = false)
+    public function editAction(Topic $topic = null, $isPreview = false, $isNew = false)
     {
         $this->view->assign('topic', $topic);
         $this->view->assign('isPreview', $isPreview);
@@ -140,6 +152,8 @@ class TopicController extends \JWeiland\Pforum\Controller\AbstractTopicControlle
     /**
      * getObjectByIdentifier can only find non-hidden values
      * With this method we help extbase backend to find our hidden object.
+     *
+     * @return void
      */
     public function initializeUpdateAction()
     {
@@ -148,10 +162,8 @@ class TopicController extends \JWeiland\Pforum\Controller\AbstractTopicControlle
         /** @var \JWeiland\Pforum\Domain\Model\Topic $topic */
         $topic = $this->topicRepository->findByIdentifier($argument['__identity']);
         if ($this->settings['useImages']) {
-            /** @var \JWeiland\Pforum\Property\TypeConverter\UploadMultipleFilesConverter $multipleFilesTypeConverter */
-            $multipleFilesTypeConverter = $this->objectManager->get(
-                'JWeiland\\Pforum\\Property\\TypeConverter\\UploadMultipleFilesConverter'
-            );
+            /** @var UploadMultipleFilesConverter $multipleFilesTypeConverter */
+            $multipleFilesTypeConverter = $this->objectManager->get(UploadMultipleFilesConverter::class);
             $this->arguments->getArgument('topic')
                 ->getPropertyMappingConfiguration()
                 ->forProperty('images')
@@ -167,10 +179,12 @@ class TopicController extends \JWeiland\Pforum\Controller\AbstractTopicControlle
     /**
      * action update.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Topic $topic
-     * @param bool                                $isNew We need the information if updateAction was called from createAction. If so we have to add different messages
+     * @param Topic $topic
+     * @param bool $isNew We need the information if updateAction was called from createAction.
+     *                    If so we have to add different messages
+     * @return void
      */
-    public function updateAction(\JWeiland\Pforum\Domain\Model\Topic $topic, $isNew = false)
+    public function updateAction(Topic $topic, $isNew = false)
     {
         $this->topicRepository->update($topic);
 
@@ -199,7 +213,7 @@ class TopicController extends \JWeiland\Pforum\Controller\AbstractTopicControlle
             } else {
                 // edited topics which are not new are visible
                 $topic->setHidden(false);
-                $this->flashMessageContainer->add(LocalizationUtility::translate('topicUpdated', 'pforum'), '', FlashMessage::OK);
+                $this->addFlashMessage(LocalizationUtility::translate('topicUpdated', 'pforum'), '', FlashMessage::OK);
             }
             $this->redirect('show', 'Forum', '', array('forum' => $topic->getForum()));
         }
@@ -208,6 +222,8 @@ class TopicController extends \JWeiland\Pforum\Controller\AbstractTopicControlle
     /**
      * initialize action delete
      * hidden record throws an exception. Thats why I check it here before calling deleteAction.
+     *
+     * @return void
      */
     public function initializeDeleteAction()
     {
@@ -217,18 +233,21 @@ class TopicController extends \JWeiland\Pforum\Controller\AbstractTopicControlle
     /**
      * action delete.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Topic $topic
+     * @param Topic $topic
+     * @return void
      */
-    public function deleteAction(\JWeiland\Pforum\Domain\Model\Topic $topic)
+    public function deleteAction(Topic $topic)
     {
         $this->topicRepository->remove($topic);
-        $this->flashMessageContainer->add(LocalizationUtility::translate('topicDeleted', 'pforum'), '', FlashMessage::OK);
+        $this->addFlashMessage(LocalizationUtility::translate('topicDeleted', 'pforum'), '', FlashMessage::OK);
         $this->redirect('list', 'Forum');
     }
 
     /**
      * initialize action activate
      * hidden record throws an exception. Thats why I check it here before calling activateAction.
+     *
+     * @return void
      */
     public function initializeActivateAction()
     {
@@ -239,13 +258,14 @@ class TopicController extends \JWeiland\Pforum\Controller\AbstractTopicControlle
      * action activate by uid
      * We need this extra action, because hidden entries can't be found in FE mode.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Topic $topic
+     * @param Topic $topic
+     * @return void
      */
-    public function activateAction(\JWeiland\Pforum\Domain\Model\Topic $topic)
+    public function activateAction(Topic $topic)
     {
         $topic->setHidden(false);
         $this->topicRepository->update($topic);
-        $this->flashMessageContainer->add(LocalizationUtility::translate('topicActivated', 'pforum'), '', FlashMessage::OK);
+        $this->addFlashMessage(LocalizationUtility::translate('topicActivated', 'pforum'), '', FlashMessage::OK);
         $this->redirect('list', 'Forum');
     }
 }

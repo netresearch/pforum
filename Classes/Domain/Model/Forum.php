@@ -81,7 +81,7 @@ class Forum extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function setTitle($title)
     {
-        $this->title = $title;
+        $this->title = (string)$title;
     }
 
     /**
@@ -101,7 +101,7 @@ class Forum extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function setTeaser($teaser)
     {
-        $this->teaser = $teaser;
+        $this->teaser = (string)$teaser;
     }
 
     /**

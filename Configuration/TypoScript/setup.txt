@@ -21,18 +21,12 @@ plugin.tx_pforum {
   persistence {
     storagePid = {$plugin.tx_pforum.persistence.storagePid}
     classes {
-      Tx_Pforum_Domain_Model_FrontendUser {
+      JWeiland\Pforum\Domain\Model\FrontendUser {
         mapping {
           tableName = fe_users
-          recordType =
         }
       }
     }
-  }
-
-  features {
-    # uncomment the following line to enable the new Property Mapper.
-    rewrittenPropertyMapper = 1
   }
 
   settings {

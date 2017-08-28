@@ -45,6 +45,7 @@ abstract class AbstractValidator extends \TYPO3\CMS\Extbase\Validation\Validator
 
     /**
      * @param ConfigurationManagerInterface $configurationManager
+     * @return void
      */
     public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager)
     {

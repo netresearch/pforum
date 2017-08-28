@@ -14,6 +14,9 @@ namespace JWeiland\Pforum\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Pforum\Domain\Model\Post;
+use JWeiland\Pforum\Domain\Model\Topic;
+use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -27,11 +30,12 @@ class PostController extends \JWeiland\Pforum\Controller\AbstractPostController
     /**
      * action new.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Topic $topic
-     * @param \JWeiland\Pforum\Domain\Model\Post  $newPost
+     * @param Topic $topic
+     * @param Post $newPost
      * @dontvalidate $newPost
+     * @return void
      */
-    public function newAction(\JWeiland\Pforum\Domain\Model\Topic $topic, \JWeiland\Pforum\Domain\Model\Post $newPost = null)
+    public function newAction(Topic $topic, Post $newPost = null)
     {
         $this->view->assign('topic', $topic);
         $this->view->assign('newPost', $newPost);
@@ -39,22 +43,27 @@ class PostController extends \JWeiland\Pforum\Controller\AbstractPostController
 
     /**
      * check if email of user object is mandatory or not.
+     *
+     * @return void
      */
     public function initializeCreateAction()
     {
         if ($this->settings['useImages']) {
             // we have our own implementation how to implement images
-            $this->arguments->getArgument('newPost')->getPropertyMappingConfiguration()->setTargetTypeForSubProperty('images', 'array');
+            $this->arguments->getArgument('newPost')->getPropertyMappingConfiguration()->setTargetTypeForSubProperty(
+                'images', 'array'
+            );
         }
     }
 
     /**
      * action create.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Topic $topic
-     * @param \JWeiland\Pforum\Domain\Model\Post  $newPost
+     * @param Topic $topic
+     * @param Post $newPost
+     * @return void
      */
-    public function createAction(\JWeiland\Pforum\Domain\Model\Topic $topic, \JWeiland\Pforum\Domain\Model\Post $newPost)
+    public function createAction(Topic $topic, Post $newPost)
     {
         /* if auth = frontend user */
         if ($this->settings['auth'] == 2) {
@@ -83,7 +92,11 @@ class PostController extends \JWeiland\Pforum\Controller\AbstractPostController
                 $this->mailToUser($newPost);
             }
         }
-        if ($newPost->getHidden() === false && $topic->getUser() instanceof \JWeiland\Pforum\Domain\Model\User && $topic->getUser()->getEmail() != '') {
+        if (
+            $newPost->getHidden() === false &&
+            $topic->getUser() instanceof \JWeiland\Pforum\Domain\Model\User &&
+            $topic->getUser()->getEmail() != ''
+        ) {
             // send an email to creator of topic to inform him about new comments/posts
             $this->mailToTopicCreator($topic, $newPost);
         }
@@ -94,6 +107,8 @@ class PostController extends \JWeiland\Pforum\Controller\AbstractPostController
     /**
      * initialize action edit
      * hidden record throws an exception. Thats why I check it here before calling editAction.
+     *
+     * @return void
      */
     public function initializeEditAction()
     {
@@ -103,12 +118,14 @@ class PostController extends \JWeiland\Pforum\Controller\AbstractPostController
     /**
      * action edit.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Post $post
-     * @param bool                               $isPreview
-     * @param bool                               $isNew     We need the information if updateAction was called from createAction. If so we have to passthrough this information
+     * @param Post $post
+     * @param bool $isPreview
+     * @param bool $isNew We need the information if updateAction was called from createAction.
+     *                    If so we have to passthrough this information
      * @dontvalidate $post
+     * @return void
      */
-    public function editAction(\JWeiland\Pforum\Domain\Model\Post $post = null, $isPreview = false, $isNew = false)
+    public function editAction(Post $post = null, $isPreview = false, $isNew = false)
     {
         $this->view->assign('post', $post);
         $this->view->assign('isPreview', $isPreview);
@@ -124,17 +141,21 @@ class PostController extends \JWeiland\Pforum\Controller\AbstractPostController
         $this->registerPostFromRequest('post');
         if ($this->settings['useImages']) {
             // we have our own implementation how to implement images
-            $this->arguments->getArgument('post')->getPropertyMappingConfiguration()->setTargetTypeForSubProperty('images', 'array');
+            $this->arguments->getArgument('post')->getPropertyMappingConfiguration()->setTargetTypeForSubProperty(
+                'images', 'array'
+            );
         }
     }
 
     /**
      * action update.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Post $post
-     * @param bool                               $isNew We need the information if updateAction was called from createAction. If so we have to add different messages
+     * @param Post $post
+     * @param bool $isNew We need the information if updateAction was
+     *                    called from createAction. If so we have to add different messages
+     * @return void
      */
-    public function updateAction(\JWeiland\Pforum\Domain\Model\Post $post, $isNew = false)
+    public function updateAction(Post $post, $isNew = false)
     {
         $this->postRepository->update($post);
 
@@ -162,7 +183,7 @@ class PostController extends \JWeiland\Pforum\Controller\AbstractPostController
             } else {
                 // edited posts which are not new are visible
                 $post->setHidden(false);
-                $this->flashMessageContainer->add(LocalizationUtility::translate('postUpdated', 'pforum'), '', FlashMessage::OK);
+                $this->addFlashMessage(LocalizationUtility::translate('postUpdated', 'pforum'), '', FlashMessage::OK);
             }
             $this->redirect('show', 'Forum', '', array('forum' => $post->getTopic()->getForum()));
         }
@@ -171,6 +192,8 @@ class PostController extends \JWeiland\Pforum\Controller\AbstractPostController
     /**
      * initialize action delete
      * hidden record throws an exception. Thats why I check it here before calling deleteAction.
+     *
+     * @return void
      */
     public function initializeDeleteAction()
     {
@@ -180,27 +203,31 @@ class PostController extends \JWeiland\Pforum\Controller\AbstractPostController
     /**
      * action delete.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Post $post
+     * @param Post $post
+     * @return void
      */
-    public function deleteAction(\JWeiland\Pforum\Domain\Model\Post $post)
+    public function deleteAction(Post $post)
     {
         $this->topicRepository->remove($post);
-        $this->flashMessageContainer->add(LocalizationUtility::translate('postDeleted', 'pforum'), '', FlashMessage::OK);
+        $this->addFlashMessage(LocalizationUtility::translate('postDeleted', 'pforum'), '', FlashMessage::OK);
         $this->redirect('list', 'Forum');
     }
 
     /**
      * send mail to user to confirm, edit or delete his entry.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Topic $topic
-     * @param \JWeiland\Pforum\Domain\Model\Post  $post
+     * @param Topic $topic
+     * @param Post $post
+     * @return void
      */
-    protected function mailToTopicCreator(\JWeiland\Pforum\Domain\Model\Topic $topic, \JWeiland\Pforum\Domain\Model\Post $post)
+    protected function mailToTopicCreator(Topic $topic, Post $post)
     {
-        $mail = $this->objectManager->get('TYPO3\\CMS\\Core\\Mail\\MailMessage');
+        $mail = $this->objectManager->get(MailMessage::class);
         $mail->setFrom($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName());
         $mail->setTo($topic->getUser()->getEmail(), $topic->getUser()->getName());
-        $mail->setSubject(LocalizationUtility::translate('email.post.subject.newPost', 'pforum', array($topic->getTitle())));
+        $mail->setSubject(LocalizationUtility::translate(
+            'email.post.subject.newPost', 'pforum', array($topic->getTitle()))
+        );
         $mail->setBody(LocalizationUtility::translate(
             'email.post.text.newPost',
             'pforum',
@@ -217,6 +244,8 @@ class PostController extends \JWeiland\Pforum\Controller\AbstractPostController
     /**
      * initialize action activate
      * hidden record throws an exception. Thats why I check it here before calling activateAction.
+     *
+     * @return void
      */
     public function initializeActivateAction()
     {
@@ -227,9 +256,10 @@ class PostController extends \JWeiland\Pforum\Controller\AbstractPostController
      * action activate by uid
      * We need this extra action, because hidden entries can't be found in FE mode.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Post $post
+     * @param Post $post
+     * @return void
      */
-    public function activateAction(\JWeiland\Pforum\Domain\Model\Post $post)
+    public function activateAction(Post $post)
     {
         $post->setHidden(false);
         $this->postRepository->update($post);
@@ -237,7 +267,7 @@ class PostController extends \JWeiland\Pforum\Controller\AbstractPostController
         // send an email to creator of topic to inform him about new comments/posts
         $this->mailToTopicCreator($post->getTopic(), $post);
 
-        $this->flashMessageContainer->add(LocalizationUtility::translate('postActivated', 'pforum'), '', FlashMessage::OK);
+        $this->addFlashMessage(LocalizationUtility::translate('postActivated', 'pforum'), '', FlashMessage::OK);
         $this->redirect('list', 'Forum');
     }
 }

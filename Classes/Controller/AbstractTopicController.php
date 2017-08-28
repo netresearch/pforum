@@ -16,8 +16,8 @@ namespace JWeiland\Pforum\Controller;
 
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
@@ -56,7 +56,7 @@ class AbstractTopicController extends \JWeiland\Pforum\Controller\AbstractContro
             $newTopic->setFrontendUser($user);
         } else {
             /* normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated */
-            $this->flashMessageContainer->add('You must be logged in before creating a topic');
+            $this->addFlashMessage('You must be logged in before creating a topic', '', FlashMessage::WARNING);
             $this->redirect('show', 'Forum', null, array('forum' => $forum));
         }
     }
@@ -86,9 +86,11 @@ class AbstractTopicController extends \JWeiland\Pforum\Controller\AbstractContro
      */
     protected function getContent(\JWeiland\Pforum\Domain\Model\Topic $topic)
     {
-        /** @var \TYPO3\CMS\Fluid\View\StandaloneView $view */
-        $view = $this->objectManager->get('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
-        $view->setTemplatePathAndFilename(ExtensionManagementUtility::extPath('pforum').'Resources/Private/Templates/Mail/ConfigureTopic.html');
+        /** @var StandaloneView $view */
+        $view = $this->objectManager->get(StandaloneView::class);
+        $view->setTemplatePathAndFilename(
+            ExtensionManagementUtility::extPath('pforum') . 'Resources/Private/Templates/Mail/ConfigureTopic.html'
+        );
         $view->setControllerContext($this->getControllerContext());
         $view->assign('settings', $this->settings);
         $view->assign('topic', $topic);
@@ -98,18 +100,28 @@ class AbstractTopicController extends \JWeiland\Pforum\Controller\AbstractContro
 
     /**
      * add flash message for creation.
+     *
+     * @return void
      */
     protected function addFlashMessageForCreation()
     {
         if ($this->settings['topic']['hideAtCreation']) {
             if ($this->settings['topic']['activateByAdmin']) {
-                $this->flashMessageContainer->add(LocalizationUtility::translate('hiddenTopicCreatedAndActivateByAdmin', 'pforum'), '', FlashMessage::OK);
+                $this->addFlashMessage(
+                    LocalizationUtility::translate('hiddenTopicCreatedAndActivateByAdmin', 'pforum'),
+                    '',
+                    FlashMessage::OK
+                );
             } else {
-                $this->flashMessageContainer->add(LocalizationUtility::translate('hiddenTopicCreatedAndActivateByUser', 'pforum'), '', FlashMessage::OK);
+                $this->addFlashMessage(
+                    LocalizationUtility::translate('hiddenTopicCreatedAndActivateByUser', 'pforum'),
+                    '',
+                    FlashMessage::OK
+                );
             }
         } else {
             // if topic is not hidden at creation there is no need to activate it by admin
-            $this->flashMessageContainer->add(LocalizationUtility::translate('topicCreated', 'pforum'), '', FlashMessage::OK);
+            $this->addFlashMessage(LocalizationUtility::translate('topicCreated', 'pforum'), '', FlashMessage::OK);
         }
     }
 }

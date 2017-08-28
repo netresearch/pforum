@@ -134,7 +134,7 @@ class Topic extends AbstractEntity
      */
     public function setHidden($hidden)
     {
-        $this->hidden = (bool) $hidden;
+        $this->hidden = (bool)$hidden;
     }
 
     /**

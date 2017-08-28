@@ -14,6 +14,8 @@ namespace JWeiland\Pforum\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Pforum\Domain\Model\Post;
+use JWeiland\Pforum\Domain\Model\Topic;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
@@ -112,10 +114,10 @@ class ForumController extends \JWeiland\Pforum\Controller\AbstractController
      * action activate
      * This is for BE use.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Topic $topic
-     * @param \JWeiland\Pforum\Domain\Model\Post  $post
+     * @param Topic $topic
+     * @param Post $post
      */
-    public function activateAction(\JWeiland\Pforum\Domain\Model\Topic $topic = null, \JWeiland\Pforum\Domain\Model\Post $post = null)
+    public function activateAction(Topic $topic = null, Post $post = null)
     {
         if (!empty($topic)) {
             $topic->setHidden(false);

@@ -14,7 +14,16 @@ namespace JWeiland\Pforum\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Pforum\Configuration\ExtConf;
+use JWeiland\Pforum\Domain\Repository\AnonymousUserRepository;
+use JWeiland\Pforum\Domain\Repository\ForumRepository;
+use JWeiland\Pforum\Domain\Repository\FrontendUserRepository;
+use JWeiland\Pforum\Domain\Repository\PostRepository;
+use JWeiland\Pforum\Domain\Repository\TopicRepository;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\Persistence\Generic\Session;
 
 /**
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
@@ -74,10 +83,10 @@ class AbstractController extends ActionController
     /**
      * inject extConf
      *
-     * @param \JWeiland\Pforum\Configuration\ExtConf $extConf
+     * @param ExtConf $extConf
      * @return void
      */
-    public function injectExtConf(\JWeiland\Pforum\Configuration\ExtConf $extConf)
+    public function injectExtConf(ExtConf $extConf)
     {
         $this->extConf = $extConf;
     }
@@ -85,10 +94,10 @@ class AbstractController extends ActionController
     /**
      * inject session
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\Generic\Session $session
+     * @param Session $session
      * @return void
      */
-    public function injectSession(\TYPO3\CMS\Extbase\Persistence\Generic\Session $session)
+    public function injectSession(Session $session)
     {
         $this->session = $session;
     }
@@ -96,10 +105,10 @@ class AbstractController extends ActionController
     /**
      * inject forumRepository
      *
-     * @param \JWeiland\Pforum\Domain\Repository\ForumRepository $forumRepository
+     * @param ForumRepository $forumRepository
      * @return void
      */
-    public function injectForumRepository(\JWeiland\Pforum\Domain\Repository\ForumRepository $forumRepository)
+    public function injectForumRepository(ForumRepository $forumRepository)
     {
         $this->forumRepository = $forumRepository;
     }
@@ -107,10 +116,10 @@ class AbstractController extends ActionController
     /**
      * inject topicRepository
      *
-     * @param \JWeiland\Pforum\Domain\Repository\TopicRepository $topicRepository
+     * @param TopicRepository $topicRepository
      * @return void
      */
-    public function injectTopicRepository(\JWeiland\Pforum\Domain\Repository\TopicRepository $topicRepository)
+    public function injectTopicRepository(TopicRepository $topicRepository)
     {
         $this->topicRepository = $topicRepository;
     }
@@ -118,10 +127,10 @@ class AbstractController extends ActionController
     /**
      * inject postRepository
      *
-     * @param \JWeiland\Pforum\Domain\Repository\PostRepository $postRepository
+     * @param PostRepository $postRepository
      * @return void
      */
-    public function injectPostRepository(\JWeiland\Pforum\Domain\Repository\PostRepository $postRepository)
+    public function injectPostRepository(PostRepository $postRepository)
     {
         $this->postRepository = $postRepository;
     }
@@ -129,10 +138,10 @@ class AbstractController extends ActionController
     /**
      * inject anonymousUserRepository
      *
-     * @param \JWeiland\Pforum\Domain\Repository\AnonymousUserRepository $anonymousUserRepository
+     * @param AnonymousUserRepository $anonymousUserRepository
      * @return void
      */
-    public function injectAnonymousUserRepository(\JWeiland\Pforum\Domain\Repository\AnonymousUserRepository $anonymousUserRepository)
+    public function injectAnonymousUserRepository(AnonymousUserRepository $anonymousUserRepository)
     {
         $this->anonymousUserRepository = $anonymousUserRepository;
     }
@@ -140,10 +149,10 @@ class AbstractController extends ActionController
     /**
      * inject frontendUserRepository
      *
-     * @param \JWeiland\Pforum\Domain\Repository\FrontendUserRepository $frontendUserRepository
+     * @param FrontendUserRepository $frontendUserRepository
      * @return void
      */
-    public function injectFrontendUserRepository(\JWeiland\Pforum\Domain\Repository\FrontendUserRepository $frontendUserRepository)
+    public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository)
     {
         $this->frontendUserRepository = $frontendUserRepository;
     }
@@ -151,25 +160,26 @@ class AbstractController extends ActionController
     /**
      * inject persistenceManager
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager
+     * @param PersistenceManager $persistenceManager
      * @return void
      */
-    public function injectPersistenceManager(\TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager)
+    public function injectPersistenceManager(PersistenceManager $persistenceManager)
     {
         $this->persistenceManager = $persistenceManager;
     }
 
     /**
-     * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
+     * @param ConfigurationManagerInterface $configurationManager
+     * @return void
      */
-    public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager)
+    public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager)
     {
         $this->configurationManager = $configurationManager;
         $tsSettings = $this->configurationManager->getConfiguration(
-            \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'pforum', 'doNotLoadFlexFormSettings'
+           ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'pforum', 'doNotLoadFlexFormSettings'
         );
         $mergedSettings = $this->configurationManager->getConfiguration(
-            \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
         );
         if (is_array($mergedSettings)) {
             foreach ($mergedSettings as $key => $value) {
@@ -183,6 +193,8 @@ class AbstractController extends ActionController
 
     /**
      * preprocessing of all actions.
+     *
+     * @return void
      */
     public function initializeAction()
     {
@@ -198,14 +210,31 @@ class AbstractController extends ActionController
      * If there is a misconfiguration in TS this will throw an Exception.
      *
      * @throws \Exception
+     * @return void
      */
     protected function checkForMisconfiguration()
     {
-        if ($this->settings['topic']['hideAtCreation'] && empty($this->settings['topic']['activateByAdmin']) && empty($this->settings['emailIsMandatory'])) {
-            throw new \Exception('You can\'t hide topics at creation, deactivate admin activation and mark email as NOT mandatory. This would produce hidden records which will never be visible', 1378371532);
+        if (
+            $this->settings['topic']['hideAtCreation'] &&
+            empty($this->settings['topic']['activateByAdmin']) &&
+            empty($this->settings['emailIsMandatory'])
+        ) {
+            throw new \Exception(
+                'You can\'t hide topics at creation, deactivate admin activation and mark email as NOT mandatory.' .
+                'This would produce hidden records which will never be visible',
+                1378371532
+            );
         }
-        if ($this->settings['post']['hideAtCreation'] && empty($this->settings['post']['activateByAdmin']) && empty($this->settings['emailIsMandatory'])) {
-            throw new \Exception('You can\'t hide posts at creation, deactivate admin activation and mark email as NOT mandatory. This would produce hidden records which will never be visible', 1378371541);
+        if (
+            $this->settings['post']['hideAtCreation'] &&
+            empty($this->settings['post']['activateByAdmin']) &&
+            empty($this->settings['emailIsMandatory'])
+        ) {
+            throw new \Exception(
+                'You can\'t hide posts at creation, deactivate admin activation and mark email ' .
+                'as NOT mandatory. This would produce hidden records which will never be visible',
+                1378371541
+            );
         }
     }
 

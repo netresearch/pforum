@@ -1,4 +1,5 @@
 <?php
+
 namespace JWeiland\Pforum\Property\TypeConverter;
 
 /*
@@ -14,6 +15,8 @@ namespace JWeiland\Pforum\Property\TypeConverter;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
+use TYPO3\CMS\Extbase\Error\Error;
 use TYPO3\CMS\Extbase\Property\TypeConverter\AbstractTypeConverter;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -48,11 +51,9 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
     /**
      * This implementation always returns TRUE for this method.
      *
-     * @param mixed  $source     the source data
+     * @param mixed $source the source data
      * @param string $targetType the type to convert to.
-     *
      * @return bool TRUE if this TypeConverter can convert from $source to $targetType, FALSE otherwise.
-     *
      * @api
      */
     public function canConvertFrom($source, $targetType)
@@ -77,19 +78,17 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
      * Actually convert from $source to $targetType, taking into account the fully
      * built $convertedChildProperties and $configuration.
      *
-     * @param array                                                             $source
-     * @param string                                                            $targetType
-     * @param array                                                             $convertedChildProperties
+     * @param array $source
+     * @param string $targetType
+     * @param array $convertedChildProperties
      * @param \TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface $configuration
-     *
      * @throws \TYPO3\CMS\Extbase\Property\Exception
-     *
-     * @return \TYPO3\CMS\Extbase\Domain\Model\AbstractFileFolder
-     *
+     * @return \TYPO3\CMS\Extbase\Domain\Model\AbstractFileFolder|Error
      * @api
      */
     public function convertFrom(
-        $source, $targetType,
+        $source,
+        $targetType,
         array $convertedChildProperties = array(),
         \TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface $configuration = null
     ) {
@@ -140,7 +139,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
                 );
             }
             // OK...we have a valid file and the user has the rights. It's time to check, if an old file can be deleted
-            if (!empty($alreadyPersistedImages) && $alreadyPersistedImages[$key] instanceof \TYPO3\CMS\Extbase\Domain\Model\FileReference) {
+            if (!empty($alreadyPersistedImages) && $alreadyPersistedImages[$key] instanceof FileReference) {
                 /** @var \TYPO3\CMS\Extbase\Domain\Model\FileReference $oldFile */
                 $oldFile = $alreadyPersistedImages[$key];
                 $oldFile->getOriginalResource()->getOriginalFile()->delete();
@@ -166,14 +165,13 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
     /**
      * upload file and get a file reference object.
      *
-     * @param array  $source
-     *
+     * @param array $source
      * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference
      */
     protected function getExtbaseFileReference($source)
     {
         /** @var \TYPO3\CMS\Extbase\Domain\Model\FileReference $extbaseFileReference */
-        $extbaseFileReference = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Domain\\Model\\FileReference');
+        $extbaseFileReference = $this->objectManager->get(FileReference::class);
         $extbaseFileReference->setOriginalResource($this->getCoreFileReference($source));
 
         return $extbaseFileReference;
@@ -183,7 +181,6 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
      * upload file and get a file reference object.
      *
      * @param array $source
-     *
      * @return \TYPO3\CMS\Core\Resource\FileReference
      */
     protected function getCoreFileReference(array $source)

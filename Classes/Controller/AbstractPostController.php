@@ -14,9 +14,11 @@ namespace JWeiland\Pforum\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Pforum\Domain\Model\Post;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
@@ -33,6 +35,7 @@ class AbstractPostController extends \JWeiland\Pforum\Controller\AbstractControl
      * This is a workaround to help controller actions to find (hidden) posts.
      *
      * @param $argumentName
+     * @return void
      */
     protected function registerPostFromRequest($argumentName)
     {
@@ -52,6 +55,7 @@ class AbstractPostController extends \JWeiland\Pforum\Controller\AbstractControl
      *
      * @param \JWeiland\Pforum\Domain\Model\Topic $topic
      * @param \JWeiland\Pforum\Domain\Model\Post  $newPost
+     * @return void
      */
     protected function addFeUserToPost(\JWeiland\Pforum\Domain\Model\Topic $topic, \JWeiland\Pforum\Domain\Model\Post $newPost)
     {
@@ -61,7 +65,7 @@ class AbstractPostController extends \JWeiland\Pforum\Controller\AbstractControl
             $newPost->setFrontendUser($user);
         } else {
             /* normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated */
-            $this->flashMessageContainer->add('You must be logged in before creating a post');
+            $this->addFlashMessage('You must be logged in before creating a post');
             $this->redirect('show', 'Forum', null, array('forum' => $topic->getForum()));
         }
     }
@@ -70,6 +74,7 @@ class AbstractPostController extends \JWeiland\Pforum\Controller\AbstractControl
      * send mail to user to confirm, edit or delete his entry.
      *
      * @param \JWeiland\Pforum\Domain\Model\Post $post
+     * @return void
      */
     protected function mailToUser(\JWeiland\Pforum\Domain\Model\Post $post)
     {
@@ -85,15 +90,17 @@ class AbstractPostController extends \JWeiland\Pforum\Controller\AbstractControl
     /**
      * get content for mailing.
      *
-     * @param \JWeiland\Pforum\Domain\Model\Post $post
-     *
+     * @param Post $post
      * @return string
      */
-    protected function getContent(\JWeiland\Pforum\Domain\Model\Post $post)
+    protected function getContent(Post $post)
     {
         /** @var \TYPO3\CMS\Fluid\View\StandaloneView $view */
-        $view = $this->objectManager->get('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
-        $view->setTemplatePathAndFilename(ExtensionManagementUtility::extPath('pforum').'Resources/Private/Templates/Mail/ConfigurePost.html');
+        $view = $this->objectManager->get(StandaloneView::class);
+        $view->setTemplatePathAndFilename(
+            ExtensionManagementUtility::extPath('pforum') .
+            'Resources/Private/Templates/Mail/ConfigurePost.html'
+        );
         $view->setControllerContext($this->getControllerContext());
         $view->assign('settings', $this->settings);
         $view->assign('post', $post);
@@ -103,18 +110,32 @@ class AbstractPostController extends \JWeiland\Pforum\Controller\AbstractControl
 
     /**
      * add flash message for creation.
+     *
+     * @return void
      */
     protected function addFlashMessageForCreation()
     {
         if ($this->settings['post']['hideAtCreation']) {
             if ($this->settings['post']['activateByAdmin']) {
-                $this->flashMessageContainer->add(LocalizationUtility::translate('hiddenPostCreatedAndActivateByAdmin', 'pforum'), '', FlashMessage::OK);
+                $this->addFlashMessage(
+                    LocalizationUtility::translate('hiddenPostCreatedAndActivateByAdmin', 'pforum'),
+                    '',
+                    FlashMessage::OK
+                );
             } else {
-                $this->flashMessageContainer->add(LocalizationUtility::translate('hiddenPostCreatedAndActivateByUser', 'pforum'), '', FlashMessage::OK);
+                $this->addFlashMessage(
+                    LocalizationUtility::translate('hiddenPostCreatedAndActivateByUser', 'pforum'),
+                    '',
+                    FlashMessage::OK
+                );
             }
         } else {
             // if topic is not hidden at creation there is no need to activate it by admin
-            $this->flashMessageContainer->add(LocalizationUtility::translate('postCreated', 'pforum'), '', FlashMessage::OK);
+            $this->addFlashMessage(
+                LocalizationUtility::translate('postCreated', 'pforum'),
+                '',
+                FlashMessage::OK)
+            ;
         }
     }
 }

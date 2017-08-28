@@ -119,7 +119,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function setHidden($hidden)
     {
-        $this->hidden = (bool) $hidden;
+        $this->hidden = (bool)$hidden;
     }
 
     /**
@@ -179,7 +179,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function setTitle($title)
     {
-        $this->title = $title;
+        $this->title = (string)$title;
     }
 
     /**
@@ -199,7 +199,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function setDescription($description)
     {
-        $this->description = $description;
+        $this->description = (string)$description;
     }
 
     /**
