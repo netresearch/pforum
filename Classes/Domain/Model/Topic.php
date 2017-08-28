@@ -14,11 +14,6 @@ namespace JWeiland\Pforum\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
-use JWeiland\Pforum\Domain\Model\AnonymousUser;
-use JWeiland\Pforum\Domain\Model\Forum;
-use JWeiland\Pforum\Domain\Model\FrontendUser;
-use JWeiland\Pforum\Domain\Model\Post;
-use JWeiland\Pforum\Domain\Model\User;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -46,7 +41,7 @@ class Topic extends AbstractEntity
     /**
      * Forum.
      *
-     * @var Forum
+     * @var \JWeiland\Pforum\Domain\Model\Forum
      */
     protected $forum;
 
@@ -69,7 +64,7 @@ class Topic extends AbstractEntity
     /**
      * Posts.
      *
-     * @var ObjectStorage<\JWeiland\Pforum\Domain\Model\Post>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Pforum\Domain\Model\Post>
      * @cascade remove
      * @lazy
      */
@@ -78,7 +73,7 @@ class Topic extends AbstractEntity
     /**
      * AnonymousUser.
      *
-     * @var AnonymousUser
+     * @var \JWeiland\Pforum\Domain\Model\AnonymousUser
      * @cascade remove
      * @lazy
      */
@@ -87,7 +82,7 @@ class Topic extends AbstractEntity
     /**
      * FrontendUser.
      *
-     * @var FrontendUser
+     * @var \JWeiland\Pforum\Domain\Model\FrontendUser
      * @lazy
      */
     protected $frontendUser;
@@ -95,7 +90,7 @@ class Topic extends AbstractEntity
     /**
      * Images.
      *
-     * @var ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
      * @lazy
      */
     protected $images;

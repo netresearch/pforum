@@ -14,7 +14,6 @@ namespace JWeiland\Pforum\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
-use JWeiland\Pforum\Domain\Model\Topic;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -41,7 +40,7 @@ class Forum extends AbstractEntity
     /**
      * Topics.
      *
-     * @var ObjectStorage<\JWeiland\Pforum\Domain\Model\Topic>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Pforum\Domain\Model\Topic>
      * @lazy
      */
     protected $topics;
