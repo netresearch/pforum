@@ -210,7 +210,7 @@ class PostController extends AbstractPostController
      */
     public function deleteAction(Post $post)
     {
-        $this->topicRepository->remove($post);
+        $this->postRepository->remove($post);
         $this->addFlashMessage(LocalizationUtility::translate('postDeleted', 'pforum'), '', FlashMessage::OK);
         $this->redirect('list', 'Forum');
     }
