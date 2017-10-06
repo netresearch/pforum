@@ -49,9 +49,19 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
 
     /**
      * @var ResourceFactory
-     * @inject
      */
     protected $fileFactory;
+
+    /**
+     * inject fileFactory
+     *
+     * @param ResourceFactory $fileFactory
+     * @return void
+     */
+    public function injectFileFactory(ResourceFactory $fileFactory)
+    {
+        $this->fileFactory = $fileFactory;
+    }
 
     /**
      * This implementation always returns TRUE for this method.

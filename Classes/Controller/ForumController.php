@@ -18,6 +18,10 @@ use JWeiland\Pforum\Controller\AbstractController;
 use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
+use JWeiland\Pforum\Domain\Repository\ForumRepository;
+use JWeiland\Pforum\Domain\Repository\PostRepository;
+use JWeiland\Pforum\Domain\Repository\TopicRepository;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
@@ -32,7 +36,6 @@ class ForumController extends AbstractController
      * forumRepository.
      *
      * @var \JWeiland\Pforum\Domain\Repository\ForumRepository
-     * @inject
      */
     protected $forumRepository;
 
@@ -40,7 +43,6 @@ class ForumController extends AbstractController
      * topicRepository.
      *
      * @var \JWeiland\Pforum\Domain\Repository\TopicRepository
-     * @inject
      */
     protected $topicRepository;
 
@@ -48,15 +50,59 @@ class ForumController extends AbstractController
      * postRepository.
      *
      * @var \JWeiland\Pforum\Domain\Repository\PostRepository
-     * @inject
      */
     protected $postRepository;
 
     /**
+     * pageRenderer
+     *
      * @var \TYPO3\CMS\Core\Page\PageRenderer
-     * @inject
      */
     protected $pageRenderer;
+
+    /**
+     * inject forumRepository
+     *
+     * @param ForumRepository $forumRepository
+     * @return void
+     */
+    public function injectForumRepository(ForumRepository $forumRepository)
+    {
+        $this->forumRepository = $forumRepository;
+    }
+
+    /**
+     * inject topicRepository
+     *
+     * @param TopicRepository $topicRepository
+     * @return void
+     */
+    public function injectTopicRepository(TopicRepository $topicRepository)
+    {
+        $this->topicRepository = $topicRepository;
+    }
+
+    /**
+     * inject postRepository
+     *
+     * @param PostRepository $postRepository
+     * @return void
+     */
+    public function injectPostRepository(PostRepository $postRepository)
+    {
+        $this->postRepository = $postRepository;
+    }
+
+    /**
+     * inject pageRenderer
+     *
+     * @param PageRenderer $pageRenderer
+     * @return void
+     */
+    public function injectPageRenderer(PageRenderer $pageRenderer)
+    {
+        $this->pageRenderer = $pageRenderer;
+    }
 
     /**
      * action list.

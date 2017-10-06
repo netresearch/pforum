@@ -32,9 +32,19 @@ class AbstractPostController extends AbstractController
 {
     /**
      * @var PageRenderer
-     * @inject
      */
     protected $pageRenderer;
+
+    /**
+     * inject pageRenderer
+     *
+     * @param PageRenderer $pageRenderer
+     * @return void
+     */
+    public function injectPageRenderer(PageRenderer $pageRenderer)
+    {
+        $this->pageRenderer = $pageRenderer;
+    }
 
     /**
      * This is a workaround to help controller actions to find (hidden) posts.
