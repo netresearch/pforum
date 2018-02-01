@@ -2,8 +2,7 @@
   "name": "jweiland/pforum",
   "type": "typo3-cms-extension",
   "description": "Lightweight forum extension for TYPO3",
-  "version": "2.0.0",
-  "license": "GPL-2.0+",
+  "license": "GPL-2.0-or-later",
   "keywords": ["typo3", "TYPO3 CMS", "template"],
   "homepage": "https://jweiland.net",
   "authors": [
