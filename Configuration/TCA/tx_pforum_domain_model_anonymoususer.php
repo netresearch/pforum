@@ -1,6 +1,6 @@
 <?php
-return array(
-    'ctrl' => array(
+return [
+    'ctrl' => [
         'title' => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_anonymoususer',
         'label' => 'name',
         'tstamp' => 'tstamp',
@@ -15,129 +15,142 @@ return array(
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
         'delete' => 'deleted',
-        'enablecolumns' => array(
+        'enablecolumns' => [
             'disabled' => 'hidden',
             'starttime' => 'starttime',
             'endtime' => 'endtime',
-        ),
+        ],
         'searchFields' => 'name,username,email',
-        'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('pforum') . 'Configuration/TCA/Anonymoususer.php',
-        'iconfile' =>'EXT:pforum/Resources/Public/Icons/tx_pforum_domain_model_anonymoususer.gif',
-    ),
-    'interface' => array(
+        'iconfile' => 'EXT:pforum/Resources/Public/Icons/tx_pforum_domain_model_anonymoususer.gif',
+    ],
+    'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, username, email',
-    ),
-    'types' => array(
-        '1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, name, username, email,--div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,starttime, endtime'),
-    ),
-    'palettes' => array(
-        '1' => array('showitem' => ''),
-    ),
-    'columns' => array(
-        'sys_language_uid' => array(
-            'exclude' => 1,
+    ],
+    'types' => [
+        '1' => [
+            'showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, name, username, email,
+            --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
+            --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access'
+        ],
+    ],
+    'palettes' => [
+        'access' => [
+            'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel',
+        ]
+    ],
+    'columns' => [
+        'sys_language_uid' => [
+            'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
-            'config' => array(
+            'config' => [
                 'type' => 'select',
-                'foreign_table' => 'sys_language',
-                'foreign_table_where' => 'ORDER BY sys_language.title',
-                'items' => array(
-                    array('LLL:EXT:lang/locallang_general.xlf:LGL.allLanguages', -1),
-                    array('LLL:EXT:lang/locallang_general.xlf:LGL.default_value', 0),
-                ),
-            ),
-        ),
-        'l10n_parent' => array(
+                'renderType' => 'selectSingle',
+                'special' => 'languages',
+                'items' => [
+                    [
+                        'LLL:EXT:lang/locallang_general.xlf:LGL.allLanguages',
+                        -1,
+                        'flags-multiple'
+                    ],
+                ],
+                'default' => 0,
+            ]
+        ],
+        'l10n_parent' => [
             'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.l18n_parent',
-            'config' => array(
+            'config' => [
                 'type' => 'select',
-                'items' => array(
-                    array('', 0),
-                ),
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['', 0],
+                ],
                 'foreign_table' => 'tx_pforum_domain_model_anonymoususer',
                 'foreign_table_where' => 'AND tx_pforum_domain_model_anonymoususer.pid=###CURRENT_PID### AND tx_pforum_domain_model_anonymoususer.sys_language_uid IN (-1,0)',
-            ),
-        ),
-        'l10n_diffsource' => array(
-            'config' => array(
+                'showIconTable' => false,
+                'default' => 0,
+            ]
+        ],
+        'l10n_diffsource' => [
+            'config' => [
                 'type' => 'passthrough',
-            ),
-        ),
-        't3ver_label' => array(
+                'default' => ''
+            ]
+        ],
+        't3ver_label' => [
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.versionLabel',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
-                'size' => 30,
-                'max' => 255,
-            ),
-        ),
-        'hidden' => array(
-            'exclude' => 1,
+                'size' => '30',
+                'max' => '255'
+            ]
+        ],
+        'hidden' => [
+            'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
-            'config' => array(
+            'config' => [
                 'type' => 'check',
-            ),
-        ),
-        'starttime' => array(
-            'exclude' => 1,
-            'l10n_mode' => 'mergeIfNotBlank',
+                'items' => [
+                    '1' => [
+                        '0' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:hidden.I.0'
+                    ]
+                ]
+            ]
+        ],
+        'starttime' => [
+            'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.starttime',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
-                'size' => 13,
-                'max' => 20,
+                'size' => '13',
                 'eval' => 'datetime',
-                'checkbox' => 0,
-                'default' => 0,
-                'range' => array(
-                    'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y')),
-                ),
-            ),
-        ),
-        'endtime' => array(
-            'exclude' => 1,
-            'l10n_mode' => 'mergeIfNotBlank',
+                'default' => 0
+            ],
+            'l10n_mode' => 'exclude',
+            'l10n_display' => 'defaultAsReadonly'
+        ],
+        'endtime' => [
+            'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.endtime',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
-                'size' => 13,
-                'max' => 20,
+                'size' => '13',
                 'eval' => 'datetime',
-                'checkbox' => 0,
                 'default' => 0,
-                'range' => array(
-                    'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y')),
-                ),
-            ),
-        ),
-        'name' => array(
-            'exclude' => 1,
+                'range' => [
+                    'upper' => mktime(0, 0, 0, 1, 1, 2038)
+                ]
+            ],
+            'l10n_mode' => 'exclude',
+            'l10n_display' => 'defaultAsReadonly'
+        ],
+        'name' => [
+            'exclude' => true,
             'label' => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_anonymoususer.name',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-            ),
-        ),
-        'username' => array(
-            'exclude' => 1,
+            ],
+        ],
+        'username' => [
+            'exclude' => true,
             'label' => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_anonymoususer.username',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-            ),
-        ),
-        'email' => array(
-            'exclude' => 1,
+            ],
+        ],
+        'email' => [
+            'exclude' => true,
             'label' => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_anonymoususer.email',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-            ),
-        ),
-    ),
-);
+            ],
+        ],
+    ],
+];
