@@ -41,7 +41,7 @@ abstract class AbstractValidator extends \TYPO3\CMS\Extbase\Validation\Validator
      *
      * @var array
      */
-    protected $settings = array();
+    protected $settings = [];
 
     /**
      * @param ConfigurationManagerInterface $configurationManager

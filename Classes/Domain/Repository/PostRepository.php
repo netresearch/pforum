@@ -28,9 +28,9 @@ class PostRepository extends Repository
     /**
      * @var array
      */
-    protected $defaultOrderings = array(
+    protected $defaultOrderings = [
         'crdate' => QueryInterface::ORDER_DESCENDING,
-    );
+    ];
 
     /**
      * find all hidden posts.
@@ -55,7 +55,7 @@ class PostRepository extends Repository
     {
         $query = $this->createQuery();
         $query->getQuerySettings()->setIgnoreEnableFields(true);
-        $query->getQuerySettings()->setEnableFieldsToBeIgnored(array('disabled'));
+        $query->getQuerySettings()->setEnableFieldsToBeIgnored(['disabled']);
 
         return $query->matching($query->equals('uid', (int) $postUid))->execute()->getFirst();
     }

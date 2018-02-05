@@ -45,7 +45,7 @@ class TopicController extends AbstractTopicController
             $posts->getQuery()
                 ->getQuerySettings()
                 ->setIgnoreEnableFields(true)
-                ->setEnableFieldsToBeIgnored(array('disabled'));
+                ->setEnableFieldsToBeIgnored(['disabled']);
         }
         $this->view->assign('topic', $topic);
         $this->view->assign('posts', $posts);
@@ -102,7 +102,7 @@ class TopicController extends AbstractTopicController
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
             $newTopic->setHidden(true); // topic should not be visible while previewing
             $this->persistenceManager->persistAll(); // we need an uid before redirecting
-            $this->redirect('edit', null, null, array('topic' => $newTopic, 'isPreview' => true, 'isNew' => true));
+            $this->redirect('edit', null, null, ['topic' => $newTopic, 'isPreview' => true, 'isNew' => true]);
         }
 
         if ($this->settings['topic']['hideAtCreation']) {
@@ -118,7 +118,7 @@ class TopicController extends AbstractTopicController
             }
         }
         $this->addFlashMessageForCreation();
-        $this->redirect('show', 'Forum', null, array('forum' => $forum));
+        $this->redirect('show', 'Forum', null, ['forum' => $forum]);
     }
 
     /**
@@ -169,9 +169,9 @@ class TopicController extends AbstractTopicController
                 ->forProperty('images')
                 ->setTypeConverter($multipleFilesTypeConverter)
                 ->setTypeConverterOptions(UploadMultipleFilesConverter::class,
-                    array(
+                    [
                         'IMAGES' => $topic->getImages()
-                    )
+                    ]
                 );
         }
     }
@@ -191,7 +191,7 @@ class TopicController extends AbstractTopicController
         // if a preview was requested direct to preview action
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
             $topic->setHidden(true);
-            $this->redirect('edit', null, null, array('topic' => $topic, 'isPreview' => true, 'isNew' => $isNew));
+            $this->redirect('edit', null, null, ['topic' => $topic, 'isPreview' => true, 'isNew' => $isNew]);
         } else {
             if ($isNew) {
                 // if is new and preview was pressed we have to check for visibility again
@@ -215,7 +215,7 @@ class TopicController extends AbstractTopicController
                 $topic->setHidden(false);
                 $this->addFlashMessage(LocalizationUtility::translate('topicUpdated', 'pforum'), '', FlashMessage::OK);
             }
-            $this->redirect('show', 'Forum', '', array('forum' => $topic->getForum()));
+            $this->redirect('show', 'Forum', '', ['forum' => $topic->getForum()]);
         }
     }
 

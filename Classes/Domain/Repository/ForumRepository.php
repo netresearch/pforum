@@ -27,7 +27,7 @@ class ForumRepository extends Repository
     /**
      * @var array
      */
-    protected $defaultOrderings = array(
+    protected $defaultOrderings = [
         'sorting' => QueryInterface::ORDER_ASCENDING,
-    );
+    ];
 }

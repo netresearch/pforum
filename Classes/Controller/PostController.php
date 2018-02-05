@@ -79,7 +79,7 @@ class PostController extends AbstractPostController
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
             $newPost->setHidden(true); // post should not be visible while previewing
             $this->persistenceManager->persistAll(); // we need an uid before redirecting
-            $this->redirect('edit', null, null, array('post' => $newPost, 'isPreview' => true, 'isNew' => true));
+            $this->redirect('edit', null, null, ['post' => $newPost, 'isPreview' => true, 'isNew' => true]);
         }
 
         if ($this->settings['post']['hideAtCreation']) {
@@ -103,7 +103,7 @@ class PostController extends AbstractPostController
             $this->mailToTopicCreator($topic, $newPost);
         }
         $this->addFlashMessageForCreation();
-        $this->redirect('show', 'Topic', null, array('topic' => $topic));
+        $this->redirect('show', 'Topic', null, ['topic' => $topic]);
     }
 
     /**
@@ -164,7 +164,7 @@ class PostController extends AbstractPostController
         // if a preview was requested direct to preview action
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
             $post->setHidden(true);
-            $this->redirect('edit', null, null, array('post' => $post, 'isPreview' => true, 'isNew' => $isNew));
+            $this->redirect('edit', null, null, ['post' => $post, 'isPreview' => true, 'isNew' => $isNew]);
         } else {
             if ($isNew) {
                 // if is new and preview was pressed we have to check for visibility again
@@ -187,7 +187,7 @@ class PostController extends AbstractPostController
                 $post->setHidden(false);
                 $this->addFlashMessage(LocalizationUtility::translate('postUpdated', 'pforum'), '', FlashMessage::OK);
             }
-            $this->redirect('show', 'Forum', '', array('forum' => $post->getTopic()->getForum()));
+            $this->redirect('show', 'Forum', '', ['forum' => $post->getTopic()->getForum()]);
         }
     }
 
@@ -228,16 +228,16 @@ class PostController extends AbstractPostController
         $mail->setFrom($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName());
         $mail->setTo($topic->getUser()->getEmail(), $topic->getUser()->getName());
         $mail->setSubject(LocalizationUtility::translate(
-            'email.post.subject.newPost', 'pforum', array($topic->getTitle()))
+            'email.post.subject.newPost', 'pforum', [$topic->getTitle()])
         );
         $mail->setBody(LocalizationUtility::translate(
             'email.post.text.newPost',
             'pforum',
-            array(
+            [
                 $topic->getUser()->getName(),
                 $topic->getTitle(),
                 $post->getDescription(),
-            )
+            ]
         ), 'text/html');
 
         $mail->send();

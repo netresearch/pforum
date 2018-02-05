@@ -62,7 +62,7 @@ class AbstractTopicController extends AbstractController
         } else {
             /* normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated */
             $this->addFlashMessage('You must be logged in before creating a topic', '', FlashMessage::WARNING);
-            $this->redirect('show', 'Forum', null, array('forum' => $forum));
+            $this->redirect('show', 'Forum', null, ['forum' => $forum]);
         }
     }
 

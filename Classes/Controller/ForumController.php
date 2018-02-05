@@ -130,7 +130,7 @@ class ForumController extends AbstractController
             $topics->getQuery()
                 ->getQuerySettings()
                 ->setIgnoreEnableFields(true)
-                ->setEnableFieldsToBeIgnored(array('disabled'));
+                ->setEnableFieldsToBeIgnored(['disabled']);
         }
         $this->view->assign('forum', $forum);
         $this->view->assign('topics', $topics);

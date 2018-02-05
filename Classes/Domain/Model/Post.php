@@ -270,7 +270,7 @@ class Post extends AbstractEntity
      */
     public function getImages()
     {
-        $references = array();
+        $references = [];
         foreach ($this->images as $image) {
             $references[] = $image;
         }

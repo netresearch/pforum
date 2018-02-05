@@ -19,14 +19,14 @@ if (TYPO3_MODE === 'BE') {
         'web',     // Make module a submodule of 'web'
         'forum',    // Submodule key
         '',                        // Position
-        array(
+        [
             'Forum' => 'listHidden, activate',
-        ),
-        array(
+        ],
+        [
             'access' => 'user,group',
             'icon' => 'EXT:'.$_EXTKEY.'/Resources/Public/Icons/module.svg',
             'labels' => 'LLL:EXT:'.$_EXTKEY.'/Resources/Private/Language/locallang_forum.xlf',
-        )
+        ]
     );
 }
 

@@ -81,7 +81,7 @@ class AbstractPostController extends AbstractController
         } else {
             /* normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated */
             $this->addFlashMessage('You must be logged in before creating a post');
-            $this->redirect('show', 'Forum', null, array('forum' => $topic->getForum()));
+            $this->redirect('show', 'Forum', null, ['forum' => $topic->getForum()]);
         }
     }
 
