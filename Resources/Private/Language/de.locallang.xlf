@@ -260,6 +260,10 @@
 				<target>Sie können nur Bilder mit folgenden Dateiendungen hochladen: %1$s</target>
 			</trans-unit>
 
+			<trans-unit id="mandatory">
+				<source>mandatory</source>
+				<target>Pflichtfelder</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
