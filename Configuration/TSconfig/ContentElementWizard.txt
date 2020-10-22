@@ -1,0 +1,16 @@
+mod.wizards.newContentElement.wizardItems.plugins {
+  elements {
+    pforum {
+      iconIdentifier = ext-pforum-wizard-icon
+      title = LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:plugin.pforum.title
+      description = LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:plugin.pforum.description
+      tt_content_defValues {
+        CType = list
+        list_type = pforum_forum
+      }
+    }
+  }
+}
+
+# Add CType Preview
+mod.web_layout.tt_content.preview.list.pforum_forum = EXT:pforum/Resources/Private/Templates/PluginPreview/Forum.html
