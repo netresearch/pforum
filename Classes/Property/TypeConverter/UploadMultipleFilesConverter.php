@@ -176,10 +176,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
      */
     protected function getCoreFileReference(array $source): \TYPO3\CMS\Core\Resource\FileReference
     {
-        $settings = $this->converterConfiguration->getConfigurationValue(
-                self::class,
-                'settings'
-            ) ?? [];
+        $settings = $this->converterConfiguration->getConfigurationValue(self::class, 'settings') ?? [];
 
         $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
         $uploadFolderIdentifier = $settings['new']['uploadFolder'] ?? '';
