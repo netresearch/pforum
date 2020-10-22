@@ -28,6 +28,10 @@ plugin.tx_pforum {
       activateByAdmin = 0
     }
 
+    new {
+      uploadFolder = 1:user_upload/tx_pforum/
+    }
+
     image {
       width = 120c
       height = 90c

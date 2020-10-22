@@ -42,10 +42,12 @@ class PostController extends AbstractPostController
     {
         if ($this->settings['useImages']) {
             // we have our own implementation how to implement images
-            $this->arguments->getArgument('newPost')->getPropertyMappingConfiguration()->setTargetTypeForSubProperty(
-                'images',
-                'array'
-            );
+            $this->arguments->getArgument('newPost')
+                ->getPropertyMappingConfiguration()
+                ->setTargetTypeForSubProperty(
+                    'images',
+                    'array'
+                );
         }
     }
 
@@ -55,7 +57,7 @@ class PostController extends AbstractPostController
      */
     public function createAction(Topic $topic, Post $newPost): void
     {
-        /* if auth = frontend user */
+        // if auth = frontend user
         if ($this->settings['auth'] == 2) {
             $this->addFeUserToPost($topic, $newPost);
         }

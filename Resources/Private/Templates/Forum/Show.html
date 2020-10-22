@@ -2,39 +2,50 @@
 
 <f:section name="main">
 	<f:flashMessages />
+
 	<div class="breadcrumb">
-		<f:link.action action="list"><f:translate key="tx_pforum_domain_model_forum"/> »</f:link.action> {forum.title}
+		<f:link.action action="list">{f:translate(key: 'tx_pforum_domain_model_forum')} »</f:link.action> {forum.title}
 	</div>
-	<header><h1>{forum.title}</h1></header>
+
+	<header>
+		<h2>{forum.title}</h2>
+	</header>
 
 	<f:render partial="Auth/Content" arguments="{subpartial: 'Link', data: {pageUid: settings.pidOfDetailPage, action: 'new', controller: 'Topic', arguments: {forum: forum}, translationKey: 'newTopic'}}" />
 
 	<f:if condition="{topics}">
 		<f:then>
-			<div class="list scroll-container">
+			<div class="container">
 				<f:widget.paginate objects="{topics}" as="paginatedTopics" configuration="{itemsPerPage: settings.pageBrowser.itemsPerPage, insertAbove: settings.pageBrowser.insertAbove, insertBelow: settings.pageBrowser.insertBelow, maximumNumberOfLinks: settings.pageBrowser.maximumNumberOfLinks}">
 					<f:for each="{paginatedTopics}" as="topic">
-						<div class="marginbottom scroll-item clearfix" style="{f:if(condition: topic.hidden, then: "border: 1px solid red;")}">
-							<div class="borderbottom">
-								<h2 class="noborder nomargin">
-									<f:link.action pageUid="{settings.pidOfDetailPage}" action="show" controller="Topic" arguments="{topic: topic, forum: forum}">{topic.title}</f:link.action>
-								</h2>
-								<div>{topic.crdate -> f:format.date(format: 'd.m.Y')}&nbsp;| <f:translate key="from"/>: <f:render partial="User/Username" arguments="{user: topic.user}" /> | {topic.posts ->f:count()}&nbsp;<f:translate key="tx_pforum_domain_model_topic.posts"/></div>
-								<f:if condition="{topic.hidden}">
-									<div>
-										<f:form action="activate" controller="Topic" name="topic" arguments="{topic: topic}">
-											<f:form.submit value="{f:translate(key: 'activate')}" />
-										</f:form>
-									</div>
-								</f:if>
+						<div class="borderbottom">
+							<h3>
+								<f:link.action pageUid="{settings.pidOfDetailPage}"
+											   action="show"
+											   controller="Topic"
+											   arguments="{topic: topic, forum: forum}">
+									{topic.title}
+								</f:link.action>
+							</h3>
+
+							<div>
+								{topic.crdate -> f:format.date(format: 'd.m.Y')}&nbsp;| <f:translate key="from"/>: <f:render partial="User/Username" arguments="{user: topic.user}" /> | {topic.posts ->f:count()}&nbsp;<f:translate key="tx_pforum_domain_model_topic.posts"/>
 							</div>
+
+							<f:if condition="{topic.hidden}">
+								<div>
+									<f:form action="activate" controller="Topic" name="topic" arguments="{topic: topic}">
+										<f:form.submit value="{f:translate(key: 'activate')}" />
+									</f:form>
+								</div>
+							</f:if>
 						</div>
 					</f:for>
 				</f:widget.paginate>
 			</div>
 		</f:then>
 		<f:else>
-			<div class="noResults"><f:translate key="noTopics" /></div>
+			<p class="noResults">{f:translate(key: 'noTopics')}</p>
 		</f:else>
 	</f:if>
 </f:section>
