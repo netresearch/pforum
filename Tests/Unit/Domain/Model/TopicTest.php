@@ -7,150 +7,188 @@
  * LICENSE file that was distributed with this source code.
  */
 
+namespace JWeiland\Pforum\Tests\Unit\Domain\Model;
+
+use JWeiland\Pforum\Domain\Model\Post;
+use JWeiland\Pforum\Domain\Model\Topic;
+use JWeiland\Pforum\Domain\Model\User;
+use Nimut\TestingFramework\TestCase\UnitTestCase;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
 /**
  * Test case
  */
-class Tx_Pforum_Domain_Model_TopicTest extends Tx_Extbase_Tests_Unit_BaseTestCase
+class TopicTest extends UnitTestCase
 {
     /**
-     * @var Tx_Pforum_Domain_Model_Topic
+     * @var Topic
      */
-    protected $fixture;
+    protected $subject;
 
     public function setUp()
     {
-        $this->fixture = new Tx_Pforum_Domain_Model_Topic();
+        $this->subject = new Topic();
     }
 
     public function tearDown()
     {
-        unset($this->fixture);
+        unset($this->subject);
     }
 
     /**
      * @test
      */
-    public function getTitleReturnsInitialValueForString()
+    public function getTitleInitiallyReturnsEmptyString()
     {
-    }
-
-    /**
-     * @test
-     */
-    public function setTitleForStringSetsTitle()
-    {
-        $this->fixture->setTitle('Conceived at T3CON10');
-
-        self::Same(
-            'Conceived at T3CON10',
-            $this->fixture->getTitle()
+        self::assertSame(
+            '',
+            $this->subject->getTitle()
         );
     }
 
     /**
      * @test
      */
-    public function getDescriptionReturnsInitialValueForString()
+    public function setTitleSetsTitle()
     {
-    }
+        $this->subject->setTitle('foo bar');
 
-    /**
-     * @test
-     */
-    public function setDescriptionForStringSetsDescription()
-    {
-        $this->fixture->setDescription('Conceived at T3CON10');
-
-        self::Same(
-            'Conceived at T3CON10',
-            $this->fixture->getDescription()
+        self::assertSame(
+            'foo bar',
+            $this->subject->getTitle()
         );
     }
 
     /**
      * @test
      */
-    public function getPostsReturnsInitialValueForObjectStorageContainingTx_Pforum_Domain_Model_Post()
+    public function setTitleWithIntegerResultsInString()
     {
-        $newObjectStorage = new Tx_Extbase_Persistence_ObjectStorage();
-        self::Equals(
-            $newObjectStorage,
-            $this->fixture->getPosts()
+        $this->subject->setTitle(123);
+        self::assertSame('123', $this->subject->getTitle());
+    }
+
+    /**
+     * @test
+     */
+    public function setTitleWithBooleanResultsInString()
+    {
+        $this->subject->setTitle(true);
+        self::assertSame('1', $this->subject->getTitle());
+    }
+
+    /**
+     * @test
+     */
+    public function getDescriptionInitiallyReturnsEmptyString()
+    {
+        self::assertSame(
+            '',
+            $this->subject->getDescription()
         );
     }
 
     /**
      * @test
      */
-    public function setPostsForObjectStorageContainingTx_Pforum_Domain_Model_PostSetsPosts()
+    public function setDescriptionSetsDescription()
     {
-        $post = new Tx_Pforum_Domain_Model_Post();
-        $objectStorageHoldingExactlyOnePosts = new Tx_Extbase_Persistence_ObjectStorage();
-        $objectStorageHoldingExactlyOnePosts->attach($post);
-        $this->fixture->setPosts($objectStorageHoldingExactlyOnePosts);
+        $this->subject->setDescription('foo bar');
 
-        self::Same(
-            $objectStorageHoldingExactlyOnePosts,
-            $this->fixture->getPosts()
+        self::assertSame(
+            'foo bar',
+            $this->subject->getDescription()
         );
     }
 
     /**
      * @test
      */
-    public function addPostToObjectStorageHoldingPosts()
+    public function setDescriptionWithIntegerResultsInString()
     {
-        $post = new Tx_Pforum_Domain_Model_Post();
-        $objectStorageHoldingExactlyOnePost = new Tx_Extbase_Persistence_ObjectStorage();
-        $objectStorageHoldingExactlyOnePost->attach($post);
-        $this->fixture->addPost($post);
+        $this->subject->setDescription(123);
+        self::assertSame('123', $this->subject->getDescription());
+    }
 
-        self::Equals(
-            $objectStorageHoldingExactlyOnePost,
-            $this->fixture->getPosts()
+    /**
+     * @test
+     */
+    public function setDescriptionWithBooleanResultsInString()
+    {
+        $this->subject->setDescription(true);
+        self::assertSame('1', $this->subject->getDescription());
+    }
+
+    /**
+     * @test
+     */
+    public function getPostsInitiallyReturnsObjectStorage()
+    {
+        self::assertEquals(
+            new ObjectStorage(),
+            $this->subject->getPosts()
         );
     }
 
     /**
      * @test
      */
-    public function removePostFromObjectStorageHoldingPosts()
+    public function setPostsSetsPosts()
     {
-        $post = new Tx_Pforum_Domain_Model_Post();
-        $localObjectStorage = new Tx_Extbase_Persistence_ObjectStorage();
-        $localObjectStorage->attach($post);
-        $localObjectStorage->detach($post);
-        $this->fixture->addPost($post);
-        $this->fixture->removePost($post);
+        $object = new Post();
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($object);
+        $this->subject->setPosts($objectStorage);
 
-        self::Equals(
-            $localObjectStorage,
-            $this->fixture->getPosts()
+        self::assertSame(
+            $objectStorage,
+            $this->subject->getPosts()
         );
     }
 
     /**
      * @test
      */
-    public function getUserReturnsInitialValueForTx_Pforum_Domain_Model_User()
+    public function addPostAddsOnePost()
     {
-        self::Equals(
-            null,
-            $this->fixture->getUser()
+        $objectStorage = new ObjectStorage();
+        $this->subject->setPosts($objectStorage);
+
+        $object = new Post();
+        $this->subject->addPost($object);
+
+        $objectStorage->attach($object);
+
+        self::assertSame(
+            $objectStorage,
+            $this->subject->getPosts()
         );
     }
 
     /**
      * @test
      */
-    public function setUserForTx_Pforum_Domain_Model_UserSetsUser()
+    public function removePostRemovesOnePost()
     {
-        $dummyObject = new Tx_Pforum_Domain_Model_User();
-        $this->fixture->setUser($dummyObject);
+        $object = new Post();
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($object);
+        $this->subject->setPosts($objectStorage);
 
-        self::Same(
-            $dummyObject,
-            $this->fixture->getUser()
+        $this->subject->removePost($object);
+        $objectStorage->detach($object);
+
+        self::assertSame(
+            $objectStorage,
+            $this->subject->getPosts()
         );
+    }
+
+    /**
+     * @test
+     */
+    public function getUserInitiallyReturnsNull()
+    {
+        self::assertNull($this->subject->getUser());
     }
 }

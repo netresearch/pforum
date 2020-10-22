@@ -7,103 +7,154 @@
  * LICENSE file that was distributed with this source code.
  */
 
+namespace JWeiland\Pforum\Tests\Unit\Domain\Model;
+
+use JWeiland\Pforum\Domain\Model\User;
+use Nimut\TestingFramework\TestCase\UnitTestCase;
+
 /**
  * Test case
  */
-class Tx_Pforum_Domain_Model_UserTest extends Tx_Extbase_Tests_Unit_BaseTestCase
+class UserTest extends UnitTestCase
 {
     /**
-     * @var Tx_Pforum_Domain_Model_User
+     * @var User
      */
-    protected $fixture;
+    protected $subject;
 
     public function setUp()
     {
-        $this->fixture = new Tx_Pforum_Domain_Model_User();
+        $this->subject = new User();
     }
 
     public function tearDown()
     {
-        unset($this->fixture);
+        unset($this->subject);
     }
 
     /**
      * @test
      */
-    public function getNameReturnsInitialValueForString()
+    public function getNameInitiallyReturnsEmptyString()
     {
-    }
-
-    /**
-     * @test
-     */
-    public function setNameForStringSetsName()
-    {
-        $this->fixture->setName('Conceived at T3CON10');
-
-        self::Same(
-            'Conceived at T3CON10',
-            $this->fixture->getName()
+        self::assertSame(
+            '',
+            $this->subject->getName()
         );
     }
 
     /**
      * @test
      */
-    public function getUsernameReturnsInitialValueForString()
+    public function setNameSetsName()
     {
-    }
+        $this->subject->setName('foo bar');
 
-    /**
-     * @test
-     */
-    public function setUsernameForStringSetsUsername()
-    {
-        $this->fixture->setUsername('Conceived at T3CON10');
-
-        self::Same(
-            'Conceived at T3CON10',
-            $this->fixture->getUsername()
+        self::assertSame(
+            'foo bar',
+            $this->subject->getName()
         );
     }
 
     /**
      * @test
      */
-    public function getEmailReturnsInitialValueForString()
+    public function setNameWithIntegerResultsInString()
     {
+        $this->subject->setName(123);
+        self::assertSame('123', $this->subject->getName());
     }
 
     /**
      * @test
      */
-    public function setEmailForStringSetsEmail()
+    public function setNameWithBooleanResultsInString()
     {
-        $this->fixture->setEmail('Conceived at T3CON10');
+        $this->subject->setName(true);
+        self::assertSame('1', $this->subject->getName());
+    }
 
-        self::Same(
-            'Conceived at T3CON10',
-            $this->fixture->getEmail()
+    /**
+     * @test
+     */
+    public function getUsernameInitiallyReturnsEmptyString()
+    {
+        self::assertSame(
+            '',
+            $this->subject->getUsername()
         );
     }
 
     /**
      * @test
      */
-    public function getPasswordReturnsInitialValueForString()
+    public function setUsernameSetsUsername()
     {
+        $this->subject->setUsername('foo bar');
+
+        self::assertSame(
+            'foo bar',
+            $this->subject->getUsername()
+        );
     }
 
     /**
      * @test
      */
-    public function setPasswordForStringSetsPassword()
+    public function setUsernameWithIntegerResultsInString()
     {
-        $this->fixture->setPassword('Conceived at T3CON10');
+        $this->subject->setUsername(123);
+        self::assertSame('123', $this->subject->getUsername());
+    }
 
-        self::Same(
-            'Conceived at T3CON10',
-            $this->fixture->getPassword()
+    /**
+     * @test
+     */
+    public function setUsernameWithBooleanResultsInString()
+    {
+        $this->subject->setUsername(true);
+        self::assertSame('1', $this->subject->getUsername());
+    }
+
+    /**
+     * @test
+     */
+    public function getEmailInitiallyReturnsEmptyString()
+    {
+        self::assertSame(
+            '',
+            $this->subject->getEmail()
         );
+    }
+
+    /**
+     * @test
+     */
+    public function setEmailSetsEmail()
+    {
+        $this->subject->setEmail('foo bar');
+
+        self::assertSame(
+            'foo bar',
+            $this->subject->getEmail()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setEmailWithIntegerResultsInString()
+    {
+        $this->subject->setEmail(123);
+        self::assertSame('123', $this->subject->getEmail());
+    }
+
+    /**
+     * @test
+     */
+    public function setEmailWithBooleanResultsInString()
+    {
+        $this->subject->setEmail(true);
+        self::assertSame('1', $this->subject->getEmail());
     }
 }

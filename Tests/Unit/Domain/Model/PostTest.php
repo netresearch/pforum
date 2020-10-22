@@ -7,88 +7,121 @@
  * LICENSE file that was distributed with this source code.
  */
 
+namespace JWeiland\Pforum\Tests\Unit\Domain\Model;
+
+use JWeiland\Pforum\Domain\Model\Post;
+use JWeiland\Pforum\Domain\Model\User;
+use Nimut\TestingFramework\TestCase\UnitTestCase;
+
 /**
  * Test case
  */
-class Tx_Pforum_Domain_Model_PostTest extends Tx_Extbase_Tests_Unit_BaseTestCase
+class PostTest extends UnitTestCase
 {
     /**
-     * @var Tx_Pforum_Domain_Model_Post
+     * @var Post
      */
-    protected $fixture;
+    protected $subject;
 
     public function setUp()
     {
-        $this->fixture = new Tx_Pforum_Domain_Model_Post();
+        $this->subject = new Post();
     }
 
     public function tearDown()
     {
-        unset($this->fixture);
+        unset($this->subject);
     }
 
     /**
      * @test
      */
-    public function getTitleReturnsInitialValueForString()
+    public function getTitleInitiallyReturnsEmptyString()
     {
-    }
-
-    /**
-     * @test
-     */
-    public function setTitleForStringSetsTitle()
-    {
-        $this->fixture->setTitle('Conceived at T3CON10');
-
-        self::Same(
-            'Conceived at T3CON10',
-            $this->fixture->getTitle()
+        self::assertSame(
+            '',
+            $this->subject->getTitle()
         );
     }
 
     /**
      * @test
      */
-    public function getDescriptionReturnsInitialValueForString()
+    public function setTitleSetsTitle()
     {
-    }
+        $this->subject->setTitle('foo bar');
 
-    /**
-     * @test
-     */
-    public function setDescriptionForStringSetsDescription()
-    {
-        $this->fixture->setDescription('Conceived at T3CON10');
-
-        self::Same(
-            'Conceived at T3CON10',
-            $this->fixture->getDescription()
+        self::assertSame(
+            'foo bar',
+            $this->subject->getTitle()
         );
     }
 
     /**
      * @test
      */
-    public function getUserReturnsInitialValueForTx_Pforum_Domain_Model_User()
+    public function setTitleWithIntegerResultsInString()
     {
-        self::Equals(
-            null,
-            $this->fixture->getUser()
+        $this->subject->setTitle(123);
+        self::assertSame('123', $this->subject->getTitle());
+    }
+
+    /**
+     * @test
+     */
+    public function setTitleWithBooleanResultsInString()
+    {
+        $this->subject->setTitle(true);
+        self::assertSame('1', $this->subject->getTitle());
+    }
+
+    /**
+     * @test
+     */
+    public function getDescriptionInitiallyReturnsEmptyString()
+    {
+        self::assertSame(
+            '',
+            $this->subject->getDescription()
         );
     }
 
     /**
      * @test
      */
-    public function setUserForTx_Pforum_Domain_Model_UserSetsUser()
+    public function setDescriptionSetsDescription()
     {
-        $dummyObject = new Tx_Pforum_Domain_Model_User();
-        $this->fixture->setUser($dummyObject);
+        $this->subject->setDescription('foo bar');
 
-        self::Same(
-            $dummyObject,
-            $this->fixture->getUser()
+        self::assertSame(
+            'foo bar',
+            $this->subject->getDescription()
         );
+    }
+
+    /**
+     * @test
+     */
+    public function setDescriptionWithIntegerResultsInString()
+    {
+        $this->subject->setDescription(123);
+        self::assertSame('123', $this->subject->getDescription());
+    }
+
+    /**
+     * @test
+     */
+    public function setDescriptionWithBooleanResultsInString()
+    {
+        $this->subject->setDescription(true);
+        self::assertSame('1', $this->subject->getDescription());
+    }
+
+    /**
+     * @test
+     */
+    public function getUserInitiallyReturnsNull()
+    {
+        self::assertNull($this->subject->getUser());
     }
 }
