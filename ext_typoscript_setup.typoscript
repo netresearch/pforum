@@ -1,4 +1,16 @@
-# Module configuration
+# Remove that part while removing TYPO3 9 compatibility
+config.tx_extbase {
+  persistence {
+    classes {
+      JWeiland\Pforum\Domain\Model\FrontendUser {
+        mapping {
+          tableName = fe_users
+        }
+      }
+    }
+  }
+}
+
 module.tx_pforum {
   view {
     # cat=module.tx_pforum/file; type=string; label=Path to template root (BE)

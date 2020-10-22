@@ -1,4 +1,3 @@
-# Plugin configuration
 plugin.tx_pforum {
   view {
     # cat=plugin.tx_pforum/file; type=string; label=Path to template root (FE)

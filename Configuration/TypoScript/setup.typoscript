@@ -1,16 +1,3 @@
-config.tx_extbase {
-  persistence {
-    classes {
-      JWeiland\Pforum\Domain\Model\FrontendUser {
-        mapping {
-          tableName = fe_users
-        }
-      }
-    }
-  }
-}
-
-# Plugin configuration
 plugin.tx_pforum {
   view {
     templateRootPaths.100 = {$plugin.tx_pforum.view.templateRootPath}
@@ -20,18 +7,6 @@ plugin.tx_pforum {
 
   persistence {
     storagePid = {$plugin.tx_pforum.persistence.storagePid}
-    classes {
-      JWeiland\Pforum\Domain\Model\FrontendUser {
-        mapping {
-          tableName = fe_users
-        }
-      }
-    }
-  }
-
-  features {
-    # Make cHash an additional field because of mail links
-    requireCHashArgumentForActionArguments = 0
   }
 
   settings {
