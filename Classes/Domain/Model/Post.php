@@ -49,13 +49,11 @@ class Post extends AbstractEntity
 
     /**
      * @var \JWeiland\Pforum\Domain\Model\AnonymousUser
-     * @Extbase\ORM\Lazy
      */
     protected $anonymousUser;
 
     /**
      * @var \JWeiland\Pforum\Domain\Model\FrontendUser
-     * @Extbase\ORM\Lazy
      */
     protected $frontendUser;
 
@@ -89,7 +87,7 @@ class Post extends AbstractEntity
         $this->crdate = $crdate;
     }
 
-    public function getTopic(): Topic
+    public function getTopic(): ?Topic
     {
         return $this->topic;
     }
@@ -129,7 +127,7 @@ class Post extends AbstractEntity
         $this->anonymousUser = $anonymousUser;
     }
 
-    public function getFrontendUser(): FrontendUser
+    public function getFrontendUser(): ?FrontendUser
     {
         return $this->frontendUser;
     }

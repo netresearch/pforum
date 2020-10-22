@@ -58,13 +58,11 @@ class Topic extends AbstractEntity
     /**
      * @var \JWeiland\Pforum\Domain\Model\AnonymousUser
      * @Extbase\ORM\Cascade("remove")
-     * @Extbase\ORM\Lazy
      */
     protected $anonymousUser;
 
     /**
      * @var \JWeiland\Pforum\Domain\Model\FrontendUser
-     * @Extbase\ORM\Lazy
      */
     protected $frontendUser;
 
@@ -100,7 +98,7 @@ class Topic extends AbstractEntity
         $this->crdate = $crdate;
     }
 
-    public function getForum(): Forum
+    public function getForum(): ?Forum
     {
         return $this->forum;
     }
@@ -150,7 +148,7 @@ class Topic extends AbstractEntity
         $this->posts = $posts;
     }
 
-    public function getAnonymousUser(): AnonymousUser
+    public function getAnonymousUser(): ?AnonymousUser
     {
         return $this->anonymousUser;
     }
@@ -160,7 +158,7 @@ class Topic extends AbstractEntity
         $this->anonymousUser = $anonymousUser;
     }
 
-    public function getFrontendUser(): FrontendUser
+    public function getFrontendUser(): ?FrontendUser
     {
         return $this->frontendUser;
     }
