@@ -19,12 +19,12 @@ plugin.tx_pforum {
     uidOfUserGroup = {$plugin.tx_pforum.settings.uidOfUserGroup}
     pidOfDetailPage = {$plugin.tx_pforum.settings.pidOfDetailPage}
     topic {
-      hideAtCreation = 1
+      hideAtCreation =
       activateByAdmin = 0
     }
 
     post {
-      hideAtCreation = 1
+      hideAtCreation = 0
       activateByAdmin = 0
     }
 
