@@ -83,7 +83,7 @@ class ForumController extends AbstractController
      * @param Topic|null $topic
      * @param Post|null $post
      */
-    public function activateAction(?Topic $topic, ?Post $post): void
+    public function activateAction(?Topic $topic, ?Post $post = null): void
     {
         if (!empty($topic)) {
             $topic->setHidden(false);

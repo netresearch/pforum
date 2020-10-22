@@ -1,6 +1,6 @@
 define(['jquery', 'TYPO3/CMS/Pforum/Datatables'], function ($, dataTables) {
   $( document ).ready( function() {
-    oTable = $( "table.tx_pforum" ).dataTable({
+    oTable = $( "table.table" ).dataTable({
       "bJQueryUI": true,
       "sPaginationType": "full_numbers",
       "bProcessing": true,
@@ -30,7 +30,7 @@ define(['jquery', 'TYPO3/CMS/Pforum/Datatables'], function ($, dataTables) {
     oTable.fnSetColumnVis( 1, false );
     
     // show/hide description by click on title
-    $( "table.tx_pforum tbody tr td:eq(0)").on("click", function () {
+    $( "table.table tbody tr td:eq(0)").on("click", function () {
       var nTr = $( this ).parents( "tr" )[0];
       if ( oTable.fnIsOpen(nTr) ) {
         oTable.fnClose( nTr );

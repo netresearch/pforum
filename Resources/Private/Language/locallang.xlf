@@ -77,8 +77,14 @@
 			<trans-unit id="noPosts">
 				<source>There are no posts to this topic yet.</source>
 			</trans-unit>
+			<trans-unit id="noHiddenPosts">
+				<source>There are currently no activateable posts available</source>
+			</trans-unit>
 			<trans-unit id="noTopics">
 				<source>There are no topics to this forum yet.</source>
+			</trans-unit>
+			<trans-unit id="noHiddenTopics">
+				<source>There are currently no activateable topics available</source>
 			</trans-unit>
 			<trans-unit id="newTopic">
 				<source>Create new Topic</source>

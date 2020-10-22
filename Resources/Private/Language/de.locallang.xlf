@@ -99,9 +99,17 @@
 				<source>There are no posts to this topic yet.</source>
 				<target>Es gibt noch keine Antworten auf diesen Beitrag.</target>
 			</trans-unit>
+			<trans-unit id="noHiddenPosts">
+				<source>There are currently no activateable posts available</source>
+				<target>Es gibt aktuell keine aktivierbaren Beiträge</target>
+			</trans-unit>
 			<trans-unit id="noTopics">
 				<source>There are no topics to this forum yet.</source>
 				<target>Es gibt noch keine Beiträge zu diesem Thema.</target>
+			</trans-unit>
+			<trans-unit id="noHiddenTopics">
+				<source>There are currently no activateable topics available</source>
+				<target>Es gibt aktuell keine aktivierbaren Beiträge</target>
 			</trans-unit>
 			<trans-unit id="newTopic">
 				<source>Create new Topic</source>
