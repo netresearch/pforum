@@ -39,13 +39,13 @@ class Post extends AbstractEntity
     /**
      * @var string
      */
-    protected $title;
+    protected $title = '';
 
     /**
      * @var string
      * @Extbase\Validate("NotEmpty")
      */
-    protected $description;
+    protected $description = '';
 
     /**
      * @var \JWeiland\Pforum\Domain\Model\AnonymousUser

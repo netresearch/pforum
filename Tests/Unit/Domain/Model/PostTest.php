@@ -115,12 +115,4 @@ class PostTest extends UnitTestCase
         $this->subject->setDescription(true);
         self::assertSame('1', $this->subject->getDescription());
     }
-
-    /**
-     * @test
-     */
-    public function getUserInitiallyReturnsNull()
-    {
-        self::assertNull($this->subject->getUser());
-    }
 }

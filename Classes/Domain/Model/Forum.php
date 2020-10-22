@@ -24,12 +24,12 @@ class Forum extends AbstractEntity
      * @var string
      * @Extbase\Validate("NotEmpty")
      */
-    protected $title;
+    protected $title = '';
 
     /**
      * @var string
      */
-    protected $teaser;
+    protected $teaser = '';
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Pforum\Domain\Model\Topic>

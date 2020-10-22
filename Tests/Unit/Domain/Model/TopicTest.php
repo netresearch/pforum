@@ -182,12 +182,4 @@ class TopicTest extends UnitTestCase
             $this->subject->getPosts()
         );
     }
-
-    /**
-     * @test
-     */
-    public function getUserInitiallyReturnsNull()
-    {
-        self::assertNull($this->subject->getUser());
-    }
 }
