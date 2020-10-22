@@ -112,9 +112,9 @@ class AbstractController extends ActionController
     {
         $this->configurationManager = $configurationManager;
         $tsSettings = $this->configurationManager->getConfiguration(
-           ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-           'pforum',
-           'doNotLoadFlexFormSettings'
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+            'pforum',
+            'doNotLoadFlexFormSettings'
         );
         $mergedSettings = $this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
