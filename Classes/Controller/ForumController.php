@@ -1,5 +1,6 @@
 <?php
-namespace JWeiland\Pforum\Controller;
+
+declare(strict_types=1);
 
 /*
  * This file is part of the package jweiland/pforum.
@@ -7,6 +8,8 @@ namespace JWeiland\Pforum\Controller;
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
  */
+
+namespace JWeiland\Pforum\Controller;
 
 use JWeiland\Pforum\Controller\AbstractController;
 use JWeiland\Pforum\Domain\Model\Forum;
@@ -18,103 +21,35 @@ use JWeiland\Pforum\Domain\Repository\TopicRepository;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
- * Class ForumController
- *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * Main controller to list and show postings/questions
  */
 class ForumController extends AbstractController
 {
     /**
-     * forumRepository.
-     *
-     * @var \JWeiland\Pforum\Domain\Repository\ForumRepository
-     */
-    protected $forumRepository;
-
-    /**
-     * topicRepository.
-     *
-     * @var \JWeiland\Pforum\Domain\Repository\TopicRepository
-     */
-    protected $topicRepository;
-
-    /**
-     * postRepository.
-     *
-     * @var \JWeiland\Pforum\Domain\Repository\PostRepository
-     */
-    protected $postRepository;
-
-    /**
-     * pageRenderer
-     *
-     * @var \TYPO3\CMS\Core\Page\PageRenderer
+     * @var PageRenderer
      */
     protected $pageRenderer;
 
-    /**
-     * inject forumRepository
-     *
-     * @param ForumRepository $forumRepository
-     * @return void
-     */
-    public function injectForumRepository(ForumRepository $forumRepository)
-    {
-        $this->forumRepository = $forumRepository;
-    }
-
-    /**
-     * inject topicRepository
-     *
-     * @param TopicRepository $topicRepository
-     * @return void
-     */
-    public function injectTopicRepository(TopicRepository $topicRepository)
-    {
-        $this->topicRepository = $topicRepository;
-    }
-
-    /**
-     * inject postRepository
-     *
-     * @param PostRepository $postRepository
-     * @return void
-     */
-    public function injectPostRepository(PostRepository $postRepository)
-    {
-        $this->postRepository = $postRepository;
-    }
-
-    /**
-     * inject pageRenderer
-     *
-     * @param PageRenderer $pageRenderer
-     * @return void
-     */
-    public function injectPageRenderer(PageRenderer $pageRenderer)
+    public function injectPageRenderer(PageRenderer $pageRenderer): void
     {
         $this->pageRenderer = $pageRenderer;
     }
 
-    /**
-     * action list.
-     */
-    public function listAction()
+    public function listAction(): void
     {
         $forums = $this->forumRepository->findAll();
         $this->view->assign('forums', $forums);
     }
 
     /**
-     * action show.
-     *
      * @param Forum $forum
      */
-    public function showAction(Forum $forum)
+    public function showAction(Forum $forum): void
     {
-        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $topics */
+        /** @var QueryResultInterface $topics */
         $topics = $this->topicRepository->findByForum($forum);
         if (
             !empty($this->settings['uidOfAdminGroup']) &&
@@ -130,10 +65,7 @@ class ForumController extends AbstractController
         $this->view->assign('topics', $topics);
     }
 
-    /**
-     * initialize activate action.
-     */
-    public function initializeListHiddenAction()
+    public function initializeListHiddenAction(): void
     {
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Pforum/Forum');
         $path = PathUtility::getAbsoluteWebPath(ExtensionManagementUtility::extPath('pforum')) .
@@ -143,23 +75,19 @@ class ForumController extends AbstractController
         $this->pageRenderer->addCssFile($path.'smoothness/jquery-ui-1.10.3.custom.min.css');
     }
 
-    /**
-     * action list hidden.
-     */
-    public function listHiddenAction()
+    public function listHiddenAction(): void
     {
         $this->view->assign('topics', $this->topicRepository->findAllHidden());
         $this->view->assign('posts', $this->postRepository->findAllHidden());
     }
 
     /**
-     * action activate
-     * This is for BE use.
+     * This is for BE use only.
      *
-     * @param Topic $topic
-     * @param Post $post
+     * @param Topic|null $topic
+     * @param Post|null $post
      */
-    public function activateAction(Topic $topic = null, Post $post = null)
+    public function activateAction(?Topic $topic, ?Post $post): void
     {
         if (!empty($topic)) {
             $topic->setHidden(false);

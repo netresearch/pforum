@@ -1,5 +1,6 @@
 <?php
-namespace JWeiland\Pforum\Controller;
+
+declare(strict_types=1);
 
 /*
  * This file is part of the package jweiland/pforum.
@@ -8,28 +9,27 @@ namespace JWeiland\Pforum\Controller;
  * LICENSE file that was distributed with this source code.
  */
 
+namespace JWeiland\Pforum\Controller;
+
 use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Domain\Model\Topic;
 use JWeiland\Pforum\Property\TypeConverter\UploadMultipleFilesConverter;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
- * Class TopicController
- *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * Controller to list and show topics of forum
  */
 class TopicController extends AbstractTopicController
 {
     /**
-     * action show.
-     *
      * @param Topic $topic
-     * @return void
      */
-    public function showAction(Topic $topic)
+    public function showAction(Topic $topic): void
     {
-        /* @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $topics */
+        /* @var QueryResultInterface $topics */
         $posts = $this->postRepository->findByTopic($topic);
         if (
             !empty($this->settings['uidOfAdminGroup']) &&
@@ -46,12 +46,9 @@ class TopicController extends AbstractTopicController
     }
 
     /**
-     * action new.
-     *
      * @param Forum $forum
-     * @return void
      */
-    public function newAction(Forum $forum)
+    public function newAction(Forum $forum): void
     {
         $this->deleteUploadedFilesOnValidationErrors('newTopic');
         $this->view->assign('forum', $forum);
@@ -59,11 +56,9 @@ class TopicController extends AbstractTopicController
     }
 
     /**
-     * set special typeConverter for images
-     *
-     * @return void
+     * Set special typeConverter for images
      */
-    public function initializeCreateAction()
+    public function initializeCreateAction(): void
     {
         if ($this->settings['useImages']) {
             /** @var UploadMultipleFilesConverter $multipleFilesTypeConverter */
@@ -76,15 +71,12 @@ class TopicController extends AbstractTopicController
     }
 
     /**
-     * action create.
-     *
      * @param Forum $forum
      * @param Topic $newTopic
-     * @return void
      */
-    public function createAction(Forum $forum, Topic $newTopic)
+    public function createAction(Forum $forum, Topic $newTopic): void
     {
-        /* if auth = frontend user */
+        // if auth = frontend user
         if ($this->settings['auth'] == 2) {
             $this->addFeUserToTopic($forum, $newTopic);
         }
@@ -103,7 +95,7 @@ class TopicController extends AbstractTopicController
             $newTopic->setHidden(true);
         }
 
-        /* if auth = anonymous user */
+        // if auth = anonymous user
         if ($this->settings['auth'] == 1) {
             /* send a mail to the user to activate, edit or delete his entry */
             if ($this->settings['emailIsMandatory']) {
@@ -116,28 +108,26 @@ class TopicController extends AbstractTopicController
     }
 
     /**
-     * initialize action edit
-     * hidden record throws an exception. Thats why I check it here before calling editAction.
-     *
-     * @return void
+     * Hidden record throws an exception.
+     * That's why I check it here before calling editAction.
      */
-    public function initializeEditAction()
+    public function initializeEditAction(): void
     {
         $this->registerTopicFromRequest('topic');
     }
 
     /**
-     * action edit.
-     *
      * @param Topic $topic
      * @param bool $isPreview If is preview there will be an additional output above edit form
      * @param bool $isNew We need the information if updateAction was called from createAction.
      *                    If so we have to passthrough this information
-     * @dontvalidate $topic
-     * @return void
+     * @Extbase\IgnoreValidation("topic")
      */
-    public function editAction(Topic $topic = null, $isPreview = false, $isNew = false)
-    {
+    public function editAction(
+        Topic $topic = null,
+        bool $isPreview = false,
+        bool $isNew = false
+    ): void {
         $this->view->assign('topic', $topic);
         $this->view->assign('isPreview', $isPreview);
         $this->view->assign('isNew', $isNew);
@@ -146,10 +136,8 @@ class TopicController extends AbstractTopicController
     /**
      * getObjectByIdentifier can only find non-hidden values
      * With this method we help extbase backend to find our hidden object.
-     *
-     * @return void
      */
-    public function initializeUpdateAction()
+    public function initializeUpdateAction(): void
     {
         $this->registerTopicFromRequest('topic');
         $argument = $this->request->getArgument('topic');
@@ -171,14 +159,11 @@ class TopicController extends AbstractTopicController
     }
 
     /**
-     * action update.
-     *
      * @param Topic $topic
      * @param bool $isNew We need the information if updateAction was called from createAction.
      *                    If so we have to add different messages
-     * @return void
      */
-    public function updateAction(Topic $topic, $isNew = false)
+    public function updateAction(Topic $topic, bool $isNew = false): void
     {
         $this->topicRepository->update($topic);
 
@@ -214,23 +199,18 @@ class TopicController extends AbstractTopicController
     }
 
     /**
-     * initialize action delete
-     * hidden record throws an exception. Thats why I check it here before calling deleteAction.
-     *
-     * @return void
+     * Hidden record throws an exception.
+     * That's why I check it here before calling deleteAction.
      */
-    public function initializeDeleteAction()
+    public function initializeDeleteAction(): void
     {
         $this->registerTopicFromRequest('topic');
     }
 
     /**
-     * action delete.
-     *
      * @param Topic $topic
-     * @return void
      */
-    public function deleteAction(Topic $topic)
+    public function deleteAction(Topic $topic): void
     {
         $this->topicRepository->remove($topic);
         $this->addFlashMessage(LocalizationUtility::translate('topicDeleted', 'pforum'), '', FlashMessage::OK);
@@ -238,24 +218,20 @@ class TopicController extends AbstractTopicController
     }
 
     /**
-     * initialize action activate
-     * hidden record throws an exception. Thats why I check it here before calling activateAction.
-     *
-     * @return void
+     * Hidden record throws an exception.
+     * That's why I check it here before calling activateAction.
      */
-    public function initializeActivateAction()
+    public function initializeActivateAction(): void
     {
         $this->registerTopicFromRequest('topic');
     }
 
     /**
-     * action activate by uid
      * We need this extra action, because hidden entries can't be found in FE mode.
      *
      * @param Topic $topic
-     * @return void
      */
-    public function activateAction(Topic $topic)
+    public function activateAction(Topic $topic): void
     {
         $topic->setHidden(false);
         $this->topicRepository->update($topic);

@@ -1,5 +1,6 @@
 <?php
-namespace JWeiland\Pforum\Configuration;
+
+declare(strict_types=1);
 
 /*
  * This file is part of the package jweiland/pforum.
@@ -8,41 +9,35 @@ namespace JWeiland\Pforum\Configuration;
  * LICENSE file that was distributed with this source code.
  */
 
+namespace JWeiland\Pforum\Configuration;
+
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class ExtConf
- *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class ExtConf implements SingletonInterface
 {
     /**
-     * email from address.
-     *
      * @var string
      */
     protected $emailFromAddress;
 
     /**
-     * email from name.
-     *
      * @var string
      */
     protected $emailFromName;
 
-    /**
-     * constructor of this class
-     * This method reads the global configuration and calls the setter methods.
-     */
     public function __construct()
     {
         // get global configuration
-        $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['pforum']);
+        $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('pforum');
         if (is_array($extConf) && count($extConf)) {
             // call setter method foreach configuration entry
             foreach ($extConf as $key => $value) {
-                $methodName = 'set'.ucfirst($key);
+                $methodName = 'set' . ucfirst($key);
                 if (method_exists($this, $methodName)) {
                     $this->$methodName($value);
                 }
@@ -50,12 +45,7 @@ class ExtConf implements SingletonInterface
         }
     }
 
-    /**
-     * getter for email from address.
-     *
-     * @return string
-     */
-    public function getEmailFromAddress()
+    public function getEmailFromAddress(): string
     {
         if (empty($this->emailFromAddress)) {
             return $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'];
@@ -64,23 +54,12 @@ class ExtConf implements SingletonInterface
         }
     }
 
-    /**
-     * setter for email from address.
-     *
-     * @param string $emailFromAddress
-     * @return void
-     */
-    public function setEmailFromAddress($emailFromAddress)
+    public function setEmailFromAddress(string $emailFromAddress): void
     {
-        $this->emailFromAddress = (string)$emailFromAddress;
+        $this->emailFromAddress = $emailFromAddress;
     }
 
-    /**
-     * getter for email from name.
-     *
-     * @return string
-     */
-    public function getEmailFromName()
+    public function getEmailFromName(): string
     {
         if (empty($this->emailFromName)) {
             return $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName'];
@@ -89,14 +68,8 @@ class ExtConf implements SingletonInterface
         }
     }
 
-    /**
-     * setter for emailFromName.
-     *
-     * @param string $emailFromName
-     * @return void
-     */
-    public function setEmailFromName($emailFromName)
+    public function setEmailFromName(string $emailFromName): void
     {
-        $this->emailFromName = (string)$emailFromName;
+        $this->emailFromName = $emailFromName;
     }
 }

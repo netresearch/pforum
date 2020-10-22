@@ -1,5 +1,6 @@
 <?php
-namespace JWeiland\Pforum\Controller;
+
+declare(strict_types=1);
 
 /*
  * This file is part of the package jweiland/pforum.
@@ -7,6 +8,8 @@ namespace JWeiland\Pforum\Controller;
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
  */
+
+namespace JWeiland\Pforum\Controller;
 
 use JWeiland\Pforum\Controller\AbstractController;
 use JWeiland\Pforum\Domain\Model\FrontendUser;
@@ -20,7 +23,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * Abstract class to keep PostController more clean
  */
 class AbstractPostController extends AbstractController
 {
@@ -29,13 +32,7 @@ class AbstractPostController extends AbstractController
      */
     protected $pageRenderer;
 
-    /**
-     * inject pageRenderer
-     *
-     * @param PageRenderer $pageRenderer
-     * @return void
-     */
-    public function injectPageRenderer(PageRenderer $pageRenderer)
+    public function injectPageRenderer(PageRenderer $pageRenderer): void
     {
         $this->pageRenderer = $pageRenderer;
     }
@@ -43,10 +40,9 @@ class AbstractPostController extends AbstractController
     /**
      * This is a workaround to help controller actions to find (hidden) posts.
      *
-     * @param $argumentName
-     * @return void
+     * @param string $argumentName
      */
-    protected function registerPostFromRequest($argumentName)
+    protected function registerPostFromRequest(string $argumentName): void
     {
         $argument = $this->request->getArgument($argumentName);
         if (is_array($argument)) {
@@ -59,14 +55,7 @@ class AbstractPostController extends AbstractController
         $this->session->registerObject($post, $post->getUid());
     }
 
-    /**
-     * add current fe_user to post.
-     *
-     * @param Topic $topic
-     * @param Post  $newPost
-     * @return void
-     */
-    protected function addFeUserToPost(Topic $topic, Post $newPost)
+    protected function addFeUserToPost(Topic $topic, Post $newPost): void
     {
         if (is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid']) {
             /** @var FrontendUser $user */
@@ -79,36 +68,26 @@ class AbstractPostController extends AbstractController
         }
     }
 
-    /**
-     * send mail to user to confirm, edit or delete his entry.
-     *
-     * @param Post $post
-     * @return void
-     */
-    protected function mailToUser(Post $post)
+    protected function mailToUser(Post $post): void
     {
         $mail = $this->objectManager->get(MailMessage::class);
         $mail->setFrom($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName());
         $mail->setTo($post->getUser()->getEmail(), $post->getUser()->getName());
         $mail->setSubject(LocalizationUtility::translate('email.post.subject', 'pforum'));
-        $mail->setBody($this->getContent($post), 'text/html');
+        if (version_compare(TYPO3_branch, '10.0', '>=')) {
+            $mail->html($this->getContentForMail($post));
+        } else {
+            $mail->setBody($this->getContentForMail($post), 'text/html');
+        }
 
         $mail->send();
     }
 
-    /**
-     * get content for mailing.
-     *
-     * @param Post $post
-     * @return string
-     */
-    protected function getContent(Post $post)
+    protected function getContentForMail(Post $post): string
     {
-        /** @var StandaloneView $view */
         $view = $this->objectManager->get(StandaloneView::class);
         $view->setTemplatePathAndFilename(
-            ExtensionManagementUtility::extPath('pforum') .
-            'Resources/Private/Templates/Mail/ConfigurePost.html'
+            'EXT:pforum/Resources/Private/Templates/Mail/ConfigurePost.html'
         );
         $view->setControllerContext($this->getControllerContext());
         $view->assign('settings', $this->settings);
@@ -117,12 +96,7 @@ class AbstractPostController extends AbstractController
         return $view->render();
     }
 
-    /**
-     * add flash message for creation.
-     *
-     * @return void
-     */
-    protected function addFlashMessageForCreation()
+    protected function addFlashMessageForCreation(): void
     {
         if ($this->settings['post']['hideAtCreation']) {
             if ($this->settings['post']['activateByAdmin']) {

@@ -1,5 +1,6 @@
 <?php
-namespace JWeiland\Pforum\Domain\Repository;
+
+declare(strict_types=1);
 
 /*
  * This file is part of the package jweiland/pforum.
@@ -8,13 +9,13 @@ namespace JWeiland\Pforum\Domain\Repository;
  * LICENSE file that was distributed with this source code.
  */
 
+namespace JWeiland\Pforum\Domain\Repository;
+
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
- * Class ForumRepository
- *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * Main Repo to manage forum records
  */
 class ForumRepository extends Repository
 {

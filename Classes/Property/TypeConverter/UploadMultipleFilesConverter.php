@@ -1,6 +1,6 @@
 <?php
 
-namespace JWeiland\Pforum\Property\TypeConverter;
+declare(strict_types=1);
 
 /*
  * This file is part of the package jweiland/pforum.
@@ -8,6 +8,8 @@ namespace JWeiland\Pforum\Property\TypeConverter;
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
  */
+
+namespace JWeiland\Pforum\Property\TypeConverter;
 
 use TYPO3\CMS\Core\Resource\DuplicationBehavior;
 use TYPO3\CMS\Extbase\Domain\Model\AbstractFileFolder;
@@ -46,12 +48,6 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
      */
     protected $fileFactory;
 
-    /**
-     * inject fileFactory
-     *
-     * @param ResourceFactory $fileFactory
-     * @return void
-     */
     public function injectFileFactory(ResourceFactory $fileFactory)
     {
         $this->fileFactory = $fileFactory;
@@ -65,7 +61,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
      * @return bool TRUE if this TypeConverter can convert from $source to $targetType, FALSE otherwise.
      * @api
      */
-    public function canConvertFrom($source, $targetType)
+    public function canConvertFrom($source, string $targetType): bool
     {
         // check if $source consists of uploaded files
         foreach ($source as $uploadedFile) {
@@ -92,7 +88,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
      * @param array $convertedChildProperties
      * @param PropertyMappingConfigurationInterface $configuration
      * @throws Exception
-     * @return AbstractFileFolder|Error
+     * @return ObjectStorage|Error
      * @api
      */
     public function convertFrom(
@@ -157,7 +153,6 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
         // I will do two foreach here. First: everything must be OK, before files will be uploaded
 
         // upload file and add it to ObjectStorage
-        /** @var ObjectStorage $references */
         $references = $this->objectManager->get(ObjectStorage::class);
         foreach ($source as $uploadedFile) {
             if ($uploadedFile instanceof FileReference) {
@@ -176,7 +171,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
      * @param array $source
      * @return FileReference
      */
-    protected function getExtbaseFileReference($source)
+    protected function getExtbaseFileReference(array $source): FileReference
     {
         /** @var FileReference $extbaseFileReference */
         $extbaseFileReference = $this->objectManager->get(FileReference::class);
@@ -191,7 +186,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
      * @param array $source
      * @return \TYPO3\CMS\Core\Resource\FileReference
      */
-    protected function getCoreFileReference(array $source)
+    protected function getCoreFileReference(array $source): \TYPO3\CMS\Core\Resource\FileReference
     {
         // upload file
         $uploadFolder = ResourceFactory::getInstance()->retrieveFileOrFolderObject('uploads/tx_pforum/');

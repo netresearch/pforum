@@ -1,5 +1,6 @@
 <?php
-namespace JWeiland\Pforum\Domain\Repository;
+
+declare(strict_types=1);
 
 /*
  * This file is part of the package jweiland/pforum.
@@ -8,12 +9,12 @@ namespace JWeiland\Pforum\Domain\Repository;
  * LICENSE file that was distributed with this source code.
  */
 
+namespace JWeiland\Pforum\Domain\Repository;
+
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
- * Class AnonymousUserRepository
- *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * Repo to handle anonymous users
  */
 class AnonymousUserRepository extends Repository
 {

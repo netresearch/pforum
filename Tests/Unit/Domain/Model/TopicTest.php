@@ -8,13 +8,7 @@
  */
 
 /**
- * Test case for class Tx_Pforum_Domain_Model_Topic.
- *
- * @version $Id$
- *
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- * @author Stefan Froemken <sfroemken@jweiland.net>
+ * Test case
  */
 class Tx_Pforum_Domain_Model_TopicTest extends Tx_Extbase_Tests_Unit_BaseTestCase
 {

@@ -1,5 +1,6 @@
 <?php
-namespace JWeiland\Pforum\Domain\Repository;
+
+declare(strict_types=1);
 
 /*
  * This file is part of the package jweiland/pforum.
@@ -8,14 +9,15 @@ namespace JWeiland\Pforum\Domain\Repository;
  * LICENSE file that was distributed with this source code.
  */
 
+namespace JWeiland\Pforum\Domain\Repository;
+
 use JWeiland\Pforum\Domain\Model\Topic;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
- * Class TopicRepository
- *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * Repo to retrieve records for topics
  */
 class TopicRepository extends Repository
 {
@@ -26,31 +28,21 @@ class TopicRepository extends Repository
         'crdate' => QueryInterface::ORDER_DESCENDING,
     ];
 
-    /**
-     * find all hidden topics.
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     */
-    public function findAllHidden()
+    public function findAllHidden(): QueryResultInterface
     {
         $query = $this->createQuery();
 
         return $query->matching($query->equals('hidden', 1))->execute();
     }
 
-    /**
-     * find topic by uid whether it is hidden or not.
-     *
-     * @param int $topicUid
-     *
-     * @return Topic
-     */
-    public function findHiddenEntryByUid($topicUid)
+    public function findHiddenEntryByUid(int $topicUid): Topic
     {
         $query = $this->createQuery();
         $query->getQuerySettings()->setIgnoreEnableFields(true);
         $query->getQuerySettings()->setEnableFieldsToBeIgnored(['disabled']);
 
-        return $query->matching($query->equals('uid', (int) $topicUid))->execute()->getFirst();
+        /** @var Topic $topic */
+        $topic = $query->matching($query->equals('uid', (int) $topicUid))->execute()->getFirst();
+        return $topic;
     }
 }

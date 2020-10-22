@@ -1,5 +1,6 @@
 <?php
-namespace JWeiland\Pforum\Controller;
+
+declare(strict_types=1);
 
 /*
  * This file is part of the package jweiland/pforum.
@@ -7,6 +8,8 @@ namespace JWeiland\Pforum\Controller;
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
  */
+
+namespace JWeiland\Pforum\Controller;
 
 use JWeiland\Pforum\Controller\AbstractController;
 use JWeiland\Pforum\Domain\Model\Forum;
@@ -19,16 +22,16 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * Abstract class to keep TopicController more clean
  */
 class AbstractTopicController extends AbstractController
 {
     /**
      * This is a workaround to help controller actions to find (hidden) topics.
      *
-     * @param $argumentName
+     * @param string $argumentName
      */
-    protected function registerTopicFromRequest($argumentName)
+    protected function registerTopicFromRequest(string $argumentName): void
     {
         $argument = $this->request->getArgument($argumentName);
         if (is_array($argument)) {
@@ -41,13 +44,7 @@ class AbstractTopicController extends AbstractController
         $this->session->registerObject($topic, $topic->getUid());
     }
 
-    /**
-     * add current fe_user to topic.
-     *
-     * @param Forum $forum
-     * @param Topic $newTopic
-     */
-    protected function addFeUserToTopic(Forum $forum, Topic $newTopic)
+    protected function addFeUserToTopic(Forum $forum, Topic $newTopic): void
     {
         if (is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid']) {
             /** @var FrontendUser $user */
@@ -60,30 +57,22 @@ class AbstractTopicController extends AbstractController
         }
     }
 
-    /**
-     * send mail to user to confirm, edit or delete his entry.
-     *
-     * @param Topic $topic
-     */
-    protected function mailToUser(Topic $topic)
+    protected function mailToUser(Topic $topic): void
     {
         $mail = $this->objectManager->get(MailMessage::class);
         $mail->setFrom($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName());
         $mail->setTo($topic->getUser()->getEmail(), $topic->getUser()->getName());
         $mail->setSubject(LocalizationUtility::translate('email.topic.subject', 'pforum'));
-        $mail->setBody($this->getContent($topic), 'text/html');
+        if (version_compare(TYPO3_branch, '10.0', '>=')) {
+            $mail->html($this->getContentForMailing($topic));
+        } else {
+            $mail->setBody($this->getContentForMailing($topic), 'text/html');
+        }
 
         $mail->send();
     }
 
-    /**
-     * get content for mailing.
-     *
-     * @param Topic $topic
-     *
-     * @return string
-     */
-    protected function getContent(Topic $topic)
+    protected function getContentForMailing(Topic $topic): string
     {
         /** @var StandaloneView $view */
         $view = $this->objectManager->get(StandaloneView::class);
@@ -97,12 +86,7 @@ class AbstractTopicController extends AbstractController
         return $view->render();
     }
 
-    /**
-     * add flash message for creation.
-     *
-     * @return void
-     */
-    protected function addFlashMessageForCreation()
+    protected function addFlashMessageForCreation(): void
     {
         if ($this->settings['topic']['hideAtCreation']) {
             if ($this->settings['topic']['activateByAdmin']) {

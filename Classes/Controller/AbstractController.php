@@ -1,5 +1,6 @@
 <?php
-namespace JWeiland\Pforum\Controller;
+
+declare(strict_types=1);
 
 /*
  * This file is part of the package jweiland/pforum.
@@ -7,6 +8,8 @@ namespace JWeiland\Pforum\Controller;
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
  */
+
+namespace JWeiland\Pforum\Controller;
 
 use JWeiland\Pforum\Configuration\ExtConf;
 use JWeiland\Pforum\Domain\Model\Topic;
@@ -21,7 +24,7 @@ use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Session;
 
 /**
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * Abstract class with useful methods for all other extending classes
  */
 class AbstractController extends ActionController
 {
@@ -36,36 +39,26 @@ class AbstractController extends ActionController
     protected $session;
 
     /**
-     * forumRepository.
-     *
      * @var ForumRepository
      */
     protected $forumRepository;
 
     /**
-     * topicRepository.
-     *
      * @var TopicRepository
      */
     protected $topicRepository;
 
     /**
-     * postRepository.
-     *
      * @var PostRepository
      */
     protected $postRepository;
 
     /**
-     * anonymousUserRepository.
-     *
      * @var AnonymousUserRepository
      */
     protected $anonymousUserRepository;
 
     /**
-     * frontendUserRepository.
-     *
      * @var FrontendUserRepository
      */
     protected $frontendUserRepository;
@@ -75,99 +68,47 @@ class AbstractController extends ActionController
      */
     protected $persistenceManager;
 
-    /**
-     * inject extConf
-     *
-     * @param ExtConf $extConf
-     * @return void
-     */
-    public function injectExtConf(ExtConf $extConf)
+    public function injectExtConf(ExtConf $extConf): void
     {
         $this->extConf = $extConf;
     }
 
-    /**
-     * inject session
-     *
-     * @param Session $session
-     * @return void
-     */
-    public function injectSession(Session $session)
+    public function injectSession(Session $session): void
     {
         $this->session = $session;
     }
 
-    /**
-     * inject forumRepository
-     *
-     * @param ForumRepository $forumRepository
-     * @return void
-     */
-    public function injectForumRepository(ForumRepository $forumRepository)
+    public function injectForumRepository(ForumRepository $forumRepository): void
     {
         $this->forumRepository = $forumRepository;
     }
 
-    /**
-     * inject topicRepository
-     *
-     * @param TopicRepository $topicRepository
-     * @return void
-     */
-    public function injectTopicRepository(TopicRepository $topicRepository)
+    public function injectTopicRepository(TopicRepository $topicRepository): void
     {
         $this->topicRepository = $topicRepository;
     }
 
-    /**
-     * inject postRepository
-     *
-     * @param PostRepository $postRepository
-     * @return void
-     */
-    public function injectPostRepository(PostRepository $postRepository)
+    public function injectPostRepository(PostRepository $postRepository): void
     {
         $this->postRepository = $postRepository;
     }
 
-    /**
-     * inject anonymousUserRepository
-     *
-     * @param AnonymousUserRepository $anonymousUserRepository
-     * @return void
-     */
-    public function injectAnonymousUserRepository(AnonymousUserRepository $anonymousUserRepository)
+    public function injectAnonymousUserRepository(AnonymousUserRepository $anonymousUserRepository): void
     {
         $this->anonymousUserRepository = $anonymousUserRepository;
     }
 
-    /**
-     * inject frontendUserRepository
-     *
-     * @param FrontendUserRepository $frontendUserRepository
-     * @return void
-     */
-    public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository)
+    public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository): void
     {
         $this->frontendUserRepository = $frontendUserRepository;
     }
 
-    /**
-     * inject persistenceManager
-     *
-     * @param PersistenceManager $persistenceManager
-     * @return void
-     */
-    public function injectPersistenceManager(PersistenceManager $persistenceManager)
+    public function injectPersistenceManager(PersistenceManager $persistenceManager): void
     {
         $this->persistenceManager = $persistenceManager;
     }
 
-    /**
-     * @param ConfigurationManagerInterface $configurationManager
-     * @return void
-     */
-    public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager)
+    public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager): void
     {
         $this->configurationManager = $configurationManager;
         $tsSettings = $this->configurationManager->getConfiguration(
@@ -186,12 +127,7 @@ class AbstractController extends ActionController
         $this->settings = $mergedSettings;
     }
 
-    /**
-     * preprocessing of all actions.
-     *
-     * @return void
-     */
-    public function initializeAction()
+    public function initializeAction(): void
     {
         // if this value was not set, then it will be filled with 0
         // but that is not good, because UriBuilder accepts 0 as pid, so it's better to set it to NULL
@@ -203,11 +139,8 @@ class AbstractController extends ActionController
 
     /**
      * If there is a misconfiguration in TS this will throw an Exception.
-     *
-     * @throws \Exception
-     * @return void
      */
-    protected function checkForMisconfiguration()
+    protected function checkForMisconfiguration(): void
     {
         if (
             $this->settings['topic']['hideAtCreation'] &&
@@ -239,7 +172,7 @@ class AbstractController extends ActionController
      *
      * @param string $argument
      */
-    protected function deleteUploadedFilesOnValidationErrors($argument)
+    protected function deleteUploadedFilesOnValidationErrors(string $argument): void
     {
         if ($this->getControllerContext()->getRequest()->hasArgument($argument)) {
             /** @var Topic $topic */

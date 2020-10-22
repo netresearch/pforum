@@ -1,5 +1,6 @@
 <?php
-namespace JWeiland\Pforum\Validation\Validator;
+
+declare(strict_types=1);
 
 /*
  * This file is part of the package jweiland/pforum.
@@ -8,13 +9,13 @@ namespace JWeiland\Pforum\Validation\Validator;
  * LICENSE file that was distributed with this source code.
  */
 
+namespace JWeiland\Pforum\Validation\Validator;
+
 use JWeiland\Pforum\Validation\Validator\AbstractValidator;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
- * Class UsernameValidator
- *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * Username validator will only be executed, if set in TypoScript
  */
 class UsernameValidator extends AbstractValidator
 {
@@ -23,7 +24,7 @@ class UsernameValidator extends AbstractValidator
      *
      * @param mixed $value The value that should be validated
      */
-    public function isValid($value)
+    public function isValid($value): void
     {
         if ($this->settings['usernameIsMandatory'] && empty($value)) {
             $this->addError(

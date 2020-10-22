@@ -1,5 +1,6 @@
 <?php
-namespace JWeiland\Pforum\Controller;
+
+declare(strict_types=1);
 
 /*
  * This file is part of the package jweiland/pforum.
@@ -8,41 +9,36 @@ namespace JWeiland\Pforum\Controller;
  * LICENSE file that was distributed with this source code.
  */
 
-use JWeiland\Pforum\Controller\AbstractPostController;
+namespace JWeiland\Pforum\Controller;
+
 use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
 use JWeiland\Pforum\Domain\Model\User;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
- * Class PostController
- *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * Controller to manage (list and show) postings
  */
 class PostController extends AbstractPostController
 {
     /**
-     * action new.
-     *
      * @param Topic $topic
-     * @param Post $newPost
-     * @dontvalidate $newPost
-     * @return void
+     * @param Post|null $newPost
+     * @Extbase\IgnoreValidation("newPost")
      */
-    public function newAction(Topic $topic, Post $newPost = null)
+    public function newAction(Topic $topic, Post $newPost = null): void
     {
         $this->view->assign('topic', $topic);
         $this->view->assign('newPost', $newPost);
     }
 
     /**
-     * check if email of user object is mandatory or not.
-     *
-     * @return void
+     * Check if email of user object is mandatory or not.
      */
-    public function initializeCreateAction()
+    public function initializeCreateAction(): void
     {
         if ($this->settings['useImages']) {
             // we have our own implementation how to implement images
@@ -53,13 +49,10 @@ class PostController extends AbstractPostController
     }
 
     /**
-     * action create.
-     *
      * @param Topic $topic
      * @param Post $newPost
-     * @return void
      */
-    public function createAction(Topic $topic, Post $newPost)
+    public function createAction(Topic $topic, Post $newPost): void
     {
         /* if auth = frontend user */
         if ($this->settings['auth'] == 2) {
@@ -80,7 +73,7 @@ class PostController extends AbstractPostController
             $newPost->setHidden(true);
         }
 
-        /* if auth = anonymous user */
+        // if auth = anonymous user
         if ($this->settings['auth'] == 1) {
             /* send a mail to the user to activate, edit or delete his entry */
             if ($this->settings['emailIsMandatory']) {
@@ -101,38 +94,36 @@ class PostController extends AbstractPostController
     }
 
     /**
-     * initialize action edit
-     * hidden record throws an exception. Thats why I check it here before calling editAction.
-     *
-     * @return void
+     * Hidden record throws an exception.
+     * That's why I check it here before calling editAction.
      */
-    public function initializeEditAction()
+    public function initializeEditAction(): void
     {
         $this->registerPostFromRequest('post');
     }
 
     /**
-     * action edit.
-     *
-     * @param Post $post
+     * @param Post|null $post
      * @param bool $isPreview
      * @param bool $isNew We need the information if updateAction was called from createAction.
      *                    If so we have to passthrough this information
-     * @dontvalidate $post
-     * @return void
+     * @Extbase\IgnoreValidation("post")
      */
-    public function editAction(Post $post = null, $isPreview = false, $isNew = false)
-    {
+    public function editAction(
+        Post $post = null,
+        bool $isPreview = false,
+        bool $isNew = false
+    ): void {
         $this->view->assign('post', $post);
         $this->view->assign('isPreview', $isPreview);
         $this->view->assign('isNew', $isNew);
     }
 
     /**
-     * getObjectByIdentifier can only find non-hidden values
+     * getObjectByIdentifier can only find non-hidden values.
      * With this method we help extbase backend to find our hidden object.
      */
-    public function initializeUpdateAction()
+    public function initializeUpdateAction(): void
     {
         $this->registerPostFromRequest('post');
         if ($this->settings['useImages']) {
@@ -144,14 +135,11 @@ class PostController extends AbstractPostController
     }
 
     /**
-     * action update.
-     *
      * @param Post $post
      * @param bool $isNew We need the information if updateAction was
      *                    called from createAction. If so we have to add different messages
-     * @return void
      */
-    public function updateAction(Post $post, $isNew = false)
+    public function updateAction(Post $post, bool $isNew = false): void
     {
         $this->postRepository->update($post);
 
@@ -186,37 +174,25 @@ class PostController extends AbstractPostController
     }
 
     /**
-     * initialize action delete
-     * hidden record throws an exception. Thats why I check it here before calling deleteAction.
-     *
-     * @return void
+     * Hidden record throws an exception.
+     * That's why I check it here before calling deleteAction.
      */
-    public function initializeDeleteAction()
+    public function initializeDeleteAction(): void
     {
         $this->registerPostFromRequest('post');
     }
 
     /**
-     * action delete.
-     *
      * @param Post $post
-     * @return void
      */
-    public function deleteAction(Post $post)
+    public function deleteAction(Post $post): void
     {
         $this->postRepository->remove($post);
         $this->addFlashMessage(LocalizationUtility::translate('postDeleted', 'pforum'), '', FlashMessage::OK);
         $this->redirect('list', 'Forum');
     }
 
-    /**
-     * send mail to user to confirm, edit or delete his entry.
-     *
-     * @param Topic $topic
-     * @param Post $post
-     * @return void
-     */
-    protected function mailToTopicCreator(Topic $topic, Post $post)
+    protected function mailToTopicCreator(Topic $topic, Post $post): void
     {
         $mail = $this->objectManager->get(MailMessage::class);
         $mail->setFrom($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName());
@@ -224,7 +200,8 @@ class PostController extends AbstractPostController
         $mail->setSubject(LocalizationUtility::translate(
             'email.post.subject.newPost', 'pforum', [$topic->getTitle()])
         );
-        $mail->setBody(LocalizationUtility::translate(
+
+        $content = LocalizationUtility::translate(
             'email.post.text.newPost',
             'pforum',
             [
@@ -232,30 +209,32 @@ class PostController extends AbstractPostController
                 $topic->getTitle(),
                 $post->getDescription(),
             ]
-        ), 'text/html');
+        );
+
+        if (version_compare(TYPO3_branch, '10.0', '>=')) {
+            $mail->html($content);
+        } else {
+            $mail->setBody($content, 'text/html');
+        }
 
         $mail->send();
     }
 
     /**
-     * initialize action activate
-     * hidden record throws an exception. Thats why I check it here before calling activateAction.
-     *
-     * @return void
+     * Hidden record throws an exception.
+     * That's why I check it here before calling activateAction.
      */
-    public function initializeActivateAction()
+    public function initializeActivateAction(): void
     {
         $this->registerPostFromRequest('post');
     }
 
     /**
-     * action activate by uid
      * We need this extra action, because hidden entries can't be found in FE mode.
      *
      * @param Post $post
-     * @return void
      */
-    public function activateAction(Post $post)
+    public function activateAction(Post $post): void
     {
         $post->setHidden(false);
         $this->postRepository->update($post);

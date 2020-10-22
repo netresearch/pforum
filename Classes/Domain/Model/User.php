@@ -1,5 +1,6 @@
 <?php
-namespace JWeiland\Pforum\Domain\Model;
+
+declare(strict_types=1);
 
 /*
  * This file is part of the package jweiland/pforum.
@@ -8,95 +9,60 @@ namespace JWeiland\Pforum\Domain\Model;
  * LICENSE file that was distributed with this source code.
  */
 
+namespace JWeiland\Pforum\Domain\Model;
+
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
- * Class User
- *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * This is an abstract class for anonymous/fe_user models
  */
 class User extends AbstractEntity
 {
     /**
-     * Name.
-     *
      * @var string
      */
     protected $name = '';
 
     /**
-     * Username.
-     *
      * @var string
-     * @validate \JWeiland\Pforum\Validation\Validator\UsernameValidator
+     * @Extbase\Validate("JWeiland\Pforum\Validation\Validator\UsernameValidator")
      */
     protected $username = '';
 
     /**
-     * E-Mail.
-     *
      * @var string
-     * @validate \JWeiland\Pforum\Validation\Validator\EmailValidator
+     * @Extbase\Validate("JWeiland\Pforum\Validation\Validator\EmailValidator")
      */
     protected $email = '';
 
-    /**
-     * Returns the name.
-     *
-     * @return string $name
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * Sets the name.
-     *
-     * @param string $name
-     */
-    public function setName($name)
+    public function setName(string $name): void
     {
-        $this->name = (string)$name;
+        $this->name = $name;
     }
 
-    /**
-     * Returns the username.
-     *
-     * @return string $username
-     */
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->username;
     }
 
-    /**
-     * Sets the username.
-     *
-     * @param string $username
-     */
-    public function setUsername($username)
+    public function setUsername(string $username): void
     {
-        $this->username = (string)$username;
+        $this->username = $username;
     }
 
-    /**
-     * Returns the email.
-     *
-     * @return string $email
-     */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    /**
-     * Sets the email.
-     *
-     * @param string $email
-     */
-    public function setEmail($email)
+    public function setEmail(string $email): void
     {
-        $this->email = (string)$email;
+        $this->email = $email;
     }
 }

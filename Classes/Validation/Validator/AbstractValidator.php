@@ -1,5 +1,6 @@
 <?php
-namespace JWeiland\Pforum\Validation\Validator;
+
+declare(strict_types=1);
 
 /*
  * This file is part of the package jweiland/pforum.
@@ -8,12 +9,12 @@ namespace JWeiland\Pforum\Validation\Validator;
  * LICENSE file that was distributed with this source code.
  */
 
+namespace JWeiland\Pforum\Validation\Validator;
+
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
- * Class AbstractValidator
- *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * Abstract Validator with useful methods for extending validators
  */
 abstract class AbstractValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator
 {
@@ -26,9 +27,9 @@ abstract class AbstractValidator extends \TYPO3\CMS\Extbase\Validation\Validator
     protected $acceptsEmptyValues = false;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
+     * @var ConfigurationManagerInterface
      */
-    protected $configurationManager = null;
+    protected $configurationManager;
 
     /**
      * Contains the settings of the current extension.
@@ -37,13 +38,13 @@ abstract class AbstractValidator extends \TYPO3\CMS\Extbase\Validation\Validator
      */
     protected $settings = [];
 
-    /**
-     * @param ConfigurationManagerInterface $configurationManager
-     * @return void
-     */
     public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager)
     {
         $this->configurationManager = $configurationManager;
-        $this->settings = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'pforum', 'forum');
+        $this->settings = $this->configurationManager->getConfiguration(
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+            'pforum',
+            'forum'
+        );
     }
 }

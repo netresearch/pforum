@@ -1,5 +1,6 @@
 <?php
-namespace JWeiland\Pforum\Domain\Model;
+
+declare(strict_types=1);
 
 /*
  * This file is part of the package jweiland/pforum.
@@ -8,10 +9,10 @@ namespace JWeiland\Pforum\Domain\Model;
  * LICENSE file that was distributed with this source code.
  */
 
+namespace JWeiland\Pforum\Domain\Model;
+
 /**
- * Class FrontendUser
- *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * Model to manage fe_users
  */
 class FrontendUser extends User
 {

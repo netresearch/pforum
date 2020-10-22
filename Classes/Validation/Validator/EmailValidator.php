@@ -1,5 +1,6 @@
 <?php
-namespace JWeiland\Pforum\Validation\Validator;
+
+declare(strict_types=1);
 
 /*
  * This file is part of the package jweiland/pforum.
@@ -8,13 +9,13 @@ namespace JWeiland\Pforum\Validation\Validator;
  * LICENSE file that was distributed with this source code.
  */
 
+namespace JWeiland\Pforum\Validation\Validator;
+
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
- * Class EmailValidator
- *
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * Email validator which will only executed if an fe_user created a topic or posting
  */
 class EmailValidator extends AbstractValidator
 {
@@ -23,7 +24,7 @@ class EmailValidator extends AbstractValidator
      *
      * @param mixed $value The value that should be validated
      */
-    public function isValid($value)
+    public function isValid($value): void
     {
         if ($this->settings['emailIsMandatory']) {
             if (empty($value)) {
