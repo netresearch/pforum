@@ -3,9 +3,11 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2013-08-32T14:44:32Z" product-name="pforum">
 		<header/>
 		<body>
-
-			<trans-unit id="plugin.title">
+			<trans-unit id="plugin.pforum.title">
 				<source>Forum</source>
+			</trans-unit>
+			<trans-unit id="plugin.pforum.description">
+				<source>Shows a list of forum entries.</source>
 			</trans-unit>
 
 			<trans-unit id="tx_pforum_domain_model_forum">
@@ -74,7 +76,6 @@
 			<trans-unit id="tx_pforum_domain_model_anonymoususer.email">
 				<source>Email</source>
 			</trans-unit>
-
 		</body>
 	</file>
 </xliff>

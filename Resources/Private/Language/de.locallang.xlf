@@ -3,7 +3,6 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2013-08-32T14:44:32Z" product-name="pforum">
 		<header/>
 		<body>
-
 			<trans-unit id="tx_pforum_domain_model_forum">
 				<source>Forum</source>
 				<target>Themen</target>
