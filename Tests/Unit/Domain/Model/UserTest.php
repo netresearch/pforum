@@ -41,7 +41,7 @@ class Tx_Pforum_Domain_Model_UserTest extends Tx_Extbase_Tests_Unit_BaseTestCase
     {
         $this->fixture->setName('Conceived at T3CON10');
 
-        $this->assertSame(
+        self::Same(
             'Conceived at T3CON10',
             $this->fixture->getName()
         );
@@ -61,7 +61,7 @@ class Tx_Pforum_Domain_Model_UserTest extends Tx_Extbase_Tests_Unit_BaseTestCase
     {
         $this->fixture->setUsername('Conceived at T3CON10');
 
-        $this->assertSame(
+        self::Same(
             'Conceived at T3CON10',
             $this->fixture->getUsername()
         );
@@ -81,7 +81,7 @@ class Tx_Pforum_Domain_Model_UserTest extends Tx_Extbase_Tests_Unit_BaseTestCase
     {
         $this->fixture->setEmail('Conceived at T3CON10');
 
-        $this->assertSame(
+        self::Same(
             'Conceived at T3CON10',
             $this->fixture->getEmail()
         );
@@ -101,7 +101,7 @@ class Tx_Pforum_Domain_Model_UserTest extends Tx_Extbase_Tests_Unit_BaseTestCase
     {
         $this->fixture->setPassword('Conceived at T3CON10');
 
-        $this->assertSame(
+        self::Same(
             'Conceived at T3CON10',
             $this->fixture->getPassword()
         );

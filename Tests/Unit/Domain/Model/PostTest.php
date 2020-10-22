@@ -41,7 +41,7 @@ class Tx_Pforum_Domain_Model_PostTest extends Tx_Extbase_Tests_Unit_BaseTestCase
     {
         $this->fixture->setTitle('Conceived at T3CON10');
 
-        $this->assertSame(
+        self::Same(
             'Conceived at T3CON10',
             $this->fixture->getTitle()
         );
@@ -61,7 +61,7 @@ class Tx_Pforum_Domain_Model_PostTest extends Tx_Extbase_Tests_Unit_BaseTestCase
     {
         $this->fixture->setDescription('Conceived at T3CON10');
 
-        $this->assertSame(
+        self::Same(
             'Conceived at T3CON10',
             $this->fixture->getDescription()
         );
@@ -72,7 +72,7 @@ class Tx_Pforum_Domain_Model_PostTest extends Tx_Extbase_Tests_Unit_BaseTestCase
      */
     public function getUserReturnsInitialValueForTx_Pforum_Domain_Model_User()
     {
-        $this->assertEquals(
+        self::Equals(
             null,
             $this->fixture->getUser()
         );
@@ -86,7 +86,7 @@ class Tx_Pforum_Domain_Model_PostTest extends Tx_Extbase_Tests_Unit_BaseTestCase
         $dummyObject = new Tx_Pforum_Domain_Model_User();
         $this->fixture->setUser($dummyObject);
 
-        $this->assertSame(
+        self::Same(
             $dummyObject,
             $this->fixture->getUser()
         );

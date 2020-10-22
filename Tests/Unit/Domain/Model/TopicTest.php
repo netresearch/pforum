@@ -41,7 +41,7 @@ class Tx_Pforum_Domain_Model_TopicTest extends Tx_Extbase_Tests_Unit_BaseTestCas
     {
         $this->fixture->setTitle('Conceived at T3CON10');
 
-        $this->assertSame(
+        self::Same(
             'Conceived at T3CON10',
             $this->fixture->getTitle()
         );
@@ -61,7 +61,7 @@ class Tx_Pforum_Domain_Model_TopicTest extends Tx_Extbase_Tests_Unit_BaseTestCas
     {
         $this->fixture->setDescription('Conceived at T3CON10');
 
-        $this->assertSame(
+        self::Same(
             'Conceived at T3CON10',
             $this->fixture->getDescription()
         );
@@ -73,7 +73,7 @@ class Tx_Pforum_Domain_Model_TopicTest extends Tx_Extbase_Tests_Unit_BaseTestCas
     public function getPostsReturnsInitialValueForObjectStorageContainingTx_Pforum_Domain_Model_Post()
     {
         $newObjectStorage = new Tx_Extbase_Persistence_ObjectStorage();
-        $this->assertEquals(
+        self::Equals(
             $newObjectStorage,
             $this->fixture->getPosts()
         );
@@ -89,7 +89,7 @@ class Tx_Pforum_Domain_Model_TopicTest extends Tx_Extbase_Tests_Unit_BaseTestCas
         $objectStorageHoldingExactlyOnePosts->attach($post);
         $this->fixture->setPosts($objectStorageHoldingExactlyOnePosts);
 
-        $this->assertSame(
+        self::Same(
             $objectStorageHoldingExactlyOnePosts,
             $this->fixture->getPosts()
         );
@@ -105,7 +105,7 @@ class Tx_Pforum_Domain_Model_TopicTest extends Tx_Extbase_Tests_Unit_BaseTestCas
         $objectStorageHoldingExactlyOnePost->attach($post);
         $this->fixture->addPost($post);
 
-        $this->assertEquals(
+        self::Equals(
             $objectStorageHoldingExactlyOnePost,
             $this->fixture->getPosts()
         );
@@ -123,7 +123,7 @@ class Tx_Pforum_Domain_Model_TopicTest extends Tx_Extbase_Tests_Unit_BaseTestCas
         $this->fixture->addPost($post);
         $this->fixture->removePost($post);
 
-        $this->assertEquals(
+        self::Equals(
             $localObjectStorage,
             $this->fixture->getPosts()
         );
@@ -134,7 +134,7 @@ class Tx_Pforum_Domain_Model_TopicTest extends Tx_Extbase_Tests_Unit_BaseTestCas
      */
     public function getUserReturnsInitialValueForTx_Pforum_Domain_Model_User()
     {
-        $this->assertEquals(
+        self::Equals(
             null,
             $this->fixture->getUser()
         );
@@ -148,7 +148,7 @@ class Tx_Pforum_Domain_Model_TopicTest extends Tx_Extbase_Tests_Unit_BaseTestCas
         $dummyObject = new Tx_Pforum_Domain_Model_User();
         $this->fixture->setUser($dummyObject);
 
-        $this->assertSame(
+        self::Same(
             $dummyObject,
             $this->fixture->getUser()
         );

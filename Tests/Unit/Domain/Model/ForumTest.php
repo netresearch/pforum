@@ -41,7 +41,7 @@ class Tx_Pforum_Domain_Model_ForumTest extends Tx_Extbase_Tests_Unit_BaseTestCas
     {
         $this->fixture->setTitle('Conceived at T3CON10');
 
-        $this->assertSame(
+        self::Same(
             'Conceived at T3CON10',
             $this->fixture->getTitle()
         );
@@ -61,7 +61,7 @@ class Tx_Pforum_Domain_Model_ForumTest extends Tx_Extbase_Tests_Unit_BaseTestCas
     {
         $this->fixture->setTeaser('Conceived at T3CON10');
 
-        $this->assertSame(
+        self::Same(
             'Conceived at T3CON10',
             $this->fixture->getTeaser()
         );
@@ -73,7 +73,7 @@ class Tx_Pforum_Domain_Model_ForumTest extends Tx_Extbase_Tests_Unit_BaseTestCas
     public function getTopicsReturnsInitialValueForObjectStorageContainingTx_Pforum_Domain_Model_Topic()
     {
         $newObjectStorage = new Tx_Extbase_Persistence_ObjectStorage();
-        $this->assertEquals(
+        self::Equals(
             $newObjectStorage,
             $this->fixture->getTopics()
         );
@@ -89,7 +89,7 @@ class Tx_Pforum_Domain_Model_ForumTest extends Tx_Extbase_Tests_Unit_BaseTestCas
         $objectStorageHoldingExactlyOneTopics->attach($topic);
         $this->fixture->setTopics($objectStorageHoldingExactlyOneTopics);
 
-        $this->assertSame(
+        self::Same(
             $objectStorageHoldingExactlyOneTopics,
             $this->fixture->getTopics()
         );
@@ -105,7 +105,7 @@ class Tx_Pforum_Domain_Model_ForumTest extends Tx_Extbase_Tests_Unit_BaseTestCas
         $objectStorageHoldingExactlyOneTopic->attach($topic);
         $this->fixture->addTopic($topic);
 
-        $this->assertEquals(
+        self::Equals(
             $objectStorageHoldingExactlyOneTopic,
             $this->fixture->getTopics()
         );
@@ -123,7 +123,7 @@ class Tx_Pforum_Domain_Model_ForumTest extends Tx_Extbase_Tests_Unit_BaseTestCas
         $this->fixture->addTopic($topic);
         $this->fixture->removeTopic($topic);
 
-        $this->assertEquals(
+        self::Equals(
             $localObjectStorage,
             $this->fixture->getTopics()
         );
