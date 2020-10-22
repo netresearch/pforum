@@ -1,31 +1,60 @@
 {
-  "name": "jweiland/pforum",
-  "type": "typo3-cms-extension",
-  "description": "Lightweight forum extension for TYPO3",
-  "license": "GPL-2.0-or-later",
-  "keywords": ["typo3", "TYPO3 CMS", "template"],
-  "homepage": "https://jweiland.net",
-  "authors": [
-    {
-      "name": "Stefan Froemken",
-      "email": "sfroemken@jweiland.net",
-      "role": "Developer"
-    }
-  ],
-  "support": {
-    "email": "support@jweiland.net",
-    "issues": "https://github.com/jweiland-net/pforum/issues",
-    "source": "https://github.com/jweiland-net/pforum"
-  },
-  "require": {
-    "typo3/cms-core": ">=7.6.0,<9.0"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "~4.8.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "JWeiland\\Pforum\\": "Classes"
-    }
-  }
+	"name": "jweiland/pforum",
+	"type": "typo3-cms-extension",
+	"description": "Lightweight forum extension for TYPO3",
+	"license": "GPL-2.0-or-later",
+	"keywords": ["typo3", "TYPO3 CMS", "forum", "pforum", "lightweight"],
+	"homepage": "https://jweiland.net",
+	"authors": [
+		{
+			"name": "Stefan Froemken",
+			"email": "sfroemken@jweiland.net",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"email": "support@jweiland.net",
+		"issues": "https://github.com/jweiland-net/pforum/issues",
+		"source": "https://github.com/jweiland-net/pforum"
+	},
+	"require": {
+		"typo3/cms-core": "^9.5.20 || ^10.4.6"
+	},
+	"require-dev": {
+		"friendsofphp/php-cs-fixer": "^2.16",
+		"nimut/testing-framework": "^5.1"
+	},
+	"autoload": {
+		"psr-4": {
+			"JWeiland\\Pforum\\": "Classes"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"JWeiland\\Pforum\\Tests\\": "Tests"
+		}
+	},
+	"config": {
+		"vendor-dir": ".build/vendor"
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "pforum",
+			"app-dir": ".build",
+			"web-dir": ".build/public"
+		}
+	},
+	"scripts": {
+		"php:fix": ".build/vendor/bin/php-cs-fixer --config=Build/.php_cs.php fix Classes Tests",
+		"ci:php:lint": "find *.php Classes Configuration Tests -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l",
+		"ci:php:fixer": ".build/vendor/bin/php-cs-fixer --config=Build/.php_cs.php fix --dry-run -v --show-progress=dots --diff-format=udiff Classes Tests",
+		"ci:tests:unit": "php .build/vendor/bin/phpunit -c .build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit",
+		"link-extension": [
+			"@php -r 'is_dir($extFolder=__DIR__.\"/.build/public/typo3conf/ext/\") || mkdir($extFolder, 0777, true);'",
+			"@php -r 'file_exists($extFolder=__DIR__.\"/.build/public/typo3conf/ext/pforum\") || symlink(__DIR__,$extFolder);'"
+		],
+		"post-autoload-dump": [
+			"@link-extension"
+		]
+	}
 }
