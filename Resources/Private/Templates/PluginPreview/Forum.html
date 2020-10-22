@@ -1,0 +1,27 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
+<table class="table">
+	<thead>
+	<tr>
+		<th>Config</th>
+		<th>Value</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td><strong>Plugin</strong></td>
+		<td>Forum</td>
+	</tr>
+	<f:if condition="{pi_flexform_transformed.settings.pidOfDetailPage}">
+		<tr>
+			<td><strong>Detail Page</strong></td>
+			<td>
+				{pi_flexform_transformed.settings.pidOfDetailPage}
+			</td>
+		</tr>
+	</f:if>
+	</tbody>
+</table>
+</html>
