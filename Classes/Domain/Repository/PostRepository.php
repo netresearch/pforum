@@ -42,7 +42,7 @@ class PostRepository extends Repository
         $query->getQuerySettings()->setEnableFieldsToBeIgnored(['disabled']);
 
         /** @var Post $post */
-        $post = $query->matching($query->equals('uid', (int) $postUid))->execute()->getFirst();
+        $post = $query->matching($query->equals('uid', $postUid))->execute()->getFirst();
         return $post;
     }
 }

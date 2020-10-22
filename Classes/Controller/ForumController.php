@@ -11,13 +11,9 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Controller;
 
-use JWeiland\Pforum\Controller\AbstractController;
 use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
-use JWeiland\Pforum\Domain\Repository\ForumRepository;
-use JWeiland\Pforum\Domain\Repository\PostRepository;
-use JWeiland\Pforum\Domain\Repository\TopicRepository;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
@@ -70,9 +66,9 @@ class ForumController extends AbstractController
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Pforum/Forum');
         $path = PathUtility::getAbsoluteWebPath(ExtensionManagementUtility::extPath('pforum')) .
             'Resources/Public/Css/';
-        $this->pageRenderer->addCssFile($path.'demo_page.css');
-        $this->pageRenderer->addCssFile($path.'demo_table_jui.css');
-        $this->pageRenderer->addCssFile($path.'smoothness/jquery-ui-1.10.3.custom.min.css');
+        $this->pageRenderer->addCssFile($path . 'demo_page.css');
+        $this->pageRenderer->addCssFile($path . 'demo_table_jui.css');
+        $this->pageRenderer->addCssFile($path . 'smoothness/jquery-ui-1.10.3.custom.min.css');
     }
 
     public function listHiddenAction(): void

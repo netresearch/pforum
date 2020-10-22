@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Controller;
 
-use JWeiland\Pforum\Controller\AbstractController;
 use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Domain\Model\FrontendUser;
 use JWeiland\Pforum\Domain\Model\Topic;
@@ -48,7 +47,9 @@ class AbstractTopicController extends AbstractController
     {
         if (is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid']) {
             /** @var FrontendUser $user */
-            $user = $this->frontendUserRepository->findByUid((int) $GLOBALS['TSFE']->fe_user->user['uid']);
+            $user = $this->frontendUserRepository->findByUid(
+                (int)$GLOBALS['TSFE']->fe_user->user['uid']
+            );
             $newTopic->setFrontendUser($user);
         } else {
             /* normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated */
@@ -62,7 +63,12 @@ class AbstractTopicController extends AbstractController
         $mail = $this->objectManager->get(MailMessage::class);
         $mail->setFrom($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName());
         $mail->setTo($topic->getUser()->getEmail(), $topic->getUser()->getName());
-        $mail->setSubject(LocalizationUtility::translate('email.topic.subject', 'pforum'));
+        $mail->setSubject(
+            LocalizationUtility::translate(
+                'email.topic.subject',
+                'pforum'
+            )
+        );
         if (version_compare(TYPO3_branch, '10.0', '>=')) {
             $mail->html($this->getContentForMailing($topic));
         } else {

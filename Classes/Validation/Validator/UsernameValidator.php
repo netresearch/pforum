@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Validation\Validator;
 
-use JWeiland\Pforum\Validation\Validator\AbstractValidator;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -31,7 +30,8 @@ class UsernameValidator extends AbstractValidator
                 LocalizationUtility::translate(
                     'validator.anonymousUser.username',
                     'pforum'
-                ), 1378304890
+                ),
+                1378304890
             );
         }
     }

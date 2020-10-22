@@ -11,14 +11,12 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Controller;
 
-use JWeiland\Pforum\Controller\AbstractController;
 use JWeiland\Pforum\Domain\Model\FrontendUser;
 use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
@@ -59,7 +57,9 @@ class AbstractPostController extends AbstractController
     {
         if (is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid']) {
             /** @var FrontendUser $user */
-            $user = $this->frontendUserRepository->findByUid((int) $GLOBALS['TSFE']->fe_user->user['uid']);
+            $user = $this->frontendUserRepository->findByUid(
+                (int)$GLOBALS['TSFE']->fe_user->user['uid']
+            );
             $newPost->setFrontendUser($user);
         } else {
             /* normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated */
@@ -117,8 +117,8 @@ class AbstractPostController extends AbstractController
             $this->addFlashMessage(
                 LocalizationUtility::translate('postCreated', 'pforum'),
                 '',
-                FlashMessage::OK)
-            ;
+                FlashMessage::OK
+            );
         }
     }
 }

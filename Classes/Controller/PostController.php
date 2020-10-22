@@ -43,7 +43,8 @@ class PostController extends AbstractPostController
         if ($this->settings['useImages']) {
             // we have our own implementation how to implement images
             $this->arguments->getArgument('newPost')->getPropertyMappingConfiguration()->setTargetTypeForSubProperty(
-                'images', 'array'
+                'images',
+                'array'
             );
         }
     }
@@ -129,7 +130,8 @@ class PostController extends AbstractPostController
         if ($this->settings['useImages']) {
             // we have our own implementation how to implement images
             $this->arguments->getArgument('post')->getPropertyMappingConfiguration()->setTargetTypeForSubProperty(
-                'images', 'array'
+                'images',
+                'array'
             );
         }
     }
@@ -197,8 +199,12 @@ class PostController extends AbstractPostController
         $mail = $this->objectManager->get(MailMessage::class);
         $mail->setFrom($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName());
         $mail->setTo($topic->getUser()->getEmail(), $topic->getUser()->getName());
-        $mail->setSubject(LocalizationUtility::translate(
-            'email.post.subject.newPost', 'pforum', [$topic->getTitle()])
+        $mail->setSubject(
+            LocalizationUtility::translate(
+                'email.post.subject.newPost',
+                'pforum',
+                [$topic->getTitle()]
+            )
         );
 
         $content = LocalizationUtility::translate(

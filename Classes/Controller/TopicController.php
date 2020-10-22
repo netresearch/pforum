@@ -150,7 +150,8 @@ class TopicController extends AbstractTopicController
                 ->getPropertyMappingConfiguration()
                 ->forProperty('images')
                 ->setTypeConverter($multipleFilesTypeConverter)
-                ->setTypeConverterOptions(UploadMultipleFilesConverter::class,
+                ->setTypeConverterOptions(
+                    UploadMultipleFilesConverter::class,
                     [
                         'IMAGES' => $topic->getImages()
                     ]

@@ -42,7 +42,7 @@ class TopicRepository extends Repository
         $query->getQuerySettings()->setEnableFieldsToBeIgnored(['disabled']);
 
         /** @var Topic $topic */
-        $topic = $query->matching($query->equals('uid', (int) $topicUid))->execute()->getFirst();
+        $topic = $query->matching($query->equals('uid', $topicUid))->execute()->getFirst();
         return $topic;
     }
 }

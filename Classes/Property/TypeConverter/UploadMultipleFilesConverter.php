@@ -12,15 +12,14 @@ declare(strict_types=1);
 namespace JWeiland\Pforum\Property\TypeConverter;
 
 use TYPO3\CMS\Core\Resource\DuplicationBehavior;
-use TYPO3\CMS\Extbase\Domain\Model\AbstractFileFolder;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Error\Error;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\Property\Exception;
 use TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface;
 use TYPO3\CMS\Extbase\Property\TypeConverter\AbstractTypeConverter;
-use TYPO3\CMS\Core\Resource\ResourceFactory;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -98,7 +97,8 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
         PropertyMappingConfigurationInterface $configuration = null
     ) {
         $alreadyPersistedImages = $configuration->getConfigurationValue(
-            __CLASS__, 'IMAGES'
+            __CLASS__,
+            'IMAGES'
         );
         $originalSource = $source;
         foreach ($originalSource as $key => $uploadedFile) {

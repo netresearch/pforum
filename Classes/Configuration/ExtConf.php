@@ -49,9 +49,8 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->emailFromAddress)) {
             return $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'];
-        } else {
-            return $this->emailFromAddress;
         }
+        return $this->emailFromAddress;
     }
 
     public function setEmailFromAddress(string $emailFromAddress): void
@@ -63,9 +62,8 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->emailFromName)) {
             return $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName'];
-        } else {
-            return $this->emailFromName;
         }
+        return $this->emailFromName;
     }
 
     public function setEmailFromName(string $emailFromName): void
