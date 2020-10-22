@@ -10,7 +10,6 @@
 namespace JWeiland\Pforum\Tests\Unit\Domain\Model;
 
 use JWeiland\Pforum\Domain\Model\Post;
-use JWeiland\Pforum\Domain\Model\User;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 
 /**
