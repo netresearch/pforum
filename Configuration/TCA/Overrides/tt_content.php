@@ -6,7 +6,7 @@ if (!defined('TYPO3_MODE')) {
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
     'JWeiland.pforum',
     'Forum',
-    'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:plugin.title'
+    'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:plugin.pforum.title'
 );
 
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['pforum_forum'] = 'pi_flexform';
