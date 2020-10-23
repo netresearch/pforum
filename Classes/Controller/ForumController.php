@@ -12,11 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Pforum\Controller;
 
 use JWeiland\Pforum\Domain\Model\Forum;
-use JWeiland\Pforum\Domain\Model\Post;
-use JWeiland\Pforum\Domain\Model\Topic;
 use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
