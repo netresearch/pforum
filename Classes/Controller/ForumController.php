@@ -60,39 +60,4 @@ class ForumController extends AbstractController
         $this->view->assign('forum', $forum);
         $this->view->assign('topics', $topics);
     }
-
-    public function initializeListHiddenAction(): void
-    {
-        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Pforum/Forum');
-        $path = PathUtility::getAbsoluteWebPath(ExtensionManagementUtility::extPath('pforum')) .
-            'Resources/Public/Css/';
-        $this->pageRenderer->addCssFile($path . 'demo_page.css');
-        $this->pageRenderer->addCssFile($path . 'demo_table_jui.css');
-        $this->pageRenderer->addCssFile($path . 'smoothness/jquery-ui-1.10.3.custom.min.css');
-    }
-
-    public function listHiddenAction(): void
-    {
-        $this->view->assign('topics', $this->topicRepository->findAllHidden());
-        $this->view->assign('posts', $this->postRepository->findAllHidden());
-    }
-
-    /**
-     * This is for BE use only.
-     *
-     * @param Topic|null $topic
-     * @param Post|null $post
-     */
-    public function activateAction(?Topic $topic, ?Post $post = null): void
-    {
-        if (!empty($topic)) {
-            $topic->setHidden(false);
-            $this->topicRepository->update($topic);
-        }
-        if (!empty($post)) {
-            $post->setHidden(false);
-            $this->postRepository->update($post);
-        }
-        $this->redirect('listHidden');
-    }
 }

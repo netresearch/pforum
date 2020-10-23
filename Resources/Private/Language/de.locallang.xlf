@@ -99,17 +99,13 @@
 				<source>There are no posts to this topic yet.</source>
 				<target>Es gibt noch keine Antworten auf diesen Beitrag.</target>
 			</trans-unit>
-			<trans-unit id="noHiddenPosts">
-				<source>There are currently no activateable posts available</source>
-				<target>Es gibt aktuell keine aktivierbaren Beiträge</target>
-			</trans-unit>
 			<trans-unit id="noTopics">
 				<source>There are no topics to this forum yet.</source>
 				<target>Es gibt noch keine Beiträge zu diesem Thema.</target>
 			</trans-unit>
-			<trans-unit id="noHiddenTopics">
-				<source>There are currently no activateable topics available</source>
-				<target>Es gibt aktuell keine aktivierbaren Beiträge</target>
+			<trans-unit id="noHiddenRecords">
+				<source>There are currently no activateable records available</source>
+				<target>Aktuell gibt es keine aktivierbaren Datensätze</target>
 			</trans-unit>
 			<trans-unit id="newTopic">
 				<source>Create new Topic</source>
@@ -270,6 +266,19 @@
 			<trans-unit id="mandatory">
 				<source>mandatory</source>
 				<target>Pflichtfelder</target>
+			</trans-unit>
+
+			<trans-unit id="be.administrateForumRecords">
+				<source>Administrate Forum Records</source>
+				<target>Foren Datensätze verwalten</target>
+			</trans-unit>
+			<trans-unit id="be.administrateForumRecords.description">
+				<source>If activated in pforum TS configuration, new topics and postings are hidden on creation. Within this BE module you can activate such records.</source>
+				<target>Sofern in der Pforum TS Konfiguration aktiviert, werden neue Topics und Posts bei Erstellung als versteckte Datensätze abgespeichert. Hier in diesem Modul kannst Du diese Datensätze aktivieren.</target>
+			</trans-unit>
+			<trans-unit id="be.noRecordsInStorage">
+				<source>There are no hidden pforum records on selected page.</source>
+				<target>Auf dieser Seite wurden keine Pforum Datensätze gefunden.</target>
 			</trans-unit>
 		</body>
 	</file>

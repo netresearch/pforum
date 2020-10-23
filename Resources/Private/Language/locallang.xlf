@@ -77,14 +77,11 @@
 			<trans-unit id="noPosts">
 				<source>There are no posts to this topic yet.</source>
 			</trans-unit>
-			<trans-unit id="noHiddenPosts">
-				<source>There are currently no activateable posts available</source>
-			</trans-unit>
 			<trans-unit id="noTopics">
 				<source>There are no topics to this forum yet.</source>
 			</trans-unit>
-			<trans-unit id="noHiddenTopics">
-				<source>There are currently no activateable topics available</source>
+			<trans-unit id="noHiddenRecords">
+				<source>There are currently no activateable records available</source>
 			</trans-unit>
 			<trans-unit id="newTopic">
 				<source>Create new Topic</source>
@@ -208,6 +205,16 @@
 
 			<trans-unit id="mandatory">
 				<source>mandatory</source>
+			</trans-unit>
+
+			<trans-unit id="be.administrateForumRecords">
+				<source>Administrate Forum Records</source>
+			</trans-unit>
+			<trans-unit id="be.administrateForumRecords.description">
+				<source>If activated in pforum TS configuration, new topics and postings are hidden on creation. Within this BE module you can activate such records.</source>
+			</trans-unit>
+			<trans-unit id="be.noRecordsInStorage">
+				<source>There are no hidden pforum records on selected page.</source>
 			</trans-unit>
 		</body>
 	</file>

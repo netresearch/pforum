@@ -1,0 +1,47 @@
+<f:layout name="Default" />
+
+<f:section name="content">
+	<h1>{f:translate(key: 'be.administrateForumRecords')}</h1>
+	<p>{f:translate(key: 'be.administrateForumRecords.description')}</p>
+
+	<f:if condition="{hasRecords}">
+		<f:render section="renderTable" arguments="{records: topics, type: 'topic', action: 'activateTopic'}" />
+		<f:render section="renderTable" arguments="{records: posts, type: 'post', action: 'activatePost'}" />
+	</f:if>
+</f:section>
+
+<f:section name="renderTable">
+	<h2>{f:translate(key: 'tx_pforum_domain_model_{type}')}</h2>
+
+	<f:if condition="{records}">
+		<f:then>
+			<table class="table">
+				<thead>
+				<tr>
+					<td>{f:translate(key: 'tx_pforum_domain_model_{type}.title')}</td>
+					<td>{f:translate(key: 'tx_pforum_domain_model_{type}.description')}</td>
+					<td>&nbsp;</td>
+				</tr>
+				</thead>
+				<tbody>
+				<f:for each="{records}" as="record">
+					<tr>
+						<td>{record.title}</td>
+						<td>{record.description}</td>
+						<td>
+							<f:link.action action="{action}"
+										   arguments="{record: record}">
+								{f:translate(key: 'activate')}
+							</f:link.action>
+						</td>
+					</tr>
+				</f:for>
+				</tbody>
+			</table>
+		</f:then>
+		<f:else>
+			<p>{f:translate(key: 'noHiddenRecords')}</p>
+		</f:else>
+	</f:if>
+
+</f:section>
