@@ -14,12 +14,12 @@ namespace JWeiland\Pforum\Validation\Validator;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
- * Abstract Validator with useful methods for extending validators
+ * This abstract Validator adds TS settings to all extending Validators
  */
 abstract class AbstractValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator
 {
     /**
-     * This validator always needs to be executed even if the given value is empty.
+     * This validator always needs to be executed, even if the given value is empty.
      * See AbstractValidator::validate().
      *
      * @var bool

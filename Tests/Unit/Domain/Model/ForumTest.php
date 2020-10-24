@@ -11,12 +11,13 @@ namespace JWeiland\Pforum\Tests\Unit\Domain\Model;
 
 use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Domain\Model\Topic;
+use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * Test case
  */
-class ForumTest extends \Nimut\TestingFramework\TestCase\UnitTestCase
+class ForumTest extends UnitTestCase
 {
     /**
      * @var Forum
