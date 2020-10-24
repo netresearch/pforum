@@ -80,10 +80,13 @@ class AbstractTopicController extends AbstractController
 
     protected function getContentForMailing(Topic $topic): string
     {
-        /** @var StandaloneView $view */
         $view = $this->objectManager->get(StandaloneView::class);
         $view->setTemplatePathAndFilename(
-            ExtensionManagementUtility::extPath('pforum') . 'Resources/Private/Templates/Mail/ConfigureTopic.html'
+            sprintf(
+                '%s%s',
+                ExtensionManagementUtility::extPath('pforum'),
+                'Resources/Private/Templates/Mail/ConfigureTopic.html'
+            )
         );
         $view->setControllerContext($this->getControllerContext());
         $view->assign('settings', $this->settings);

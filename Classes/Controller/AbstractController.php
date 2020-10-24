@@ -181,11 +181,8 @@ class AbstractController extends ActionController
             /** @var Topic $topic */
             $topic = $this->getControllerContext()->getRequest()->getArgument($argument);
             $images = $topic->getImages();
-            if (count($images)) {
-                /** @var \TYPO3\CMS\Extbase\Domain\Model\FileReference $image */
-                foreach ($images as $image) {
-                    $image->getOriginalResource()->getOriginalFile()->delete();
-                }
+            foreach ($images as $image) {
+                $image->getOriginalResource()->getOriginalFile()->delete();
             }
         }
     }

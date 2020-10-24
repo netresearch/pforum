@@ -56,12 +56,11 @@ class TopicController extends AbstractTopicController
     }
 
     /**
-     * Set special typeConverter for images
+     * Set typeConverter for images
      */
     public function initializeCreateAction(): void
     {
         if ($this->settings['useImages']) {
-            /** @var UploadMultipleFilesConverter $multipleFilesTypeConverter */
             $multipleFilesTypeConverter = $this->objectManager->get(UploadMultipleFilesConverter::class);
             $this->arguments->getArgument('newTopic')
                 ->getPropertyMappingConfiguration()
@@ -144,7 +143,6 @@ class TopicController extends AbstractTopicController
         /** @var Topic $topic */
         $topic = $this->topicRepository->findByIdentifier($argument['__identity']);
         if ($this->settings['useImages']) {
-            /** @var UploadMultipleFilesConverter $multipleFilesTypeConverter */
             $multipleFilesTypeConverter = $this->objectManager->get(UploadMultipleFilesConverter::class);
             $this->arguments->getArgument('topic')
                 ->getPropertyMappingConfiguration()
