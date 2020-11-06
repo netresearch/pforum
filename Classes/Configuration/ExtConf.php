@@ -48,7 +48,11 @@ class ExtConf implements SingletonInterface
     public function getEmailFromAddress(): string
     {
         if (empty($this->emailFromAddress)) {
-            return $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'];
+            $senderMail = $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'];
+            if (empty($senderMail)) {
+                throw new \Exception('You have forgotten to set a sender email address in extension settings of pforum or in install tool', 1604694223);
+            }
+            return $senderMail;
         }
         return $this->emailFromAddress;
     }
@@ -61,7 +65,11 @@ class ExtConf implements SingletonInterface
     public function getEmailFromName(): string
     {
         if (empty($this->emailFromName)) {
-            return $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName'];
+            $senderName = $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName'];
+            if (empty($senderName)) {
+                throw new \Exception('You have forgotten to set a sender name in extension settings of pforum or in install tool', 1604694279);
+            }
+            return $senderName;
         }
         return $this->emailFromName;
     }
