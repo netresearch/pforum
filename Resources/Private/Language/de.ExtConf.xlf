@@ -5,9 +5,11 @@
 		<body>
 			<trans-unit id="emailFromAddress" xml:space="preserve">
 				<source>FROM email address: The senders email address. If not given the extension tries to get one from installtool.</source>
+				<target>FROM E-Mail Adresse: Hierbei handelt es sich um die E-Mail Absender Adresse. Falls nicht angegeben, wird die aus dem Installtool verwendet.</target>
 			</trans-unit>
 			<trans-unit id="emailFromName" xml:space="preserve">
 				<source>FROM email name: The senders email name. If not given the extension tries to get one from installtool.</source>
+				<target>FROM E-Mail Name: Hierbei handelt es sich um den Namen des Absenders. Falls nicht angegeben, wird der aus dem Installtool verwendet.</target>
 			</trans-unit>
 		</body>
 	</file>
