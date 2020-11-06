@@ -45,10 +45,10 @@ class AbstractPostController extends AbstractController
         $argument = $this->request->getArgument($argumentName);
         if (is_array($argument)) {
             // get post from form ($_POST)
-            $post = $this->postRepository->findHiddenEntryByUid($argument['__identity']);
+            $post = $this->postRepository->findHiddenEntryByUid((int)$argument['__identity']);
         } else {
             // get post from UID
-            $post = $this->postRepository->findHiddenEntryByUid($argument);
+            $post = $this->postRepository->findHiddenEntryByUid((int)$argument);
         }
         $this->session->registerObject($post, $post->getUid());
     }

@@ -35,10 +35,10 @@ class AbstractTopicController extends AbstractController
         $argument = $this->request->getArgument($argumentName);
         if (is_array($argument)) {
             // get topic from form ($_POST)
-            $topic = $this->topicRepository->findHiddenEntryByUid($argument['__identity']);
+            $topic = $this->topicRepository->findHiddenEntryByUid((int)$argument['__identity']);
         } else {
             // get topic from UID
-            $topic = $this->topicRepository->findHiddenEntryByUid($argument);
+            $topic = $this->topicRepository->findHiddenEntryByUid((int)$argument);
         }
         $this->session->registerObject($topic, $topic->getUid());
     }
