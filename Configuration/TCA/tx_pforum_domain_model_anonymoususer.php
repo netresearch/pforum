@@ -21,7 +21,7 @@ return [
             'endtime' => 'endtime',
         ],
         'searchFields' => 'name,username,email',
-        'iconfile' => 'EXT:pforum/Resources/Public/Icons/tx_pforum_domain_model_anonymoususer.gif',
+        'iconfile' => 'EXT:pforum/Resources/Public/Icons/tx_pforum_domain_model_anonymoususer.svg',
     ],
     'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, hidden, name, username, email',

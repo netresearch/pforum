@@ -28,7 +28,7 @@ call_user_func(function () {
         \TYPO3\CMS\Core\Imaging\IconRegistry::class
     );
     $svgIcons = [
-        'ext-pforum-wizard-icon' => 'plugin_wizard.svg',
+        'ext-pforum-wizard-icon' => 'module.svg',
     ];
     foreach ($svgIcons as $identifier => $fileName) {
         $iconRegistry->registerIcon(

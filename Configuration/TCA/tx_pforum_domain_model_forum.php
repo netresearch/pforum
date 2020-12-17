@@ -21,7 +21,7 @@ return [
             'endtime' => 'endtime',
         ],
         'searchFields' => 'title,teaser,topics,',
-        'iconfile' => 'EXT:pforum/Resources/Public/Icons/tx_pforum_domain_model_forum.gif',
+        'iconfile' => 'EXT:pforum/Resources/Public/Icons/tx_pforum_domain_model_forum.svg',
     ],
     'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, title, teaser, topics',
