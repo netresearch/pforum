@@ -13,6 +13,7 @@ namespace JWeiland\Pforum\Domain\Model;
 
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -62,7 +63,7 @@ class Topic extends AbstractEntity
     protected $anonymousUser;
 
     /**
-     * @var \JWeiland\Pforum\Domain\Model\FrontendUser
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
      */
     protected $frontendUser;
 

@@ -12,11 +12,11 @@ declare(strict_types=1);
 namespace JWeiland\Pforum\Controller;
 
 use JWeiland\Pforum\Domain\Model\Forum;
-use JWeiland\Pforum\Domain\Model\FrontendUser;
 use JWeiland\Pforum\Domain\Model\Topic;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 

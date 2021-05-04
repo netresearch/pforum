@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Domain\Repository;
 
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
@@ -18,4 +20,9 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
  */
 class FrontendUserRepository extends Repository
 {
+    public function __construct(ObjectManagerInterface $objectManager)
+    {
+        parent::__construct($objectManager);
+        $this->objectType = FrontendUser::class;
+    }
 }
