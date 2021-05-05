@@ -9,13 +9,11 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace JWeiland\Pforum\Domain\Repository;
-
-use TYPO3\CMS\Extbase\Persistence\Repository;
+namespace JWeiland\Pforum\Domain\Model;
 
 /**
- * Repo to manage users of table fe_users
+ * Model to manage fe_users
  */
-class FrontendUserRepository extends Repository
+class FrontendUser extends User
 {
 }
