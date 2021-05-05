@@ -47,12 +47,10 @@ class ExtConfTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getEmailFromAddressInitiallyReturnsEmptyString()
+    public function getEmailFromAddressInitiallyThrowsException()
     {
-        self::assertSame(
-            '',
-            $this->subject->getEmailFromAddress()
-        );
+        self::expectExceptionCode(1604694223);
+        $this->subject->getEmailFromAddress();
     }
 
     /**
@@ -85,12 +83,10 @@ class ExtConfTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getEmailFromNameInitiallyReturnsEmptyString()
+    public function getEmailFromNameInitiallyThrowsException()
     {
-        self::assertSame(
-            '',
-            $this->subject->getEmailFromName()
-        );
+        self::expectExceptionCode(1604694279);
+        $this->subject->getEmailFromName();
     }
 
     /**
