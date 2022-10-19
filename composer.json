@@ -18,11 +18,11 @@
 		"source": "https://github.com/jweiland-net/pforum"
 	},
 	"require": {
-		"typo3/cms-core": "^9.5.20 || ^10.4.6"
+		"typo3/cms-core": "^10.4.32 || ^11.5.16"
 	},
 	"require-dev": {
-		"friendsofphp/php-cs-fixer": "^2.16",
-		"nimut/testing-framework": "^5.1"
+		"friendsofphp/php-cs-fixer": "^3.12",
+		"nimut/testing-framework": "^6.0"
 	},
 	"autoload": {
 		"psr-4": {
@@ -35,7 +35,11 @@
 		}
 	},
 	"config": {
-		"vendor-dir": ".build/vendor"
+		"vendor-dir": ".build/vendor",
+		"allow-plugins": {
+			"typo3/class-alias-loader": true,
+			"typo3/cms-composer-installers": true
+		}
 	},
 	"extra": {
 		"typo3/cms": {
@@ -47,7 +51,7 @@
 	"scripts": {
 		"php:fix": ".build/vendor/bin/php-cs-fixer --config=Build/.php_cs.php fix Classes Tests",
 		"ci:php:lint": "find *.php Classes Configuration Tests -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l",
-		"ci:php:fixer": ".build/vendor/bin/php-cs-fixer --config=Build/.php_cs.php fix --dry-run -v --show-progress=dots --diff-format=udiff Classes Tests",
+		"ci:php:fixer": ".build/vendor/bin/php-cs-fixer --config=Build/.php_cs.php fix --dry-run -v --show-progress=dots --diff Classes Tests",
 		"ci:tests:unit": "php .build/vendor/bin/phpunit -c .build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit",
 		"ci:tests:functional": "find 'Tests/Functional' -wholename '*Test.php' | parallel --gnu 'echo; echo \"Running functional test suite {}\"; php .build/vendor/bin/phpunit -c .build/vendor/nimut/testing-framework/res/Configuration/FunctionalTests.xml {}';",
 		"link-extension": [
