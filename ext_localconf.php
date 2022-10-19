@@ -3,25 +3,25 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-call_user_func(function () {
+call_user_func(static function (): void {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'JWeiland.pforum',
+        'pforum',
         'Forum',
         [
-            'Forum' => 'list, show',
-            'Topic' => 'show, new, create, edit, update, delete, activate',
-            'Post' => 'new, create, edit, update, delete, activate',
+            \JWeiland\Pforum\Controller\ForumController::class => 'list, show',
+            \JWeiland\Pforum\Controller\TopicController::class => 'show, new, create, edit, update, delete, activate',
+            \JWeiland\Pforum\Controller\PostController::class => 'new, create, edit, update, delete, activate',
         ],
         // non-cacheable actions
         [
-            'Topic' => 'create, update, delete, activate',
-            'Post' => 'create, update, delete, activate',
+            \JWeiland\Pforum\Controller\TopicController::class => 'create, update, delete, activate',
+            \JWeiland\Pforum\Controller\PostController::class => 'create, update, delete, activate',
         ]
     );
 
-    // add pforum plugin to new element wizard
+    // Add pforum plugin to new element wizard
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:pforum/Configuration/TSconfig/ContentElementWizard.txt">'
+        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:pforum/Configuration/TSconfig/ContentElementWizard.tsconfig">'
     );
 
     $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(

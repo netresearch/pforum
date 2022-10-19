@@ -4,12 +4,12 @@ if (!defined('TYPO3_MODE')) {
 }
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-    'JWeiland.pforum',
+    'pforum',
     'web',
     'administration',
     '',
     [
-        'Administration' => 'listHidden, activateTopic, activatePost',
+        \JWeiland\Pforum\Controller\AdministrationController::class => 'listHidden, activateTopic, activatePost',
     ],
     [
         'access' => 'user,group',
