@@ -1,18 +1,15 @@
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
 <table class="tx-pforum" >
 	<tr>
-		<td>
-			<f:translate key="tx_pforum_domain_model_post.title" />
-		</td>
-		<td>
-			{post.title}
-		</td>
+		<td>{f:translate(key: 'tx_pforum_domain_model_post.title')}</td>
+		<td>{post.title}</td>
 	</tr>
 	<tr>
-		<td>
-			<f:translate key="tx_pforum_domain_model_post.description" />
-		</td>
-		<td>
-			{post.description}
-		</td>
+		<td>{f:translate(key: 'tx_pforum_domain_model_post.description')}</td>
+		<td>{post.description}</td>
 	</tr>
 </table>
+</html>

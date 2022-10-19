@@ -1,10 +1,48 @@
-<p><f:translate key="email.post.text" /></p>
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
+<p>{f:translate(key: 'email.post.text')}</p>
 <div>
 	<f:if condition="{settings.post.hideAtCreation}">
 		<f:if condition="{settings.post.activateByAdmin} == 0">
-			<div><f:link.action pageUid="{settings.pidOfDetailPage}" action="activate" controller="Post" pluginName="forum" extensionName="pforum" absolute="1" noCache="1" arguments="{post: post}"><f:translate key="activatePost" /></f:link.action></div>
+			<div>
+				<f:link.action pageUid="{settings.pidOfDetailPage}"
+											 action="activate"
+											 controller="Post"
+											 pluginName="forum"
+											 extensionName="pforum"
+											 absolute="1"
+											 noCache="1"
+											 arguments="{post: post}">
+					{f:translate(key: 'activatePost')}
+				</f:link.action>
+			</div>
 		</f:if>
 	</f:if>
-	<div><f:link.action pageUid="{settings.pidOfDetailPage}" action="edit" controller="Post" pluginName="forum" extensionName="pforum" absolute="1" arguments="{post: post}"><f:translate key="editPost" /></f:link.action></div>
-	<div><f:link.action pageUid="{settings.pidOfDetailPage}" action="delete" controller="Post" pluginName="forum" extensionName="pforum" absolute="1" arguments="{post: post}"><f:translate key="deletePost" /></f:link.action></div>
+
+	<div>
+		<f:link.action pageUid="{settings.pidOfDetailPage}"
+									 action="edit"
+									 controller="Post"
+									 pluginName="forum"
+									 extensionName="pforum"
+									 absolute="1"
+									 arguments="{post: post}">
+			{f:translate(key: 'editPost')}
+		</f:link.action>
+	</div>
+
+	<div>
+		<f:link.action pageUid="{settings.pidOfDetailPage}"
+									 action="delete"
+									 controller="Post"
+									 pluginName="forum"
+									 extensionName="pforum"
+									 absolute="1"
+									 arguments="{post: post}">
+			{f:translate(key: 'deletePost')}
+		</f:link.action>
+	</div>
 </div>
+</html>

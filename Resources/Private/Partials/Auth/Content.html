@@ -1,3 +1,7 @@
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
 <f:if condition="{settings.auth} == 1">
 	<f:then>
 		<f:render partial="Auth/{subpartial}" arguments="{data: data}" />
@@ -8,3 +12,4 @@
 		</f:security.ifHasRole>
 	</f:else>
 </f:if>
+</html>

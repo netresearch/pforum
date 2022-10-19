@@ -1,12 +1,15 @@
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
 <f:layout name="Default" />
 
 <f:section name="main">
 	<f:flashMessages />
 	<header>
-		<h2>
-			<f:translate key="preview"/>
-		</h2>
+		<h2>{f:translate(key: 'preview')}</h2>
 	</header>
+
 	<f:render partial="FormErrors" arguments="{object: Post}"/>
 
 	<f:if condition="{isPreview}">
@@ -15,7 +18,11 @@
 			<p>{post.description -> f:format.html(parseFuncTSPath: 'lib.parseFunc') -> f:format.nl2br()}</p>
 		</div>
 	</f:if>
-	<header><h2><f:translate key="editPost"/></h2></header>
+
+	<header>
+		<h2>{f:translate(key: 'editPost')}</h2>
+	</header>
+
 	<f:form action="update" class="tx-comments-comment-form" name="post" object="{post}" enctype="multipart/form-data">
 		<f:if condition="{isNew}">
 			<f:form.hidden name="isNew" value="{isNew}" />
@@ -25,7 +32,8 @@
 		</f:if>
 		<f:render partial="Post/FormFields" arguments="{object: 'post'}" />
 		<div class="submitwrap">
-			<f:form.submit value="<f:translate key='save'/>" />
+			<f:form.submit value="{f:translate(key: 'save')}" />
 		</div>
 	</f:form>
 </f:section>
+</html>

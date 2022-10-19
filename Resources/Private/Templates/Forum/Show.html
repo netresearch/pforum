@@ -1,3 +1,7 @@
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
 <f:layout name="Default" />
 
 <f:section name="main">
@@ -29,7 +33,10 @@
 							</h3>
 
 							<div>
-								{topic.crdate -> f:format.date(format: 'd.m.Y')}&nbsp;| <f:translate key="from"/>: <f:render partial="User/Username" arguments="{user: topic.user}" /> | {topic.posts ->f:count()}&nbsp;<f:translate key="tx_pforum_domain_model_topic.posts"/>
+								{topic.crdate -> f:format.date(format: 'd.m.Y')}&nbsp;|
+								{f:translate(key: 'from')}:
+								<f:render partial="User/Username" arguments="{user: topic.user}" /> |
+								{topic.posts -> f:count()}&nbsp;{f:translate(key: 'tx_pforum_domain_model_topic.posts')}
 							</div>
 
 							<f:if condition="{topic.hidden}">
@@ -49,3 +56,4 @@
 		</f:else>
 	</f:if>
 </f:section>
+</html>

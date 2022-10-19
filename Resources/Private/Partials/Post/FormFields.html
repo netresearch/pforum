@@ -1,14 +1,18 @@
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
 <fieldset class="grid_12">
 	<div class="extdiv">
-		<label for="title" class="margintop">
-			<f:translate key="tx_pforum_domain_model_post.title" />
-		</label>
+		<label for="title" class="margintop">{f:translate(key: 'tx_pforum_domain_model_post.title')}</label>
 		<f:form.textfield property="title" />
 	</div>
+
 	<div class="extdiv">
 		<label for="description" class="margintop">
-			<f:translate key="tx_pforum_domain_model_post.description" />  <span class="required">*</span>
+			{f:translate(key: 'tx_pforum_domain_model_post.description')} <span class="required">*</span>
 		</label>
 		<f:form.textarea property="description" cols="40" rows="15" />
 	</div>
 </fieldset>
+</html>

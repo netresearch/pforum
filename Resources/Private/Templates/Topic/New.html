@@ -1,9 +1,18 @@
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
 <f:layout name="Default" />
 
 <f:section name="main">
 
 	<div class="breadcrumb">
-		<f:link.action action="show" controller="Forum" arguments="{forum: forum}">{forum.title} »</f:link.action> <f:translate key="newTopic"/>
+		<f:link.action action="show"
+									 controller="Forum"
+									 arguments="{forum: forum}">
+			{forum.title} »
+		</f:link.action>
+		{f:translate(key: 'newTopic')}
 	</div>
 
 	<f:form action="create" name="newTopic" object="{newTopic}" arguments="{forum: forum}" class="tx-comments-comment-form" enctype="multipart/form-data">
@@ -21,6 +30,10 @@
 				<f:form.submit name="preview" value="{f:translate(key: 'preview')}" />
 			</div>
 		</fieldset>
-		<p class="clearer"><span class="error">*</span><f:translate key='mandatory'/></p>
+
+		<p class="clearer">
+			<span class="error">*</span> {f:translate(key: 'mandatory')}
+		</p>
 	</f:form>
 </f:section>
+</html>

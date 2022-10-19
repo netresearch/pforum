@@ -1,34 +1,23 @@
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
 <table class="tx-pforum" >
 	<tr>
-		<td>
-			<f:translate key="tx_pforum_domain_model_user.name" />
-		</td>
-		<td>
-			{user.name}
-		</td>
+		<td>{f:translate(key: 'tx_pforum_domain_model_user.name')}</td>
+		<td>{user.name}</td>
 	</tr>
 	<tr>
-		<td>
-			<f:translate key="tx_pforum_domain_model_user.username" />
-		</td>
-		<td>
-			{user.username}
-		</td>
+		<td>{f:translate(key: 'tx_pforum_domain_model_user.username')}</td>
+		<td>{user.username}</td>
 	</tr>
 	<tr>
-		<td>
-			<f:translate key="tx_pforum_domain_model_user.email" />
-		</td>
-		<td>
-			{user.email}
-		</td>
+		<td>{f:translate(key: 'tx_pforum_domain_model_user.email')}</td>
+		<td>{user.email}</td>
 	</tr>
 	<tr>
-		<td>
-			<f:translate key="tx_pforum_domain_model_user.password" />
-		</td>
-		<td>
-			{user.password}
-		</td>
+		<td>{f:translate(key: 'tx_pforum_domain_model_user.password')}</td>
+		<td>{user.password}</td>
 	</tr>
 </table>
+</html>
