@@ -12,8 +12,9 @@ declare(strict_types=1);
 namespace JWeiland\Pforum\Controller;
 
 use JWeiland\Pforum\Domain\Model\Forum;
+use JWeiland\Pforum\Helper\FrontendGroupHelper;
 use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Main controller to list and show postings/questions
@@ -21,13 +22,13 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 class ForumController extends AbstractController
 {
     /**
-     * @var PageRenderer
+     * @var FrontendGroupHelper
      */
-    protected $pageRenderer;
+    protected $frontendGroupHelper;
 
-    public function injectPageRenderer(PageRenderer $pageRenderer): void
+    public function injectFrontendGroupHelper(FrontendGroupHelper $frontendGroupHelper): void
     {
-        $this->pageRenderer = $pageRenderer;
+        $this->frontendGroupHelper = $frontendGroupHelper;
     }
 
     public function listAction(): void
@@ -41,13 +42,8 @@ class ForumController extends AbstractController
      */
     public function showAction(Forum $forum): void
     {
-        /** @var QueryResultInterface $topics */
         $topics = $this->topicRepository->findByForum($forum);
-        if (
-            !empty($this->settings['uidOfAdminGroup']) &&
-            is_array($GLOBALS['TSFE']->fe_user->groupData['uid']) &&
-            in_array($this->settings['uidOfAdminGroup'], $GLOBALS['TSFE']->fe_user->groupData['uid'])
-        ) {
+        if ($this->frontendGroupHelper->uidExistsInGroupData((int)($this->settings['uidOfAdminGroup'] ?? 0))) {
             $topics->getQuery()
                 ->getQuerySettings()
                 ->setIgnoreEnableFields(true)
