@@ -12,11 +12,11 @@ declare(strict_types=1);
 namespace JWeiland\Pforum\Controller;
 
 use JWeiland\Pforum\Domain\Model\Forum;
-use JWeiland\Pforum\Domain\Model\FrontendUser;
 use JWeiland\Pforum\Domain\Model\Topic;
 use TYPO3\CMS\Core\Mail\MailMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
@@ -46,14 +46,17 @@ class AbstractTopicController extends AbstractController
     protected function addFeUserToTopic(Forum $forum, Topic $newTopic): void
     {
         if (is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid']) {
-            /** @var FrontendUser $user */
             $user = $this->frontendUserRepository->findByUid(
                 (int)$GLOBALS['TSFE']->fe_user->user['uid']
             );
             $newTopic->setFrontendUser($user);
         } else {
             /* normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated */
-            $this->addFlashMessage('You must be logged in before creating a topic', '', FlashMessage::WARNING);
+            $this->addFlashMessage(
+                'You must be logged in before creating a topic',
+                '',
+                AbstractMessage::WARNING
+            );
             $this->redirect('show', 'Forum', null, ['forum' => $forum]);
         }
     }
@@ -69,18 +72,14 @@ class AbstractTopicController extends AbstractController
                 'pforum'
             )
         );
-        if (version_compare(TYPO3_branch, '10.0', '>=')) {
-            $mail->html($this->getContentForMailing($topic));
-        } else {
-            $mail->setBody($this->getContentForMailing($topic), 'text/html');
-        }
+        $mail->html($this->getContentForMailing($topic));
 
         $mail->send();
     }
 
     protected function getContentForMailing(Topic $topic): string
     {
-        $view = $this->objectManager->get(StandaloneView::class);
+        $view = GeneralUtility::makeInstance(StandaloneView::class);
         $view->setTemplatePathAndFilename(
             sprintf(
                 '%s%s',
@@ -100,20 +99,18 @@ class AbstractTopicController extends AbstractController
         if ($this->settings['topic']['hideAtCreation']) {
             if ($this->settings['topic']['activateByAdmin']) {
                 $this->addFlashMessage(
-                    LocalizationUtility::translate('hiddenTopicCreatedAndActivateByAdmin', 'pforum'),
-                    '',
-                    FlashMessage::OK
+                    LocalizationUtility::translate('hiddenTopicCreatedAndActivateByAdmin', 'pforum')
                 );
             } else {
                 $this->addFlashMessage(
-                    LocalizationUtility::translate('hiddenTopicCreatedAndActivateByUser', 'pforum'),
-                    '',
-                    FlashMessage::OK
+                    LocalizationUtility::translate('hiddenTopicCreatedAndActivateByUser', 'pforum')
                 );
             }
         } else {
             // if topic is not hidden at creation there is no need to activate it by admin
-            $this->addFlashMessage(LocalizationUtility::translate('topicCreated', 'pforum'), '', FlashMessage::OK);
+            $this->addFlashMessage(
+                LocalizationUtility::translate('topicCreated', 'pforum')
+            );
         }
     }
 }

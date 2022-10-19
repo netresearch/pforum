@@ -15,7 +15,6 @@ use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
 use JWeiland\Pforum\Domain\Model\User;
 use TYPO3\CMS\Core\Mail\MailMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -58,7 +57,7 @@ class PostController extends AbstractPostController
     public function createAction(Topic $topic, Post $newPost): void
     {
         // if auth = frontend user
-        if ($this->settings['auth'] == 2) {
+        if ((int)$this->settings['auth'] === 2) {
             $this->addFeUserToPost($topic, $newPost);
         }
 
@@ -69,7 +68,12 @@ class PostController extends AbstractPostController
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
             $newPost->setHidden(true); // post should not be visible while previewing
             $this->persistenceManager->persistAll(); // we need an uid before redirecting
-            $this->redirect('edit', null, null, ['post' => $newPost, 'isPreview' => true, 'isNew' => true]);
+            $this->redirect(
+                'edit',
+                null,
+                null,
+                ['post' => $newPost, 'isPreview' => true, 'isNew' => true]
+            );
         }
 
         if ($this->settings['post']['hideAtCreation']) {
@@ -77,21 +81,21 @@ class PostController extends AbstractPostController
         }
 
         // if auth = anonymous user
-        if ($this->settings['auth'] == 1) {
-            /* send a mail to the user to activate, edit or delete his entry */
-            if ($this->settings['emailIsMandatory']) {
-                $this->persistenceManager->persistAll(); // we need an uid for mailing
-                $this->mailToUser($newPost);
-            }
+        /* send a mail to the user to activate, edit or delete his entry */
+        if (((int)$this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
+            $this->persistenceManager->persistAll(); // we need an uid for mailing
+            $this->mailToUser($newPost);
         }
+
         if (
-            $newPost->getHidden() === false &&
-            $topic->getUser() instanceof User &&
-            $topic->getUser()->getEmail() != ''
+            $newPost->getHidden() === false
+            && $topic->getUser() instanceof User
+            && $topic->getUser()->getEmail() !== ''
         ) {
             // send an email to creator of topic to inform him about new comments/posts
             $this->mailToTopicCreator($topic, $newPost);
         }
+
         $this->addFlashMessageForCreation();
         $this->redirect('show', 'Topic', null, ['topic' => $topic]);
     }
@@ -112,11 +116,8 @@ class PostController extends AbstractPostController
      *                    If so we have to passthrough this information
      * @Extbase\IgnoreValidation("post")
      */
-    public function editAction(
-        Post $post = null,
-        bool $isPreview = false,
-        bool $isNew = false
-    ): void {
+    public function editAction(Post $post = null, bool $isPreview = false, bool $isNew = false): void
+    {
         $this->view->assign('post', $post);
         $this->view->assign('isPreview', $isPreview);
         $this->view->assign('isNew', $isNew);
@@ -131,10 +132,13 @@ class PostController extends AbstractPostController
         $this->registerPostFromRequest('post');
         if ($this->settings['useImages']) {
             // we have our own implementation how to implement images
-            $this->arguments->getArgument('post')->getPropertyMappingConfiguration()->setTargetTypeForSubProperty(
-                'images',
-                'array'
-            );
+            $this->arguments
+                ->getArgument('post')
+                ->getPropertyMappingConfiguration()
+                ->setTargetTypeForSubProperty(
+                    'images',
+                    'array'
+                );
         }
     }
 
@@ -160,19 +164,19 @@ class PostController extends AbstractPostController
                     $post->setHidden(false);
                 }
 
-                /* if auth = anonymous user */
-                if ($this->settings['auth'] == 1) {
-                    /* send a mail to the user to activate, edit or delete his entry */
-                    if ($this->settings['emailIsMandatory']) {
-                        $this->mailToUser($post);
-                    }
+                // if auth = anonymous user
+                // send a mail to the user to activate, edit or delete his entry
+                if (((int)$this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
+                    $this->mailToUser($post);
                 }
+
                 $this->addFlashMessageForCreation();
             } else {
                 // edited posts which are not new are visible
                 $post->setHidden(false);
-                $this->addFlashMessage(LocalizationUtility::translate('postUpdated', 'pforum'), '', FlashMessage::OK);
+                $this->addFlashMessage(LocalizationUtility::translate('postUpdated', 'pforum'));
             }
+
             $this->redirect('show', 'Forum', '', ['forum' => $post->getTopic()->getForum()]);
         }
     }
@@ -192,7 +196,7 @@ class PostController extends AbstractPostController
     public function deleteAction(Post $post): void
     {
         $this->postRepository->remove($post);
-        $this->addFlashMessage(LocalizationUtility::translate('postDeleted', 'pforum'), '', FlashMessage::OK);
+        $this->addFlashMessage(LocalizationUtility::translate('postDeleted', 'pforum'));
         $this->redirect('list', 'Forum');
     }
 
@@ -219,12 +223,7 @@ class PostController extends AbstractPostController
             ]
         );
 
-        if (version_compare(TYPO3_branch, '10.0', '>=')) {
-            $mail->html($content);
-        } else {
-            $mail->setBody($content, 'text/html');
-        }
-
+        $mail->html($content);
         $mail->send();
     }
 
@@ -250,7 +249,7 @@ class PostController extends AbstractPostController
         // send an email to creator of topic to inform him about new comments/posts
         $this->mailToTopicCreator($post->getTopic(), $post);
 
-        $this->addFlashMessage(LocalizationUtility::translate('postActivated', 'pforum'), '', FlashMessage::OK);
+        $this->addFlashMessage(LocalizationUtility::translate('postActivated', 'pforum'));
         $this->redirect('list', 'Forum');
     }
 }

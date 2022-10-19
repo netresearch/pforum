@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Domain\Repository;
 
+use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Domain\Model\Topic;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -18,6 +19,8 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
  * Repo to retrieve records for topics
+ *
+ * @method QueryResultInterface findByForum(Forum $forum)
  */
 class TopicRepository extends Repository
 {

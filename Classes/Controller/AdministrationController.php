@@ -18,7 +18,7 @@ use JWeiland\Pforum\Domain\Repository\TopicRepository;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -56,10 +56,8 @@ class AdministrationController extends ActionController
 
     /**
      * Set up the doc header properly here
-     *
-     * @param ViewInterface $view
      */
-    protected function initializeView(ViewInterface $view)
+    protected function initializeView(ViewInterface $view): void
     {
         /** @var BackendTemplateView $view */
         parent::initializeView($view);
@@ -68,7 +66,7 @@ class AdministrationController extends ActionController
         $this->createButtons();
     }
 
-    protected function createButtons()
+    protected function createButtons(): void
     {
         $buttonBar = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
 
@@ -90,7 +88,7 @@ class AdministrationController extends ActionController
             $this->addFlashMessage(
                 LocalizationUtility::translate('be.noRecordsInStorage', 'Pforum'),
                 'No records found',
-                FlashMessage::NOTICE
+                AbstractMessage::NOTICE
             );
         }
 
@@ -109,7 +107,7 @@ class AdministrationController extends ActionController
         $this->addFlashMessage(
             'Topic "' . $record->getTitle() . '" was activated.',
             'Topic activated',
-            FlashMessage::INFO
+            AbstractMessage::INFO
         );
         $this->redirect('listHidden');
     }
@@ -124,7 +122,7 @@ class AdministrationController extends ActionController
         $this->addFlashMessage(
             'Post "' . $record->getTitle() . '" was activated.',
             'Post activated',
-            FlashMessage::INFO
+            AbstractMessage::INFO
         );
         $this->redirect('listHidden');
     }

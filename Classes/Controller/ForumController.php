@@ -13,8 +13,6 @@ namespace JWeiland\Pforum\Controller;
 
 use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Helper\FrontendGroupHelper;
-use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Main controller to list and show postings/questions

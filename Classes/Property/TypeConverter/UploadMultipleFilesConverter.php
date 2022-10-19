@@ -59,11 +59,13 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
         // check if $source consists of uploaded files
         foreach ($source as $uploadedFile) {
             if (
-                !isset($uploadedFile['error']) ||
-                !isset($uploadedFile['name']) ||
-                !isset($uploadedFile['size']) ||
-                !isset($uploadedFile['tmp_name']) ||
-                !isset($uploadedFile['type'])
+                !isset(
+                    $uploadedFile['error'],
+                    $uploadedFile['name'],
+                    $uploadedFile['size'],
+                    $uploadedFile['tmp_name'],
+                    $uploadedFile['type']
+                )
             ) {
                 return false;
             }
@@ -80,7 +82,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
      * @param string $targetType
      * @param array $convertedChildProperties
      * @param PropertyMappingConfigurationInterface|null $configuration
-     * @return mixed|Error the target type, or an error object if a user-error occurred
+     * @return ObjectStorage|Error the target type, or an error object if a user-error occurred
      */
     public function convertFrom(
         $source,
@@ -97,12 +99,14 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
         foreach ($originalSource as $key => $uploadedFile) {
             // check if $source contains an uploaded file. 4 = no file uploaded
             if (
-                !isset($uploadedFile['error']) ||
-                !isset($uploadedFile['name']) ||
-                !isset($uploadedFile['size']) ||
-                !isset($uploadedFile['tmp_name']) ||
-                !isset($uploadedFile['type']) ||
-                $uploadedFile['error'] === 4
+                !isset(
+                    $uploadedFile['error'],
+                    $uploadedFile['name'],
+                    $uploadedFile['size'],
+                    $uploadedFile['tmp_name'],
+                    $uploadedFile['type']
+                )
+                || $uploadedFile['error'] === 4
             ) {
                 if ($alreadyPersistedImages[$key] !== null) {
                     $source[$key] = $alreadyPersistedImages[$key];
@@ -111,13 +115,15 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
                 }
                 continue;
             }
+
             // check if uploaded file returns an error
-            if (!$uploadedFile['error'] === 0) {
+            if ($uploadedFile['error'] !== 0) {
                 return new Error(
                     LocalizationUtility::translate('error.upload', 'pforum') . $uploadedFile['error'],
                     1396957314
                 );
             }
+
             // check if file extension is allowed
             $fileParts = GeneralUtility::split_fileref($uploadedFile['name']);
             if (!GeneralUtility::inList($GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'], $fileParts['fileext'])) {
@@ -132,6 +138,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
                     1402981282
                 );
             }
+
             // OK...we have a valid file and the user has the rights. It's time to check, if an old file can be deleted
             if ($alreadyPersistedImages[$key] instanceof FileReference) {
                 $oldFile = $alreadyPersistedImages[$key];
@@ -156,9 +163,6 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
 
     /**
      * upload file and get a file reference object.
-     *
-     * @param array $source
-     * @return FileReference
      */
     protected function getExtbaseFileReference(array $source): FileReference
     {
@@ -170,9 +174,6 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
 
     /**
      * Upload file and get a file reference object.
-     *
-     * @param array $source
-     * @return \TYPO3\CMS\Core\Resource\FileReference
      */
     protected function getCoreFileReference(array $source): \TYPO3\CMS\Core\Resource\FileReference
     {
@@ -200,8 +201,8 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
         return $resourceFactory->createFileReferenceObject(
             [
                 'uid_local' => $uploadedFile->getUid(),
-                'uid_foreign' => uniqid('NEW_'),
-                'uid' => uniqid('NEW_'),
+                'uid_foreign' => uniqid('NEW_', true),
+                'uid' => uniqid('NEW_', true),
             ]
         );
     }

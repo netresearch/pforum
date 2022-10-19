@@ -27,8 +27,7 @@ class UsernameValidator extends AbstractValidator
     {
         if (
             $this->settings['usernameIsMandatory']
-            && is_string($value)
-            && empty($value)
+            && $value === ''
         ) {
             $this->addError(
                 LocalizationUtility::translate(

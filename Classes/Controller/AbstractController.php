@@ -120,13 +120,12 @@ class AbstractController extends ActionController
             ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
         );
 
-        if (is_array($mergedSettings)) {
-            foreach ($mergedSettings as $key => $value) {
-                if (!is_array($value) && empty($value)) {
-                    $mergedSettings[$key] = $tsSettings[$key];
-                }
+        foreach ($mergedSettings as $key => $value) {
+            if (!is_array($value) && empty($value)) {
+                $mergedSettings[$key] = $tsSettings[$key];
             }
         }
+
         $this->settings = $mergedSettings;
     }
 
@@ -150,7 +149,7 @@ class AbstractController extends ActionController
             empty($this->settings['topic']['activateByAdmin']) &&
             empty($this->settings['emailIsMandatory'])
         ) {
-            throw new \Exception(
+            throw new \RuntimeException(
                 'You can\'t hide topics at creation, deactivate admin activation and mark email as NOT mandatory.' .
                 'This would produce hidden records which will never be visible',
                 1378371532
@@ -161,7 +160,7 @@ class AbstractController extends ActionController
             empty($this->settings['post']['activateByAdmin']) &&
             empty($this->settings['emailIsMandatory'])
         ) {
-            throw new \Exception(
+            throw new \RuntimeException(
                 'You can\'t hide posts at creation, deactivate admin activation and mark email ' .
                 'as NOT mandatory. This would produce hidden records which will never be visible',
                 1378371541
@@ -172,8 +171,6 @@ class AbstractController extends ActionController
     /**
      * files will be uploaded in typeConverter automatically
      * But, if an error occurs we have to remove them.
-     *
-     * @param string $argument
      */
     protected function deleteUploadedFilesOnValidationErrors(string $argument): void
     {
