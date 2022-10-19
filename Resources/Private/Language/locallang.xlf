@@ -208,7 +208,13 @@
 			</trans-unit>
 
 			<trans-unit id="be.administrateForumRecords">
-				<source>Administrate Forum Records</source>
+				<source>Manage Forum Records</source>
+			</trans-unit>
+			<trans-unit id="be.administrateTopicRecords">
+				<source>Manage Topics</source>
+			</trans-unit>
+			<trans-unit id="be.administratePostRecords">
+				<source>Manage Posts</source>
 			</trans-unit>
 			<trans-unit id="be.administrateForumRecords.description">
 				<source>If activated in pforum TS configuration, new topics and postings are hidden on creation. Within this BE module you can activate such records.</source>

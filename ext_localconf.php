@@ -29,6 +29,9 @@ call_user_func(static function (): void {
     );
     $svgIcons = [
         'ext-pforum-wizard-icon' => 'module.svg',
+        'ext-pforum-table-forum' => 'tx_pforum_domain_model_forum.svg',
+        'ext-pforum-table-topic' => 'tx_pforum_domain_model_topic.svg',
+        'ext-pforum-table-post' => 'tx_pforum_domain_model_post.svg',
     ];
     foreach ($svgIcons as $identifier => $fileName) {
         $iconRegistry->registerIcon(

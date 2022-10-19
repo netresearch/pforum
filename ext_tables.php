@@ -9,7 +9,7 @@ if (!defined('TYPO3_MODE')) {
     'administration',
     '',
     [
-        \JWeiland\Pforum\Controller\AdministrationController::class => 'listHidden, activateTopic, activatePost',
+        \JWeiland\Pforum\Controller\AdministrationController::class => 'index, listHiddenTopics, listHiddenPosts, activateTopic, activatePost',
     ],
     [
         'access' => 'user,group',
