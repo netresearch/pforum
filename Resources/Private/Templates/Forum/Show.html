@@ -22,33 +22,41 @@
 
 	<f:if condition="{topics}">
 		<f:then>
-			<f:for each="{topics}" as="topic">
-				<div class="borderbottom">
-					<h3>
-						<f:link.action pageUid="{settings.pidOfDetailPage}"
-										 action="show"
-										 controller="Topic"
-										 arguments="{topic: topic, forum: forum}">
-							{topic.title}
-						</f:link.action>
-					</h3>
-
-					<div>
-						{topic.crdate -> f:format.date(format: 'd.m.Y')}&nbsp;|
-						{f:translate(key: 'from')}:
-						<f:render partial="User/Username" arguments="{user: topic.user}" /> |
-						{topic.posts -> f:count()}&nbsp;{f:translate(key: 'tx_pforum_domain_model_topic.posts')}
-					</div>
-
-					<f:if condition="{topic.hidden}">
-						<div>
-							<f:form action="activate" controller="Topic" name="topic" arguments="{topic: topic}">
-								<f:form.submit value="{f:translate(key: 'activate')}" />
-							</f:form>
+			<div class="list-group list-group-flush">
+				<f:for each="{topics}" as="topic">
+					<div class="list-group-item p-0 py-1">
+						<div class="d-flex w-100 justify-content-between">
+							<h5 class="mb-1">
+								<f:link.action pageUid="{settings.pidOfDetailPage}"
+															 action="show"
+															 controller="Topic"
+															 arguments="{topic: topic, forum: forum}">
+									{topic.title}
+								</f:link.action>
+							</h5>
+							<small>
+								{topic.crdate -> f:format.date(format: 'd.m.Y')}&nbsp;|
+								{f:translate(key: 'from')}:
+								<f:render partial="User/Username" arguments="{user: topic.user}" /> |
+								{topic.posts -> f:count()}&nbsp;{f:translate(key: 'tx_pforum_domain_model_topic.posts')}
+							</small>
 						</div>
-					</f:if>
-				</div>
-			</f:for>
+
+						<f:if condition="{topic.description}">
+							<p class="mb-1">{topic.description -> f:format.crop(maxCharacters: 150, respectWordBoundaries: true, respectHtml: true)}</p>
+						</f:if>
+
+						<f:if condition="{topic.hidden}">
+							<div>
+								<f:form action="activate" controller="Topic" name="topic" arguments="{topic: topic}">
+									<f:form.submit value="{f:translate(key: 'activate')}" />
+								</f:form>
+							</div>
+						</f:if>
+					</div>
+				</f:for>
+			</div>
+
 			<f:render partial="Component/Pagination"
 								arguments="{pagination: pagination, paginator: paginator, actionName: 'show'}" />
 		</f:then>

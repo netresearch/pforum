@@ -9,31 +9,23 @@
 
 	<h3>{f:translate(key: 'preview')}</h3>
 
-	<div class="card bg-light mb-3">
-		<div class="row g-0">
-			<div class="col-md-4">
-				<f:if condition="{topic.images}">
-					<f:for each="{topic.images}" as="image">
-						<figure>
-							<f:image image="{image}"
-											 class="img-fluid rounded-start"
-											 alt="{image.title}"
-											 width="{settings.image.width}"
-											 height="{settings.image.height}"
-											 minWidth="{settings.image.minWidth}"
-											 maxWidth="{settings.image.maxWidth}"
-											 minHeight="{settings.image.minHeight}"
-											 maxHeight="{settings.image.maxHeight}"/>
-						</figure>
-					</f:for>
-				</f:if>
+	<div class="list-group list-group-flush">
+		<div class="list-group-item p-0 py-1 bg-light">
+			<div class="d-flex w-100 justify-content-between">
+				<h5 class="mb-1">
+					{topic.title}
+				</h5>
+				<small>
+					{topic.crdate -> f:format.date(format: 'd.m.Y')}&nbsp;|
+					{f:translate(key: 'from')}:
+					<f:render partial="User/Username" arguments="{user: topic.user}" /> |
+					{topic.posts -> f:count()}&nbsp;{f:translate(key: 'tx_pforum_domain_model_topic.posts')}
+				</small>
 			</div>
-			<div class="col-md-8">
-				<div class="card-body">
-					<h5 class="card-title">{topic.title}</h5>
-					<p>{topic.description -> f:format.html(parseFuncTSPath: 'lib.parseFunc')->f:format.nl2br()}</p>
-				</div>
-			</div>
+
+			<f:if condition="{topic.description}">
+				<p class="mb-1">{topic.description -> f:format.crop(maxCharacters: 150, respectWordBoundaries: true, respectHtml: true)}</p>
+			</f:if>
 		</div>
 	</div>
 
