@@ -137,7 +137,7 @@ class AdministrationController extends ActionController
             'Topic activated',
             AbstractMessage::INFO
         );
-        $this->redirect('listHidden');
+        $this->redirect('listHiddenTopics');
     }
 
     /**
@@ -152,7 +152,7 @@ class AdministrationController extends ActionController
             'Post activated',
             AbstractMessage::INFO
         );
-        $this->redirect('listHidden');
+        $this->redirect('listHiddenPosts');
     }
 
     protected function getBackendUser(): BackendUserAuthentication
