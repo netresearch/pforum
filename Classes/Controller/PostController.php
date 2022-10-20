@@ -72,8 +72,8 @@ class PostController extends AbstractController
             $this->persistenceManager->persistAll(); // we need an uid before redirecting
             $this->redirect(
                 'edit',
-                null,
-                null,
+                'Post',
+                'Pforum',
                 ['post' => $newPost, 'isPreview' => true, 'isNew' => true]
             );
         }
@@ -99,7 +99,7 @@ class PostController extends AbstractController
         }
 
         $this->addFlashMessageForCreation();
-        $this->redirect('show', 'Topic', null, ['topic' => $topic]);
+        $this->redirect('show', 'Topic', 'Pforum', ['topic' => $topic]);
     }
 
     /**
@@ -156,7 +156,12 @@ class PostController extends AbstractController
         // if a preview was requested direct to preview action
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
             $post->setHidden(true);
-            $this->redirect('edit', null, null, ['post' => $post, 'isPreview' => true, 'isNew' => $isNew]);
+            $this->redirect(
+                'edit',
+                'Post',
+                'Pforum',
+                ['post' => $post, 'isPreview' => true, 'isNew' => $isNew]
+            );
         } else {
             if ($isNew) {
                 // if is new and preview was pressed we have to check for visibility again
@@ -179,7 +184,7 @@ class PostController extends AbstractController
                 $this->addFlashMessage(LocalizationUtility::translate('postUpdated', 'pforum'));
             }
 
-            $this->redirect('show', 'Forum', '', ['forum' => $post->getTopic()->getForum()]);
+            $this->redirect('show', 'Forum', 'Pforum', ['forum' => $post->getTopic()->getForum()]);
         }
     }
 
@@ -199,7 +204,7 @@ class PostController extends AbstractController
     {
         $this->postRepository->remove($post);
         $this->addFlashMessage(LocalizationUtility::translate('postDeleted', 'pforum'));
-        $this->redirect('list', 'Forum');
+        $this->redirect('list', 'Forum', 'Pforum');
     }
 
     protected function mailToTopicCreator(Topic $topic, Post $post): void
@@ -252,7 +257,7 @@ class PostController extends AbstractController
         $this->mailToTopicCreator($post->getTopic(), $post);
 
         $this->addFlashMessage(LocalizationUtility::translate('postActivated', 'pforum'));
-        $this->redirect('list', 'Forum');
+        $this->redirect('list', 'Forum', 'Pforum');
     }
 
     /**
@@ -291,7 +296,7 @@ class PostController extends AbstractController
         } else {
             /* normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated */
             $this->addFlashMessage('You must be logged in before creating a post');
-            $this->redirect('show', 'Forum', null, ['forum' => $topic->getForum()]);
+            $this->redirect('show', 'Forum', 'Pforum', ['forum' => $topic->getForum()]);
         }
     }
 

@@ -89,8 +89,8 @@ class TopicController extends AbstractController
             $this->persistenceManager->persistAll(); // we need an uid before redirecting
             $this->redirect(
                 'edit',
-                null,
-                null,
+                'Topic',
+                'Pforum',
                 ['topic' => $newTopic, 'isPreview' => true, 'isNew' => true]
             );
         }
@@ -107,7 +107,7 @@ class TopicController extends AbstractController
         }
 
         $this->addFlashMessageForCreation();
-        $this->redirect('show', 'Forum', null, ['forum' => $forum]);
+        $this->redirect('show', 'Forum', 'Pforum', ['forum' => $forum]);
     }
 
     /**
@@ -173,8 +173,8 @@ class TopicController extends AbstractController
             $topic->setHidden(true);
             $this->redirect(
                 'edit',
-                null,
-                null,
+                'Topic',
+                'Pforum',
                 ['topic' => $topic, 'isPreview' => true, 'isNew' => $isNew]
             );
         } else {
@@ -199,7 +199,7 @@ class TopicController extends AbstractController
                 $this->addFlashMessage(LocalizationUtility::translate('topicUpdated', 'pforum'));
             }
 
-            $this->redirect('show', 'Forum', '', ['forum' => $topic->getForum()]);
+            $this->redirect('show', 'Forum', 'Pforum', ['forum' => $topic->getForum()]);
         }
     }
 
@@ -216,7 +216,7 @@ class TopicController extends AbstractController
     {
         $this->topicRepository->remove($topic);
         $this->addFlashMessage(LocalizationUtility::translate('topicDeleted', 'pforum'));
-        $this->redirect('list', 'Forum');
+        $this->redirect('list', 'Forum', 'Pforum');
     }
 
     /**
@@ -236,7 +236,7 @@ class TopicController extends AbstractController
         $topic->setHidden(false);
         $this->topicRepository->update($topic);
         $this->addFlashMessage(LocalizationUtility::translate('topicActivated', 'pforum'));
-        $this->redirect('list', 'Forum');
+        $this->redirect('list', 'Forum', 'Pforum');
     }
 
     /**
@@ -271,7 +271,7 @@ class TopicController extends AbstractController
                 '',
                 AbstractMessage::WARNING
             );
-            $this->redirect('show', 'Forum', null, ['forum' => $forum]);
+            $this->redirect('show', 'Forum', 'Pforum', ['forum' => $forum]);
         }
     }
 
