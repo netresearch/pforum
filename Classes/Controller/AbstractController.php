@@ -18,6 +18,7 @@ use JWeiland\Pforum\Domain\Repository\ForumRepository;
 use JWeiland\Pforum\Domain\Repository\FrontendUserRepository;
 use JWeiland\Pforum\Domain\Repository\PostRepository;
 use JWeiland\Pforum\Domain\Repository\TopicRepository;
+use JWeiland\Pforum\Event\PostProcessFluidVariablesEvent;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -182,5 +183,19 @@ class AbstractController extends ActionController
                 $image->getOriginalResource()->getOriginalFile()->delete();
             }
         }
+    }
+
+    protected function postProcessAndAssignFluidVariables(array $variables = []): void
+    {
+        /** @var PostProcessFluidVariablesEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            new PostProcessFluidVariablesEvent(
+                $this->request,
+                $this->settings,
+                $variables
+            )
+        );
+
+        $this->view->assignMultiple($event->getFluidVariables());
     }
 }

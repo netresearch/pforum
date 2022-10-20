@@ -15,7 +15,7 @@ use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Helper\FrontendGroupHelper;
 
 /**
- * Main controller to list and show postings/questions
+ * Main controller to list and show forum entries
  */
 class ForumController extends AbstractController
 {
@@ -31,13 +31,11 @@ class ForumController extends AbstractController
 
     public function listAction(): void
     {
-        $forums = $this->forumRepository->findAll();
-        $this->view->assign('forums', $forums);
+        $this->postProcessAndAssignFluidVariables([
+            'forums' => $this->forumRepository->findAll()
+        ]);
     }
 
-    /**
-     * @param Forum $forum
-     */
     public function showAction(Forum $forum): void
     {
         $topics = $this->topicRepository->findByForum($forum);
@@ -47,7 +45,10 @@ class ForumController extends AbstractController
                 ->setIgnoreEnableFields(true)
                 ->setEnableFieldsToBeIgnored(['disabled']);
         }
-        $this->view->assign('forum', $forum);
-        $this->view->assign('topics', $topics);
+
+        $this->postProcessAndAssignFluidVariables([
+            'forum' => $forum,
+            'topics' => $topics,
+        ]);
     }
 }
