@@ -5,9 +5,23 @@
 <f:layout name="Default" />
 
 <f:section name="main">
-
 	<f:flashMessages />
-	<div class="breadcrumb"><f:link.action action="show" controller="Forum" arguments="{forum: topic.forum}">{topic.forum.title} » </f:link.action> {topic.title}</div>
+
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<f:link.action action="list">{f:translate(key: 'tx_pforum_domain_model_forum')}</f:link.action>
+			</li>
+			<li class="breadcrumb-item">
+				<f:link.action action="show" controller="Forum" arguments="{forum: topic.forum}">
+					{topic.forum.title}
+				</f:link.action>
+			</li>
+			<li class="breadcrumb-item active" aria-current="page">
+				{topic.title}
+			</li>
+		</ol>
+	</nav>
 
 	<div class="marginbottom">
 		<header><h1>{topic.title}</h1></header>
@@ -43,8 +57,7 @@
 		</div>
 	</div>
 
-	<f:render partial="Auth/Content"
-						arguments="{subpartial: 'Link', data: {pageUid: settings.pidOfDetailPage, action: 'new', controller: 'Post', arguments: {topic: topic, forum: forum}, translationKey: 'newPost'}}"/>
+	<f:render section="checkAndRenderCreationButton" arguments="{_all}" />
 
 	<f:if condition="{posts}">
 		<f:then>
@@ -84,8 +97,35 @@
 			</div>
 		</f:then>
 		<f:else>
-			<div class="noResults">{f:translate(key: 'noPosts')}</div>
+			<div class="alert alert-info" role="alert">
+				{f:translate(key: 'noPosts')}
+			</div>
 		</f:else>
 	</f:if>
+</f:section>
+
+<f:section name="checkAndRenderCreationButton">
+	<f:if condition="{settings.auth} == 1">
+		<f:then>
+			<f:render section="renderCreationButton" arguments="{_all}" />
+		</f:then>
+		<f:else>
+			<f:security.ifHasRole role="{settings.uidOfUserGroup}">
+				<f:render section="renderCreationButton" arguments="{_all}" />
+			</f:security.ifHasRole>
+		</f:else>
+	</f:if>
+</f:section>
+
+<f:section name="renderCreationButton">
+	<p>
+		<f:link.action action="new"
+									 controller="Post"
+									 pageUid="{settings.pidOfDetailPage}"
+									 class="btn btn-primary"
+									 arguments="{topic: topic, forum: forum}">
+			{f:translate(key: 'newPost')}
+		</f:link.action>
+	</p>
 </f:section>
 </html>

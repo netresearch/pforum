@@ -7,15 +7,18 @@
 <f:section name="main">
 	<f:flashMessages />
 
-	<div class="breadcrumb">
-		<f:link.action action="list">{f:translate(key: 'tx_pforum_domain_model_forum')} »</f:link.action> {forum.title}
-	</div>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<f:link.action action="list">{f:translate(key: 'tx_pforum_domain_model_forum')}</f:link.action>
+			</li>
+			<li class="breadcrumb-item active" aria-current="page">{forum.title}</li>
+		</ol>
+	</nav>
 
-	<header>
-		<h2>{forum.title}</h2>
-	</header>
+	<h2>{forum.title}</h2>
 
-	<f:render partial="Auth/Content" arguments="{subpartial: 'Link', data: {pageUid: settings.pidOfDetailPage, action: 'new', controller: 'Topic', arguments: {forum: forum}, translationKey: 'newTopic'}}" />
+	<f:render section="checkAndRenderCreationButton" arguments="{_all}" />
 
 	<f:if condition="{topics}">
 		<f:then>
@@ -50,8 +53,35 @@
 								arguments="{pagination: pagination, paginator: paginator, actionName: 'show'}" />
 		</f:then>
 		<f:else>
-			<p class="noResults">{f:translate(key: 'noTopics')}</p>
+			<div class="alert alert-info" role="alert">
+				{f:translate(key: 'noTopics')}
+			</div>
 		</f:else>
 	</f:if>
+</f:section>
+
+<f:section name="checkAndRenderCreationButton">
+	<f:if condition="{settings.auth} == 1">
+		<f:then>
+			<f:render section="renderCreationButton" arguments="{_all}" />
+		</f:then>
+		<f:else>
+			<f:security.ifHasRole role="{settings.uidOfUserGroup}">
+				<f:render section="renderCreationButton" arguments="{_all}" />
+			</f:security.ifHasRole>
+		</f:else>
+	</f:if>
+</f:section>
+
+<f:section name="renderCreationButton">
+	<p>
+		<f:link.action action="new"
+									 controller="Topic"
+									 pageUid="{settings.pidOfDetailPage}"
+									 class="btn btn-primary"
+									 arguments="{forum: forum}">
+			{f:translate(key: 'newTopic')}
+		</f:link.action>
+	</p>
 </f:section>
 </html>

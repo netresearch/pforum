@@ -32,7 +32,9 @@
 			</div>
 		</f:then>
 		<f:else>
-			<p>{f:translate(key: 'noResults')}</p>
+			<div class="alert alert-info" role="alert">
+				{f:translate(key: 'noResults')}
+			</div>
 		</f:else>
 	</f:if>
 </f:section>
