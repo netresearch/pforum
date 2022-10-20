@@ -4,19 +4,16 @@
 
 <f:form.validationResults for="{object}">
 	<f:if condition="{validationResults.flattenedErrors}">
-		<ul>
+		<dl class="row">
 			<f:for each="{validationResults.flattenedErrors}" key="propertyPath" as="errors">
-				<li>{propertyPath}:
-					<ul>
-						<f:if condition="{errors}">
-							<f:for each="{errors}" as="error">
-								<li>{error}</li>
-							</f:for>
-						</f:if>
-					</ul>
-				</li>
+				<dt class="col-sm-3">{propertyPath}:</dt>
+				<f:if condition="{errors}">
+					<f:for each="{errors}" as="error">
+						<dd class="col-sm-9 text-danger">{error}</dd>
+					</f:for>
+				</f:if>
 			</f:for>
-		</ul>
+		</dl>
 	</f:if>
 </f:form.validationResults>
 </html>

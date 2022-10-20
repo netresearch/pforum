@@ -2,29 +2,27 @@
 			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
 			data-namespace-typo3-fluid="true">
 
-<fieldset class="grid_12">
-	<div class="extdiv">
-		<label for="title" class="margintop">
-			{f:translate(key: 'tx_pforum_domain_model_topic.title')} <span class="required">*</span>
-		</label>
-		<f:form.textfield property="title" />
-	</div>
+<div class="mb-3">
+	<label for="title" class="form-label">
+		{f:translate(key: 'tx_pforum_domain_model_topic.title')} <span class="required">*</span>
+	</label>
+	<f:form.textfield class="form-control" property="title"/>
+</div>
 
-	<div class="extdiv">
-		<label for="description" class="margintop">
-			{f:translate(key: 'tx_pforum_domain_model_topic.description')} <span class="required">*</span>
-		</label>
-		<f:form.textarea property="description" cols="40" rows="15" />
-	</div>
+<div class="mb-3">
+	<label for="description" class="form-label">
+		{f:translate(key: 'tx_pforum_domain_model_topic.description')} <span class="required">*</span>
+	</label>
+	<f:form.textarea class="form-control" property="description" cols="40" rows="15"/>
+</div>
 
-	<f:if condition="{settings.useImages}">
-		<div class="extdiv">
-			<label for="images" class="margintop">
-				{f:translate(key: 'tx_pforum_domain_model_topic.images')}
-			</label>
-			<f:form.upload name="{object}[images][0]" class="marginbottom" /><br />
-			<f:form.upload name="{object}[images][1]" />
-		</div>
-	</f:if>
-</fieldset>
+<f:if condition="{settings.useImages}">
+	<div class="mb-3">
+		<label for="images" class="form-label">
+			{f:translate(key: 'tx_pforum_domain_model_topic.images')}
+		</label>
+		<f:form.upload name="{object}[images][0]" class="form-control" /><br />
+		<f:form.upload name="{object}[images][1]" class="form-control" />
+	</div>
+</f:if>
 </html>
