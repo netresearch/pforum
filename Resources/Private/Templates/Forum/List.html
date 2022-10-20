@@ -11,31 +11,25 @@
 
 	<f:if condition="{forums -> f:count()}">
 		<f:then>
-			<f:for each="{forums}" as="forum">
-				<div>
-					<header>
-						<h3>
-							<f:link.action pageUid="{settings.pidOfDetailPage}"
-										   action="show"
-										   arguments="{forum: forum}">
-								{forum.title}
-							</f:link.action>
-						</h3>
-					</header>
-
-					<f:if condition="{forum.teaser}">
-						<p>{forum.teaser}</p>
-					</f:if>
-
-					<div>
-						<f:link.action pageUid="{settings.pidOfDetailPage}"
-									   action="show"
-									   arguments="{forum: forum}">
-							{forum.topics -> f:count()} {f:translate(key: 'tx_pforum_domain_model_forum.topics')}
-						</f:link.action>
+			<div class="list-group list-group-flush">
+				<f:for each="{forums}" as="forum">
+					<div class="list-group-item p-0 py-1">
+						<div class="d-flex w-100 justify-content-between">
+							<h5 class="mb-1">
+								<f:link.action pageUid="{settings.pidOfDetailPage}"
+															 action="show"
+															 arguments="{forum: forum}">
+									{forum.title}
+								</f:link.action>
+							</h5>
+							<small>{forum.topics -> f:count()} {f:translate(key: 'tx_pforum_domain_model_forum.topics')}</small>
+						</div>
+						<f:if condition="{forum.teaser}">
+							<p class="mb-1">{forum.teaser}</p>
+						</f:if>
 					</div>
-				</div>
-			</f:for>
+				</f:for>
+			</div>
 		</f:then>
 		<f:else>
 			<p>{f:translate(key: 'noResults')}</p>
