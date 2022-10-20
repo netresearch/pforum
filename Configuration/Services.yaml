@@ -6,3 +6,8 @@ services:
 
   JWeiland\Pforum\:
     resource: '../Classes/*'
+
+  JWeiland\Pforum\EventListener\AddPaginatorEventListener:
+    tags:
+    - name: event.listener
+      event: JWeiland\Pforum\Event\PostProcessFluidVariablesEvent
