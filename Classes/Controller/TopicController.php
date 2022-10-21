@@ -69,6 +69,8 @@ class TopicController extends AbstractController
      */
     public function initializeCreateAction(): void
     {
+        $this->preProcessControllerAction();
+
         if ($this->settings['useImages']) {
             $multipleFilesTypeConverter = GeneralUtility::makeInstance(UploadMultipleFilesConverter::class);
             $this->arguments->getArgument('newTopic')
@@ -121,6 +123,8 @@ class TopicController extends AbstractController
      */
     public function initializeEditAction(): void
     {
+        $this->preProcessControllerAction();
+
         $this->registerTopicFromRequest('topic');
     }
 

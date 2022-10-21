@@ -139,6 +139,8 @@ class PostController extends AbstractController
      */
     public function initializeUpdateAction(): void
     {
+        $this->preProcessControllerAction();
+
         $this->registerPostFromRequest('post');
         if ($this->settings['useImages']) {
             // we have our own implementation how to implement images
