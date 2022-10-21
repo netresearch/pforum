@@ -9,23 +9,42 @@
 
 	<h3>{f:translate(key: 'preview')}</h3>
 
-	<div class="list-group list-group-flush mb-3">
-		<div class="list-group-item p-0 p-1 bg-light">
-			<div class="d-flex w-100 justify-content-between">
-				<h5 class="mb-1">
-					{topic.title}
-				</h5>
-				<small>
-					{topic.crdate -> f:format.date(format: 'd.m.Y')}&nbsp;|
-					{f:translate(key: 'from')}:
-					<f:render partial="User/Username" arguments="{user: topic.user}" /> |
-					{topic.posts -> f:count()}&nbsp;{f:translate(key: 'tx_pforum_domain_model_topic.posts')}
-				</small>
-			</div>
-
-			<f:if condition="{topic.description}">
-				<p class="mb-1">{topic.description -> f:format.crop(maxCharacters: 150, respectWordBoundaries: true, respectHtml: true)}</p>
+	<div class="card mb-3 bg-light">
+		<div class="row g-0">
+			<f:if condition="{topic.images}">
+				<div class="col-md-2">
+					<f:for each="{topic.images}" as="image">
+						<f:image image="{image}"
+										 alt="{image.title}"
+										 class="img-fluid rounded-start"
+										 width="{settings.image.width}"
+										 height="{settings.image.height}"
+										 minWidth="{settings.image.minWidth}"
+										 maxWidth="{settings.image.maxWidth}"
+										 minHeight="{settings.image.minHeight}"
+										 maxHeight="{settings.image.maxHeight}"/>
+					</f:for>
+				</div>
 			</f:if>
+
+			<div class="col-md-10">
+				<div class="card-body">
+					<div class="d-flex w-100 justify-content-between">
+						<h5 class="mb-1">
+							{topic.title}
+						</h5>
+						<small>
+							{topic.crdate -> f:format.date(format: 'd.m.Y')}&nbsp;|
+							{f:translate(key: 'from')}:
+							<f:render partial="User/Username" arguments="{user: topic.user}" /> |
+							{topic.posts -> f:count()}&nbsp;{f:translate(key: 'tx_pforum_domain_model_topic.posts')}
+						</small>
+					</div>
+					<f:if condition="{topic.description}">
+						<p class="card-text">{topic.description -> f:format.crop(maxCharacters: 150, respectWordBoundaries: true, respectHtml: true)}</p>
+					</f:if>
+				</div>
+			</div>
 		</div>
 	</div>
 
