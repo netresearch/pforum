@@ -40,6 +40,7 @@
 							{topic.posts -> f:count()}&nbsp;{f:translate(key: 'tx_pforum_domain_model_topic.posts')}
 						</small>
 					</div>
+
 					<f:if condition="{topic.description}">
 						<p class="card-text">{topic.description -> f:format.crop(maxCharacters: 150, respectWordBoundaries: true, respectHtml: true)}</p>
 					</f:if>

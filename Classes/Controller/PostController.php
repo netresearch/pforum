@@ -14,15 +14,14 @@ namespace JWeiland\Pforum\Controller;
 use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
 use JWeiland\Pforum\Domain\Model\User;
+use JWeiland\Pforum\Property\TypeConverter\UploadMultipleFilesConverter;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\FluidEmail;
 use TYPO3\CMS\Core\Mail\Mailer;
-use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * Controller to manage (list and show) postings
@@ -48,19 +47,14 @@ class PostController extends AbstractController
         $this->preProcessControllerAction();
 
         if ($this->settings['useImages']) {
+            $multipleFilesTypeConverter = GeneralUtility::makeInstance(UploadMultipleFilesConverter::class);
             $this->arguments->getArgument('newPost')
                 ->getPropertyMappingConfiguration()
-                ->setTargetTypeForSubProperty(
-                    'images',
-                    'array'
-                );
+                ->forProperty('images')
+                ->setTypeConverter($multipleFilesTypeConverter);
         }
     }
 
-    /**
-     * @param Topic $topic
-     * @param Post $newPost
-     */
     public function createAction(Topic $topic, Post $newPost): void
     {
         // if auth = frontend user
@@ -142,14 +136,20 @@ class PostController extends AbstractController
         $this->preProcessControllerAction();
 
         $this->registerPostFromRequest('post');
+        $argument = $this->request->getArgument('post');
+        /** @var Post $post */
+        $post = $this->topicRepository->findByIdentifier($argument['__identity']);
         if ($this->settings['useImages']) {
-            // we have our own implementation how to implement images
-            $this->arguments
-                ->getArgument('post')
+            $multipleFilesTypeConverter = GeneralUtility::makeInstance(UploadMultipleFilesConverter::class);
+            $this->arguments->getArgument('post')
                 ->getPropertyMappingConfiguration()
-                ->setTargetTypeForSubProperty(
-                    'images',
-                    'array'
+                ->forProperty('images')
+                ->setTypeConverter($multipleFilesTypeConverter)
+                ->setTypeConverterOptions(
+                    UploadMultipleFilesConverter::class,
+                    [
+                        'IMAGES' => $post->getImages()
+                    ]
                 );
         }
     }

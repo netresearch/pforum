@@ -13,4 +13,14 @@
 	<span class="required">*</span>
 	<f:form.textarea class="form-control" property="description" cols="40" rows="15"/>
 </div>
+
+<f:if condition="{settings.useImages}">
+	<div class="mb-3">
+		<label for="images" class="form-label">
+			{f:translate(key: 'tx_pforum_domain_model_post.images')}
+		</label>
+		<f:form.upload name="{object}[images][0]" class="form-control" /><br />
+		<f:form.upload name="{object}[images][1]" class="form-control" />
+	</div>
+</f:if>
 </html>
