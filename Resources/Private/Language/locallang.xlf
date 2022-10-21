@@ -169,17 +169,11 @@
 			<trans-unit id="email.post.subject">
 				<source>Manage your newly created post</source>
 			</trans-unit>
-			<trans-unit id="email.post.subject.newPost">
-				<source>New post at your topic: %1$s</source>
-			</trans-unit>
 			<trans-unit id="email.topic.text">
 				<source>You have created a new topic. Now you have following options</source>
 			</trans-unit>
 			<trans-unit id="email.post.text">
 				<source>You have created a new posting. Now you have following options</source>
-			</trans-unit>
-			<trans-unit id="email.post.text.newPost">
-				<source><![CDATA[<p>Hello %1$s</p><p>There is a new post for your topic %2$s with following content:</p><pre>%3$s</pre>]]></source>
 			</trans-unit>
 			<trans-unit id="error.activateFirst">
 				<source>Sorry. This entry can't be edited or deleted as long as this record was not activated first.</source>
