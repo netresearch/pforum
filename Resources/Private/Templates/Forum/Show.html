@@ -22,9 +22,9 @@
 
 	<f:if condition="{topics}">
 		<f:then>
-			<div class="list-group list-group-flush">
-				<f:for each="{topics}" as="topic">
-					<div class="list-group-item p-0 py-1">
+			<f:for each="{topics}" as="topic">
+				<div class="row border-bottom mb-3">
+					<div class="col-md-12">
 						<div class="d-flex w-100 justify-content-between">
 							<h5 class="mb-1">
 								<f:link.action pageUid="{settings.pidOfDetailPage}"
@@ -54,8 +54,8 @@
 							</div>
 						</f:if>
 					</div>
-				</f:for>
-			</div>
+				</div>
+			</f:for>
 
 			<f:render partial="Component/Pagination"
 								arguments="{pagination: pagination, paginator: paginator, actionName: 'show'}" />
