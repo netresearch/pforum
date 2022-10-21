@@ -23,78 +23,75 @@
 		</ol>
 	</nav>
 
-	<div class="marginbottom">
-		<header><h1>{topic.title}</h1></header>
-		<div class="csc-textpic csc-textpic-intext-left">
-			<f:if condition="{topic.images}">
-				<div class="csc-textpic-imagewrap">
-					<f:for each="{topic.images}" as="image">
-						<div class="csc-textpic-imagerow imagecol1">
-							<figure>
-								<f:image image="{image}"
-												 alt="{image.title}"
-												 width="{settings.image.width}"
-												 height="{settings.image.height}"
-												 minWidth="{settings.image.minWidth}"
-												 maxWidth="{settings.image.maxWidth}"
-												 minHeight="{settings.image.minHeight}"
-												 maxHeight="{settings.image.maxHeight}" />
-							</figure>
-						</div>
-					</f:for>
-				</div>
-			</f:if>
-
-			<div class="csc-textpic-text">
-				<p>
-					{topic.description -> f:format.html(parseFuncTSPath: 'lib.parseFunc') -> f:format.nl2br()}
-				</p>
+	<header><h1>{topic.title}</h1></header>
+	<div class="csc-textpic csc-textpic-intext-left">
+		<f:if condition="{topic.images}">
+			<div class="csc-textpic-imagewrap">
+				<f:for each="{topic.images}" as="image">
+					<div class="csc-textpic-imagerow imagecol1">
+						<figure>
+							<f:image image="{image}"
+											 alt="{image.title}"
+											 width="{settings.image.width}"
+											 height="{settings.image.height}"
+											 minWidth="{settings.image.minWidth}"
+											 maxWidth="{settings.image.maxWidth}"
+											 minHeight="{settings.image.minHeight}"
+											 maxHeight="{settings.image.maxHeight}" />
+						</figure>
+					</div>
+				</f:for>
 			</div>
+		</f:if>
+
+		<div class="csc-textpic-text">
+			<p>
+				{topic.description -> f:format.html(parseFuncTSPath: 'lib.parseFunc') -> f:format.nl2br()}
+			</p>
 		</div>
-		<div>
-			{topic.crdate -> f:format.date(format: 'd.m.Y')} |
-			{f:translate(key: 'from')}: <f:render partial="User/Username" arguments="{user: topic.user}"/>
-		</div>
+	</div>
+	<div>
+		{topic.crdate -> f:format.date(format: 'd.m.Y')} |
+		{f:translate(key: 'from')}: <f:render partial="User/Username" arguments="{user: topic.user}"/>
 	</div>
 
 	<f:render section="checkAndRenderCreationButton" arguments="{_all}" />
 
 	<f:if condition="{posts}">
 		<f:then>
-			<header>
-				<h2 class="nobordertop">{f:translate(key: 'tx_pforum_domain_model_topic.posts')}</h2>
-			</header>
+			<h2>{f:translate(key: 'tx_pforum_domain_model_topic.posts')}</h2>
 
 			<div class="list scroll-container">
-				<f:widget.paginate objects="{posts}" as="paginatedPosts" configuration="{itemsPerPage: settings.pageBrowser.itemsPerPage, insertAbove: settings.pageBrowser.insertAbove, insertBelow: settings.pageBrowser.insertBelow, maximumNumberOfLinks: settings.pageBrowser.maximumNumberOfLinks}">
-					<f:for each="{paginatedPosts}" as="post">
-						<div class="marginbottom scroll-item" style="{f:if(condition: post.hidden, then: 'border: 1px solid red;')}">
-							<div class="borderbottom">
-								<f:if condition="{post.title}">
-									<header>
-										<h3 class="noborder nomargin">{post.title}</h3>
-									</header>
-								</f:if>
-
-								<div>{post.description -> f:format.html(parseFuncTSPath: 'lib.parseFunc') ->f:format.nl2br()}</div>
-
-								<div>
-									{post.crdate -> f:format.date(format: 'd.m.Y')} |
-									{f:translate(key: 'from')}:&nbsp;<f:render partial="User/Username" arguments="{user: post.user}" />
-								</div>
-							</div>
-
-							<f:if condition="{post.hidden}">
-								<div>
-									<f:form action="activate" controller="Post" name="post" arguments="{post: post}">
-										<f:form.submit value="{f:translate(key: 'activate')}" />
-									</f:form>
-								</div>
+				<f:for each="{posts}" as="post">
+					<div class="marginbottom scroll-item" style="{f:if(condition: post.hidden, then: 'border: 1px solid red;')}">
+						<div class="borderbottom">
+							<f:if condition="{post.title}">
+								<header>
+									<h3 class="noborder nomargin">{post.title}</h3>
+								</header>
 							</f:if>
+
+							<div>{post.description -> f:format.html(parseFuncTSPath: 'lib.parseFunc') ->f:format.nl2br()}</div>
+
+							<div>
+								{post.crdate -> f:format.date(format: 'd.m.Y')} |
+								{f:translate(key: 'from')}:&nbsp;<f:render partial="User/Username" arguments="{user: post.user}" />
+							</div>
 						</div>
-					</f:for>
-				</f:widget.paginate>
+
+						<f:if condition="{post.hidden}">
+							<div>
+								<f:form action="activate" controller="Post" name="post" arguments="{post: post}">
+									<f:form.submit value="{f:translate(key: 'activate')}" />
+								</f:form>
+							</div>
+						</f:if>
+					</div>
+				</f:for>
 			</div>
+
+			<f:render partial="Component/Pagination"
+								arguments="{pagination: pagination, paginator: paginator, actionName: 'show'}" />
 		</f:then>
 		<f:else>
 			<div class="alert alert-info" role="alert">

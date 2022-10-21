@@ -48,15 +48,20 @@ class TopicController extends AbstractController
                 ->setEnableFieldsToBeIgnored(['disabled']);
         }
 
-        $this->view->assign('topic', $topic);
-        $this->view->assign('posts', $posts);
+        $this->postProcessAndAssignFluidVariables([
+            'topic' => $topic,
+            'posts' => $posts,
+        ]);
     }
 
     public function newAction(Forum $forum): void
     {
         $this->deleteUploadedFilesOnValidationErrors('newTopic');
-        $this->view->assign('forum', $forum);
-        $this->view->assign('newTopic', GeneralUtility::makeInstance(Topic::class));
+
+        $this->postProcessAndAssignFluidVariables([
+            'forum' => $forum,
+            'newTopic' => GeneralUtility::makeInstance(Topic::class),
+        ]);
     }
 
     /**
@@ -130,9 +135,11 @@ class TopicController extends AbstractController
         bool $isPreview = false,
         bool $isNew = false
     ): void {
-        $this->view->assign('topic', $topic);
-        $this->view->assign('isPreview', $isPreview);
-        $this->view->assign('isNew', $isNew);
+        $this->postProcessAndAssignFluidVariables([
+            'topic' => $topic,
+            'isPreview' => $isPreview,
+            'isNew' => $isNew,
+        ]);
     }
 
     /**
@@ -277,7 +284,7 @@ class TopicController extends AbstractController
 
     protected function mailToUser(Topic $topic): void
     {
-        $mail = $this->objectManager->get(MailMessage::class);
+        $mail = GeneralUtility::makeInstance(MailMessage::class);
         $mail->setFrom($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName());
         $mail->setTo($topic->getUser()->getEmail(), $topic->getUser()->getName());
         $mail->setSubject(
@@ -301,7 +308,6 @@ class TopicController extends AbstractController
                 'Resources/Private/Templates/Mail/ConfigureTopic.html'
             )
         );
-        $view->setControllerContext($this->getControllerContext());
         $view->assign('settings', $this->settings);
         $view->assign('topic', $topic);
 

@@ -26,21 +26,29 @@ class AddPaginatorEventListener extends AbstractControllerEventListener
     protected $allowedControllerActions = [
         'Forum' => [
             'show'
-        ]
+        ],
+        'Topic' => [
+            'show'
+        ],
     ];
 
     public function __invoke(PostProcessFluidVariablesEvent $event): void
     {
+        $typeOfPaginatedItems = 'topics';
+        if ($event->getControllerName() === 'Topic') {
+            $typeOfPaginatedItems = 'posts';
+        }
+
         if ($this->isValidRequest($event)) {
             $paginator = new QueryResultPaginator(
-                $event->getFluidVariables()['topics'],
+                $event->getFluidVariables()[$typeOfPaginatedItems],
                 $this->getCurrentPage($event),
                 $this->getItemsPerPage($event)
             );
 
             $event->addFluidVariable('actionName', $event->getActionName());
             $event->addFluidVariable('paginator', $paginator);
-            $event->addFluidVariable('topics', $paginator->getPaginatedItems());
+            $event->addFluidVariable($typeOfPaginatedItems, $paginator->getPaginatedItems());
             $event->addFluidVariable('pagination', new SimplePagination($paginator));
         }
     }
