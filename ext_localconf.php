@@ -24,6 +24,8 @@ call_user_func(static function (): void {
         '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:pforum/Configuration/TSconfig/ContentElementWizard.tsconfig">'
     );
 
+    $GLOBALS['TYPO3_CONF_VARS']['MAIL']['templateRootPaths'][1666352112] = 'EXT:pforum/Resources/Private/Templates/Mail';
+
     $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
         \TYPO3\CMS\Core\Imaging\IconRegistry::class
     );
