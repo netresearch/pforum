@@ -7,7 +7,7 @@
 <f:section name="Title">{headline}</f:section>
 
 <f:section name="Main">
-	<p>{f:translate(key: 'email.post.text')}</p>
+	<p>{f:translate(key: 'email.post.text', extensionName: 'Pforum')}</p>
 
 	<div>
 		<f:if condition="{settings.post.hideAtCreation}">
@@ -21,7 +21,7 @@
 												 absolute="1"
 												 noCache="1"
 												 arguments="{post: post}">
-						{f:translate(key: 'activatePost')}
+						{f:translate(key: 'activatePost', extensionName: 'Pforum')}
 					</f:link.action>
 				</div>
 			</f:if>
@@ -35,7 +35,7 @@
 										 extensionName="Pforum"
 										 absolute="1"
 										 arguments="{post: post}">
-				{f:translate(key: 'editPost')}
+				{f:translate(key: 'editPost', extensionName: 'Pforum')}
 			</f:link.action>
 		</div>
 
@@ -47,7 +47,7 @@
 										 extensionName="Pforum"
 										 absolute="1"
 										 arguments="{post: post}">
-				{f:translate(key: 'deletePost')}
+				{f:translate(key: 'deletePost', extensionName: 'Pforum')}
 			</f:link.action>
 		</div>
 	</div>
