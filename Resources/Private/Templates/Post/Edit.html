@@ -6,34 +6,44 @@
 
 <f:section name="main">
 	<f:flashMessages />
-	<header>
-		<h2>{f:translate(key: 'preview')}</h2>
-	</header>
 
-	<f:render partial="FormErrors" arguments="{object: Post}"/>
+	<h3>{f:translate(key: 'preview')}</h3>
 
-	<f:if condition="{isPreview}">
-		<div class="marginbottom">
-			<h1>{post.title}</h1>
-			<p>{post.description -> f:format.html(parseFuncTSPath: 'lib.parseFunc') -> f:format.nl2br()}</p>
+	<div class="list-group list-group-flush mb-3">
+		<div class="list-group-item p-0 py-1 bg-light">
+			<div class="d-flex w-100 justify-content-between">
+				<h5 class="mb-1">
+					{post.title}
+				</h5>
+				<small>
+					{post.crdate -> f:format.date(format: 'd.m.Y')}&nbsp;|
+					{f:translate(key: 'from')}:
+					<f:render partial="User/Username" arguments="{user: post.user}" />
+				</small>
+			</div>
+
+			<p class="mb-1">
+				{post.description -> f:format.html(parseFuncTSPath: 'lib.parseFunc') -> f:format.nl2br()}
+			</p>
 		</div>
-	</f:if>
+	</div>
 
-	<header>
-		<h2>{f:translate(key: 'editPost')}</h2>
-	</header>
+	<h3>{f:translate(key: 'editPost')}</h3>
 
-	<f:form action="update" class="tx-comments-comment-form" name="post" object="{post}" enctype="multipart/form-data">
+	<f:form action="update" name="post" object="{post}" enctype="multipart/form-data">
+		<f:render partial="FormErrors" arguments="{object: Post}"/>
+
 		<f:if condition="{isNew}">
 			<f:form.hidden name="isNew" value="{isNew}" />
 		</f:if>
+
 		<f:if condition="{settings.auth} == 1">
 			<f:render partial="User/FormFields" arguments="{object: 'post', post: post}" />
 		</f:if>
+
 		<f:render partial="Post/FormFields" arguments="{object: 'post'}" />
-		<div class="submitwrap">
-			<f:form.submit value="{f:translate(key: 'save')}" />
-		</div>
+
+		<f:form.submit class="btn btn-primary" value="{f:translate(key: 'save')}" />
 	</f:form>
 </f:section>
 </html>

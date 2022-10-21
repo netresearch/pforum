@@ -9,7 +9,7 @@
 
 	<h3>{f:translate(key: 'preview')}</h3>
 
-	<div class="list-group list-group-flush">
+	<div class="list-group list-group-flush mb-3">
 		<div class="list-group-item p-0 py-1 bg-light">
 			<div class="d-flex w-100 justify-content-between">
 				<h5 class="mb-1">
@@ -29,7 +29,7 @@
 		</div>
 	</div>
 
-	<h2>{f:translate(key: 'editTopic')}</h2>
+	<h3>{f:translate(key: 'editTopic')}</h3>
 
 	<f:form action="update" name="topic" object="{topic}" enctype="multipart/form-data">
 		<f:render partial="FormErrors" arguments="{object: 'topic'}" />
