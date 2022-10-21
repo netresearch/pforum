@@ -19,6 +19,7 @@ use JWeiland\Pforum\Domain\Repository\FrontendUserRepository;
 use JWeiland\Pforum\Domain\Repository\PostRepository;
 use JWeiland\Pforum\Domain\Repository\TopicRepository;
 use JWeiland\Pforum\Event\PostProcessFluidVariablesEvent;
+use JWeiland\Pforum\Event\PreProcessControllerActionEvent;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -197,5 +198,16 @@ class AbstractController extends ActionController
         );
 
         $this->view->assignMultiple($event->getFluidVariables());
+    }
+
+    protected function preProcessControllerAction(): void
+    {
+        $this->eventDispatcher->dispatch(
+            new PreProcessControllerActionEvent(
+                $this->request,
+                $this->arguments,
+                $this->settings
+            )
+        );
     }
 }

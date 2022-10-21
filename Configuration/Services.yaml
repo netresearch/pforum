@@ -11,3 +11,8 @@ services:
     tags:
     - name: event.listener
       event: JWeiland\Pforum\Event\PostProcessFluidVariablesEvent
+
+  JWeiland\Pforum\EventListener\ApplyEmailAsMandatoryIfNeededEventListener:
+    tags:
+    - name: event.listener
+      event: JWeiland\Pforum\Event\PreProcessControllerActionEvent

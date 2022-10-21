@@ -14,8 +14,12 @@ namespace JWeiland\Pforum\Controller;
 use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
 use JWeiland\Pforum\Domain\Model\User;
+use Symfony\Component\Mime\Address;
+use TYPO3\CMS\Core\Mail\FluidEmail;
+use TYPO3\CMS\Core\Mail\Mailer;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -37,12 +41,13 @@ class PostController extends AbstractController
     }
 
     /**
-     * Check if email of user object is mandatory or not.
+     * Convert images to array while passing them to post model
      */
     public function initializeCreateAction(): void
     {
+        $this->preProcessControllerAction();
+
         if ($this->settings['useImages']) {
-            // we have our own implementation how to implement images
             $this->arguments->getArgument('newPost')
                 ->getPropertyMappingConfiguration()
                 ->setTargetTypeForSubProperty(
@@ -78,7 +83,10 @@ class PostController extends AbstractController
             );
         }
 
-        if ($this->settings['post']['hideAtCreation']) {
+        if (
+            isset($this->settings['post']['hideAtCreation'])
+            && $this->settings['post']['hideAtCreation'] === '1'
+        ) {
             $newPost->setHidden(true);
         }
 
@@ -94,7 +102,7 @@ class PostController extends AbstractController
             && $topic->getUser() instanceof User
             && $topic->getUser()->getEmail() !== ''
         ) {
-            // send an email to creator of topic to inform him about new comments/posts
+            // Send an email to creator of topic to inform him about new comments/posts
             $this->mailToTopicCreator($topic, $newPost);
         }
 
@@ -184,7 +192,7 @@ class PostController extends AbstractController
                 $this->addFlashMessage(LocalizationUtility::translate('postUpdated', 'pforum'));
             }
 
-            $this->redirect('show', 'Forum', 'Pforum', ['forum' => $post->getTopic()->getForum()]);
+            $this->redirect('show', 'Topic', 'Pforum', ['topic' => $post->getTopic()]);
         }
     }
 
@@ -209,29 +217,18 @@ class PostController extends AbstractController
 
     protected function mailToTopicCreator(Topic $topic, Post $post): void
     {
-        $mail = $this->objectManager->get(MailMessage::class);
-        $mail->setFrom($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName());
-        $mail->setTo($topic->getUser()->getEmail(), $topic->getUser()->getName());
-        $mail->setSubject(
-            LocalizationUtility::translate(
-                'email.post.subject.newPost',
-                'pforum',
-                [$topic->getTitle()]
-            )
-        );
-
-        $content = LocalizationUtility::translate(
-            'email.post.text.newPost',
-            'pforum',
-            [
-                $topic->getUser()->getName(),
-                $topic->getTitle(),
-                $post->getDescription(),
-            ]
-        );
-
-        $mail->html($content);
-        $mail->send();
+        $email = GeneralUtility::makeInstance(FluidEmail::class);
+        $email
+            ->to(new Address($topic->getUser()->getEmail(), $topic->getUser()->getName()))
+            ->from(new Address($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName()))
+            ->subject('New post at your topic:' . $topic->getTitle())
+            ->setTemplate('Default')
+            ->assignMultiple([
+                'headline' => 'Hello ' . $topic->getUser()->getName(),
+                'introduction' => 'There is a new post for your topic ' . $topic->getTitle() . ' with following content:',
+                'content' => nl2br($post->getDescription()),
+            ]);
+        GeneralUtility::makeInstance(Mailer::class)->send($email);
     }
 
     /**
@@ -302,26 +299,18 @@ class PostController extends AbstractController
 
     protected function mailToUser(Post $post): void
     {
-        $mail = $this->objectManager->get(MailMessage::class);
-        $mail->setFrom($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName());
-        $mail->setTo($post->getUser()->getEmail(), $post->getUser()->getName());
-        $mail->setSubject(LocalizationUtility::translate('email.post.subject', 'pforum'));
-        $mail->html($this->getContentForMail($post));
-
-        $mail->send();
-    }
-
-    protected function getContentForMail(Post $post): string
-    {
-        $view = $this->objectManager->get(StandaloneView::class);
-        $view->setTemplatePathAndFilename(
-            'EXT:pforum/Resources/Private/Templates/Mail/ConfigurePost.html'
-        );
-        $view->setControllerContext($this->getControllerContext());
-        $view->assign('settings', $this->settings);
-        $view->assign('post', $post);
-
-        return $view->render();
+        $email = GeneralUtility::makeInstance(FluidEmail::class);
+        $email
+            ->to(new Address($post->getUser()->getEmail(), $post->getUser()->getName()))
+            ->from(new Address($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName()))
+            ->subject(LocalizationUtility::translate('email.post.subject', 'pforum'))
+            ->format('html')
+            ->setTemplate('ConfigurePost')
+            ->assignMultiple([
+                'settings' => $this->settings,
+                'post' => $post,
+            ]);
+        GeneralUtility::makeInstance(Mailer::class)->send($email);
     }
 
     protected function addFlashMessageForCreation(): void
