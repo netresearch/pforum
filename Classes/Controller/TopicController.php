@@ -15,6 +15,9 @@ use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Domain\Model\Topic;
 use JWeiland\Pforum\Helper\FrontendGroupHelper;
 use JWeiland\Pforum\Property\TypeConverter\UploadMultipleFilesConverter;
+use Symfony\Component\Mime\Address;
+use TYPO3\CMS\Core\Mail\FluidEmail;
+use TYPO3\CMS\Core\Mail\Mailer;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -288,34 +291,18 @@ class TopicController extends AbstractController
 
     protected function mailToUser(Topic $topic): void
     {
-        $mail = GeneralUtility::makeInstance(MailMessage::class);
-        $mail->setFrom($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName());
-        $mail->setTo($topic->getUser()->getEmail(), $topic->getUser()->getName());
-        $mail->setSubject(
-            LocalizationUtility::translate(
-                'email.topic.subject',
-                'pforum'
-            )
-        );
-        $mail->html($this->getContentForMailing($topic));
-
-        $mail->send();
-    }
-
-    protected function getContentForMailing(Topic $topic): string
-    {
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplatePathAndFilename(
-            sprintf(
-                '%s%s',
-                ExtensionManagementUtility::extPath('pforum'),
-                'Resources/Private/Templates/Mail/ConfigureTopic.html'
-            )
-        );
-        $view->assign('settings', $this->settings);
-        $view->assign('topic', $topic);
-
-        return $view->render();
+        $email = GeneralUtility::makeInstance(FluidEmail::class);
+        $email
+            ->to(new Address($topic->getUser()->getEmail(), $topic->getUser()->getName()))
+            ->from(new Address($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName()))
+            ->subject(LocalizationUtility::translate('email.topic.subject', 'pforum'))
+            ->format('html')
+            ->setTemplate('ConfigureTopic')
+            ->assignMultiple([
+                'settings' => $this->settings,
+                'topic' => $topic,
+            ]);
+        GeneralUtility::makeInstance(Mailer::class)->send($email);
     }
 
     protected function addFlashMessageForCreation(): void
