@@ -5,39 +5,42 @@
 <f:layout name="Default" />
 
 <f:section name="main">
-	<div class="breadcrumb">
-		<f:link.action action="show"
-									 controller="Topic"
-									 arguments="{topic: topic}">
-			{topic.forum.title} »
-		</f:link.action>
-		{f:translate(key: 'newPost')}
-	</div>
+	<f:flashMessages />
 
-	<f:form action="create"
-					name="newPost"
-					object="{newPost}"
-					arguments="{topic: topic}"
-					class="tx-comments-comment-form"
-					enctype="multipart/form-data">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<f:link.action action="list" controller="Forum">{f:translate(key: 'tx_pforum_domain_model_forum')}</f:link.action>
+			</li>
+			<li class="breadcrumb-item">
+				<f:link.action action="show" controller="Forum" arguments="{forum: topic.forum}">
+					{topic.forum.title}
+				</f:link.action>
+			</li>
+			<li class="breadcrumb-item">
+				<f:link.action action="show" controller="Topic" arguments="{topic: topic}">
+					{topic.title}
+				</f:link.action>
+			</li>
+			<li class="breadcrumb-item active" aria-current="page">
+				{f:translate(key: 'newPost')}
+			</li>
+		</ol>
+	</nav>
+
+	<f:form action="create" name="newPost" object="{newPost}" arguments="{topic: topic}" enctype="multipart/form-data">
+		<f:render partial="FormErrors" arguments="{object: 'newPost'}" />
+
 		<f:if condition="{settings.auth} == 1">
 			<f:render partial="User/FormFields" arguments="{object: 'newPost'}" />
 		</f:if>
 
 		<f:render partial="Post/FormFields" arguments="{object: 'newPost'}" />
 
-		<fieldset class="marginbottom2">
-			<div class="submitwrap submitwrap2">
-				<f:form.submit value="{f:translate(key: 'newPost')}" />
-			</div>
-			<div class="submitwrap submitwrap2">
-				<f:form.submit name="preview" value="{f:translate(key: 'preview')}" />
-			</div>
-		</fieldset>
-
-		<p class="clearer">
-			<span class="error">*</span> {f:translate(key: 'mandatory')}
-		</p>
+		<div class="mb-3">
+			<f:form.submit class="btn btn-primary" value="{f:translate(key: 'newPost')}" />
+			<f:form.submit class="btn btn-secondary" name="preview" value="{f:translate(key: 'preview')}" />
+		</div>
 	</f:form>
 </f:section>
 </html>
