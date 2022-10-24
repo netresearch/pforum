@@ -83,20 +83,6 @@ class AdministrationController extends ActionController
             ->setTitle('Back')
             ->setIcon($this->view->getModuleTemplate()->getIconFactory()->getIcon('actions-view-go-back', Icon::SIZE_SMALL));
         $buttonBar->addButton($button, ButtonBar::BUTTON_POSITION_LEFT);
-
-        $button = $buttonBar->makeLinkButton()
-            ->setHref($uriBuilder->reset()->uriFor('listHiddenTopics', [], 'Administration'))
-            ->setShowLabelText(true)
-            ->setTitle(LocalizationUtility::translate('tx_pforum_domain_model_topic', 'pforum'))
-            ->setIcon($this->view->getModuleTemplate()->getIconFactory()->getIcon('ext-pforum-table-topic', Icon::SIZE_SMALL));
-        $buttonBar->addButton($button, ButtonBar::BUTTON_POSITION_LEFT);
-
-        $button = $buttonBar->makeLinkButton()
-            ->setHref($uriBuilder->reset()->uriFor('listHiddenPosts', [], 'Administration'))
-            ->setShowLabelText(true)
-            ->setTitle(LocalizationUtility::translate('tx_pforum_domain_model_post', 'pforum'))
-            ->setIcon($this->view->getModuleTemplate()->getIconFactory()->getIcon('ext-pforum-table-post', Icon::SIZE_SMALL));
-        $buttonBar->addButton($button, ButtonBar::BUTTON_POSITION_LEFT);
     }
 
     protected function createShortcutButton(): void

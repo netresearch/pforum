@@ -2,8 +2,6 @@
 			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
 			data-namespace-typo3-fluid="true">
 
-<h2>{f:translate(key: 'tx_pforum_domain_model_{type}')}</h2>
-
 <f:if condition="{records}">
 	<f:then>
 		<table class="table table-striped table-hover">
@@ -32,7 +30,9 @@
 		</table>
 	</f:then>
 	<f:else>
-		<p>{f:translate(key: 'noHiddenRecords')}</p>
+		<f:be.infobox disableIcon="false" state="-1">
+			{f:translate(key: 'noHiddenRecords')}
+		</f:be.infobox>
 	</f:else>
 </f:if>
 </html>

@@ -3,7 +3,6 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2013-08-32T14:44:32Z" product-name="pforum">
 		<header/>
 		<body>
-
 			<trans-unit id="tx_pforum_domain_model_forum">
 				<source>Forum</source>
 			</trans-unit>
@@ -202,19 +201,28 @@
 			</trans-unit>
 
 			<trans-unit id="be.administrateForumRecords">
-				<source>Manage Forum Records</source>
+				<source>Manage records of pforum</source>
+			</trans-unit>
+			<trans-unit id="be.administrateHiddenRecords">
+				<source>Hidden records</source>
 			</trans-unit>
 			<trans-unit id="be.administrateTopicRecords">
-				<source>Manage Topics</source>
+				<source>Manage hidden topics</source>
 			</trans-unit>
 			<trans-unit id="be.administratePostRecords">
-				<source>Manage Posts</source>
+				<source>Manage hidden posts</source>
 			</trans-unit>
-			<trans-unit id="be.administrateForumRecords.description">
-				<source>If activated in pforum TS configuration, new topics and postings are hidden on creation. Within this BE module you can activate such records.</source>
+			<trans-unit id="be.administrateRecords">
+				<source>Manage</source>
+			</trans-unit>
+			<trans-unit id="be.administrateTopicRecords.description">
+				<source>If activated in TypoScript of pforum, new topics are hidden on creation. Within this BE module you can activate such records.</source>
+			</trans-unit>
+			<trans-unit id="be.administratePostRecords.description">
+				<source>If activated in TypoScript of pforum, new postings are hidden on creation. Within this BE module you can activate such records.</source>
 			</trans-unit>
 			<trans-unit id="be.noRecordsInStorage">
-				<source>There are no hidden pforum records on selected page.</source>
+				<source>Currently, there are no hidden records for selected record type.</source>
 			</trans-unit>
 		</body>
 	</file>
