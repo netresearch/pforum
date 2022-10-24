@@ -43,9 +43,6 @@ plugin.tx_pforum {
 
     pageBrowser {
       itemsPerPage = {$plugin.tx_pforum.settings.pageBrowser.itemsPerPage}
-      insertAbove = {$plugin.tx_pforum.settings.pageBrowser.insertAbove}
-      insertBelow = {$plugin.tx_pforum.settings.pageBrowser.insertBelow}
-      maximumNumberOfLinks = {$plugin.tx_pforum.settings.pageBrowser.maximumNumberOfLinks}
     }
   }
 }
