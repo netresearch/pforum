@@ -1,5 +1,6 @@
 <html lang="en"
 			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:pf="http://typo3.org/ns/JWeiland/Pforum/ViewHelper"
 			data-namespace-typo3-fluid="true">
 
 <f:layout name="Default" />
@@ -18,7 +19,7 @@
 
 	<h2>{forum.title}</h2>
 
-	<f:render section="checkAndRenderCreationButton" arguments="{_all}" />
+	<f:render section="renderCreationButton" arguments="{_all}" />
 
 	<f:if condition="{topics}">
 		<f:then>
@@ -68,28 +69,17 @@
 	</f:if>
 </f:section>
 
-<f:section name="checkAndRenderCreationButton">
-	<f:if condition="{settings.auth} == 1">
-		<f:then>
-			<f:render section="renderCreationButton" arguments="{_all}" />
-		</f:then>
-		<f:else>
-			<f:security.ifHasRole role="{settings.uidOfUserGroup}">
-				<f:render section="renderCreationButton" arguments="{_all}" />
-			</f:security.ifHasRole>
-		</f:else>
-	</f:if>
-</f:section>
-
 <f:section name="renderCreationButton">
-	<p>
-		<f:link.action action="new"
-									 controller="Topic"
-									 pageUid="{settings.pidOfDetailPage}"
-									 class="btn btn-primary"
-									 arguments="{forum: forum}">
-			{f:translate(key: 'newTopic')}
-		</f:link.action>
-	</p>
+	<f:if condition="{pf:isCreateButtonAllowed(authType: settings.auth, userGroupUid: uidOfUserGroup)}">
+		<p>
+			<f:link.action action="new"
+										 controller="Topic"
+										 pageUid="{settings.pidOfDetailPage}"
+										 class="btn btn-primary"
+										 arguments="{forum: forum}">
+				{f:translate(key: 'newTopic')}
+			</f:link.action>
+		</p>
+	</f:if>
 </f:section>
 </html>

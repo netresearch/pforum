@@ -1,5 +1,6 @@
 <html lang="en"
 			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:pf="http://typo3.org/ns/JWeiland/Pforum/ViewHelper"
 			data-namespace-typo3-fluid="true">
 
 <f:layout name="Default" />
@@ -65,7 +66,7 @@
 		</div>
 	</div>
 
-	<f:render section="checkAndRenderCreationButton" arguments="{_all}" />
+	<f:render section="renderCreationButton" arguments="{_all}" />
 
 	<f:if condition="{posts}">
 		<f:then>
@@ -134,14 +135,16 @@
 </f:section>
 
 <f:section name="renderCreationButton">
-	<p>
-		<f:link.action action="new"
-									 controller="Post"
-									 pageUid="{settings.pidOfDetailPage}"
-									 class="btn btn-primary"
-									 arguments="{topic: topic, forum: forum}">
-			{f:translate(key: 'newPost')}
-		</f:link.action>
-	</p>
+	<f:if condition="{pf:isCreateButtonAllowed(authType: settings.auth, userGroupUid: uidOfUserGroup)}">
+		<p>
+			<f:link.action action="new"
+										 controller="Post"
+										 pageUid="{settings.pidOfDetailPage}"
+										 class="btn btn-primary"
+										 arguments="{topic: topic, forum: forum}">
+				{f:translate(key: 'newPost')}
+			</f:link.action>
+		</p>
+	</f:if>
 </f:section>
 </html>
