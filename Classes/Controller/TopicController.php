@@ -71,7 +71,7 @@ class TopicController extends AbstractController
     {
         $this->preProcessControllerAction();
 
-        if ($this->settings['useImages']) {
+        if ($this->settings['useImages'] ?? false) {
             $multipleFilesTypeConverter = GeneralUtility::makeInstance(UploadMultipleFilesConverter::class);
             $this->arguments->getArgument('newTopic')
                 ->getPropertyMappingConfiguration()
@@ -156,7 +156,7 @@ class TopicController extends AbstractController
         $argument = $this->request->getArgument('topic');
         /** @var Topic $topic */
         $topic = $this->topicRepository->findByIdentifier($argument['__identity']);
-        if ($this->settings['useImages']) {
+        if ($this->settings['useImages'] ?? false) {
             $multipleFilesTypeConverter = GeneralUtility::makeInstance(UploadMultipleFilesConverter::class);
             $this->arguments->getArgument('topic')
                 ->getPropertyMappingConfiguration()

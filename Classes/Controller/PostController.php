@@ -46,7 +46,7 @@ class PostController extends AbstractController
     {
         $this->preProcessControllerAction();
 
-        if ($this->settings['useImages']) {
+        if ($this->settings['useImages'] ?? false) {
             $multipleFilesTypeConverter = GeneralUtility::makeInstance(UploadMultipleFilesConverter::class);
             $this->arguments->getArgument('newPost')
                 ->getPropertyMappingConfiguration()
@@ -139,7 +139,7 @@ class PostController extends AbstractController
         $argument = $this->request->getArgument('post');
         /** @var Post $post */
         $post = $this->postRepository->findByIdentifier($argument['__identity']);
-        if ($this->settings['useImages']) {
+        if ($this->settings['useImages'] ?? false) {
             $multipleFilesTypeConverter = GeneralUtility::makeInstance(UploadMultipleFilesConverter::class);
             $this->arguments->getArgument('post')
                 ->getPropertyMappingConfiguration()
