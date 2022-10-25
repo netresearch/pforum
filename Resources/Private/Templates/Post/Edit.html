@@ -27,7 +27,9 @@
 				</div>
 			</f:if>
 
-			<div class="col-md-10">
+			<f:variable name="columns">{f:if(condition: topic.images, then: 10, else: 12)}</f:variable>
+
+			<div class="col-md-{columns}">
 				<div class="card-body">
 					<div class="d-flex w-100 justify-content-between">
 						<h5 class="mb-1">
