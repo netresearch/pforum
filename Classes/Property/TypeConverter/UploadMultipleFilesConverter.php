@@ -47,11 +47,20 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
      */
     protected $priority = 2;
 
-    protected Folder $uploadFolder;
+    /**
+     * @var Folder
+     */
+    protected $uploadFolder;
 
-    protected PropertyMappingConfigurationInterface $converterConfiguration;
+    /**
+     * @var PropertyMappingConfigurationInterface
+     */
+    protected $converterConfiguration;
 
-    protected EventDispatcher $eventDispatcher;
+    /**
+     * @var EventDispatcher
+     */
+    protected $eventDispatcher;
 
     /**
      * Do not inject this property, as EXT:checkfaluploads may not be loaded

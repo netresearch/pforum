@@ -16,11 +16,20 @@ use TYPO3\CMS\Extbase\Mvc\Request;
 
 class PreProcessControllerActionEvent implements ControllerActionEventInterface
 {
-    protected Request $request;
+    /**
+     * @var Request
+     */
+    protected $request;
 
-    protected Arguments $arguments;
+    /**
+     * @var Arguments
+     */
+    protected $arguments;
 
-    protected array $settings = [];
+    /**
+     * @var array
+     */
+    protected $settings = [];
 
     public function __construct(
         Request $request,
