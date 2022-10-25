@@ -16,3 +16,7 @@ services:
     tags:
     - name: event.listener
       event: JWeiland\Pforum\Event\PreProcessControllerActionEvent
+  JWeiland\Pforum\EventListener\ApplyUsernameAsMandatoryIfNeededEventListener:
+    tags:
+    - name: event.listener
+      event: JWeiland\Pforum\Event\PreProcessControllerActionEvent

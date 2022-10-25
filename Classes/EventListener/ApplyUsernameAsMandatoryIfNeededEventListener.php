@@ -15,15 +15,14 @@ use JWeiland\Pforum\Event\PreProcessControllerActionEvent;
 use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Validation\Validator\ConjunctionValidator;
-use TYPO3\CMS\Extbase\Validation\Validator\EmailAddressValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\GenericObjectValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\NotEmptyValidator;
 use TYPO3\CMS\Extbase\Validation\ValidatorResolver;
 
 /**
- * Add validator for email in topic/post records, if it is was configured in typoscript
+ * Add validator for username in topic/post records, if it is was configured in typoscript
  */
-class ApplyEmailAsMandatoryIfNeededEventListener extends AbstractControllerEventListener
+class ApplyUsernameAsMandatoryIfNeededEventListener extends AbstractControllerEventListener
 {
     /**
      * @var ObjectManagerInterface
@@ -50,12 +49,10 @@ class ApplyEmailAsMandatoryIfNeededEventListener extends AbstractControllerEvent
     {
         if (
             $this->isValidRequest($controllerActionEvent)
-            && ($controllerActionEvent->getSettings()['emailIsMandatory'] ?? false)
+            && ($controllerActionEvent->getSettings()['usernameIsMandatory'] ?? false)
             && ($validatorResolver = $this->objectManager->get(ValidatorResolver::class))
             && ($notEmptyValidator = $validatorResolver->createValidator(NotEmptyValidator::class))
             && $notEmptyValidator instanceof NotEmptyValidator
-            && ($emailValidator = $validatorResolver->createValidator(EmailAddressValidator::class))
-            && $emailValidator instanceof EmailAddressValidator
             && ($argumentName = $this->getArgumentName($controllerActionEvent))
         ) {
             /** @var ConjunctionValidator $eventValidator */
@@ -68,10 +65,6 @@ class ApplyEmailAsMandatoryIfNeededEventListener extends AbstractControllerEvent
                 $this->getUsersPropertyName($controllerActionEvent->getRequest(), $argumentName),
                 $notEmptyValidator
             );
-            $genericEventValidator->addPropertyValidator(
-                $this->getUsersPropertyName($controllerActionEvent->getRequest(), $argumentName),
-                $emailValidator
-            );
         }
     }
 
@@ -83,11 +76,11 @@ class ApplyEmailAsMandatoryIfNeededEventListener extends AbstractControllerEvent
         }
 
         if (array_key_exists('anonymousUser', $requestedArgument)) {
-            return 'anonymousUser.email';
+            return 'anonymousUser.username';
         }
 
         if (array_key_exists('frontendUser', $requestedArgument)) {
-            return 'frontendUser.email';
+            return 'frontendUser.username';
         }
 
         return '';
