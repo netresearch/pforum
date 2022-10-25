@@ -26,7 +26,8 @@ class UsernameValidator extends AbstractValidator
     public function isValid($value): void
     {
         if (
-            $this->settings['usernameIsMandatory']
+            isset($this->settings['usernameIsMandatory'])
+            && $this->settings['usernameIsMandatory'] === '1'
             && $value === ''
         ) {
             $this->addError(
