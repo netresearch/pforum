@@ -138,7 +138,7 @@ class PostController extends AbstractController
         $this->registerPostFromRequest('post');
         $argument = $this->request->getArgument('post');
         /** @var Post $post */
-        $post = $this->topicRepository->findByIdentifier($argument['__identity']);
+        $post = $this->postRepository->findByIdentifier($argument['__identity']);
         if ($this->settings['useImages']) {
             $multipleFilesTypeConverter = GeneralUtility::makeInstance(UploadMultipleFilesConverter::class);
             $this->arguments->getArgument('post')
