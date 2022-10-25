@@ -101,19 +101,11 @@ class ApplyUsernameAsMandatoryIfNeededEventListener extends AbstractControllerEv
 
     protected function getArgumentName(PreProcessControllerActionEvent $event): string
     {
-        if ($event->getControllerName() === 'Topic' && $event->getActionName() === 'create') {
-            return 'newTopic';
-        }
-
-        if ($event->getControllerName() === 'Topic' && $event->getActionName() === 'update') {
+        if ($event->getControllerName() === 'Topic') {
             return 'topic';
         }
 
-        if ($event->getControllerName() === 'Post' && $event->getActionName() === 'create') {
-            return 'newPost';
-        }
-
-        if ($event->getControllerName() === 'Post' && $event->getActionName() === 'update') {
+        if ($event->getControllerName() === 'Post') {
             return 'post';
         }
 

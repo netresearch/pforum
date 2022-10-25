@@ -18,19 +18,19 @@
 				</f:link.action>
 			</li>
 			<li class="breadcrumb-item active" aria-current="page">
-				{f:translate(key: 'newTopic')}
+				{f:translate(key: 'topic')}
 			</li>
 		</ol>
 	</nav>
 
-	<f:form action="create" name="newTopic" object="{newTopic}" arguments="{forum: forum}" enctype="multipart/form-data">
-		<f:render partial="FormErrors" arguments="{object: 'newTopic'}" />
+	<f:form action="create" name="topic" object="{topic}" arguments="{forum: forum}" enctype="multipart/form-data">
+		<f:render partial="FormErrors" arguments="{object: 'topic'}" />
 
 		<f:if condition="{settings.auth} == 1">
-			<f:render partial="User/FormFields" arguments="{object: 'newTopic'}" />
+			<f:render partial="User/FormFields" arguments="{object: 'topic'}" />
 		</f:if>
 
-		<f:render partial="Topic/FormFields" arguments="{object: 'newTopic'}" />
+		<f:render partial="Topic/FormFields" arguments="{object: 'topic'}" />
 
 		<div class="mb-3">
 			<f:form.submit class="btn btn-primary" value="{f:translate(key: 'newTopic')}" />

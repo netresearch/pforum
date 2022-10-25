@@ -56,11 +56,11 @@ class TopicController extends AbstractController
 
     public function newAction(Forum $forum): void
     {
-        $this->deleteUploadedFilesOnValidationErrors('newTopic');
+        $this->deleteUploadedFilesOnValidationErrors('topic');
 
         $this->postProcessAndAssignFluidVariables([
             'forum' => $forum,
-            'newTopic' => GeneralUtility::makeInstance(Topic::class),
+            'topic' => GeneralUtility::makeInstance(Topic::class),
         ]);
     }
 
@@ -70,47 +70,39 @@ class TopicController extends AbstractController
     public function initializeCreateAction(): void
     {
         $this->preProcessControllerAction();
-
-        if ($this->settings['useImages'] ?? false) {
-            $multipleFilesTypeConverter = GeneralUtility::makeInstance(UploadMultipleFilesConverter::class);
-            $this->arguments->getArgument('newTopic')
-                ->getPropertyMappingConfiguration()
-                ->forProperty('images')
-                ->setTypeConverter($multipleFilesTypeConverter);
-        }
     }
 
-    public function createAction(Forum $forum, Topic $newTopic): void
+    public function createAction(Forum $forum, Topic $topic): void
     {
         // if auth = frontend user
         if ((int)$this->settings['auth'] === 2) {
-            $this->addFeUserToTopic($forum, $newTopic);
+            $this->addFeUserToTopic($forum, $topic);
         }
 
-        $forum->addTopic($newTopic);
+        $forum->addTopic($topic);
         $this->forumRepository->update($forum);
 
         // if a preview was requested direct to preview action
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
-            $newTopic->setHidden(true); // topic should not be visible while previewing
+            $topic->setHidden(true); // topic should not be visible while previewing
             $this->persistenceManager->persistAll(); // we need an uid before redirecting
             $this->redirect(
                 'edit',
                 'Topic',
                 'Pforum',
-                ['topic' => $newTopic, 'isPreview' => true, 'isNew' => true]
+                ['topic' => $topic, 'isPreview' => true, 'isNew' => true]
             );
         }
 
         if ($this->settings['topic']['hideAtCreation']) {
-            $newTopic->setHidden(true);
+            $topic->setHidden(true);
         }
 
         // if auth = anonymous user
         // send a mail to the user to activate, edit or delete his entry
         if (((int)$this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
             $this->persistenceManager->persistAll(); // we need an uid before mailing
-            $this->mailToUser($newTopic);
+            $this->mailToUser($topic);
         }
 
         $this->addFlashMessageForCreation();
@@ -152,23 +144,9 @@ class TopicController extends AbstractController
      */
     public function initializeUpdateAction(): void
     {
+        $this->preProcessControllerAction();
+
         $this->registerTopicFromRequest('topic');
-        $argument = $this->request->getArgument('topic');
-        /** @var Topic $topic */
-        $topic = $this->topicRepository->findByIdentifier($argument['__identity']);
-        if ($this->settings['useImages'] ?? false) {
-            $multipleFilesTypeConverter = GeneralUtility::makeInstance(UploadMultipleFilesConverter::class);
-            $this->arguments->getArgument('topic')
-                ->getPropertyMappingConfiguration()
-                ->forProperty('images')
-                ->setTypeConverter($multipleFilesTypeConverter)
-                ->setTypeConverterOptions(
-                    UploadMultipleFilesConverter::class,
-                    [
-                        'IMAGES' => $topic->getImages()
-                    ]
-                );
-        }
     }
 
     /**
@@ -220,6 +198,8 @@ class TopicController extends AbstractController
      */
     public function initializeDeleteAction(): void
     {
+        $this->preProcessControllerAction();
+
         $this->registerTopicFromRequest('topic');
     }
 
@@ -236,6 +216,8 @@ class TopicController extends AbstractController
      */
     public function initializeActivateAction(): void
     {
+        $this->preProcessControllerAction();
+
         $this->registerTopicFromRequest('topic');
     }
 
@@ -260,21 +242,24 @@ class TopicController extends AbstractController
         $argument = $this->request->getArgument($argumentName);
         if (is_array($argument)) {
             // get topic from form ($_POST)
-            $topic = $this->topicRepository->findHiddenEntryByUid((int)$argument['__identity']);
+            $topic = $this->topicRepository->findHiddenObject((int)$argument['__identity']);
         } else {
             // get topic from UID
-            $topic = $this->topicRepository->findHiddenEntryByUid((int)$argument);
+            $topic = $this->topicRepository->findHiddenObject((int)$argument);
         }
-        $this->session->registerObject($topic, $topic->getUid());
+
+        if ($topic instanceof Topic) {
+            $this->session->registerObject($topic, $topic->getUid());
+        }
     }
 
-    protected function addFeUserToTopic(Forum $forum, Topic $newTopic): void
+    protected function addFeUserToTopic(Forum $forum, Topic $topic): void
     {
         if (is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid']) {
             $user = $this->frontendUserRepository->findByUid(
                 (int)$GLOBALS['TSFE']->fe_user->user['uid']
             );
-            $newTopic->setFrontendUser($user);
+            $topic->setFrontendUser($user);
         } else {
             /* normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated */
             $this->addFlashMessage(

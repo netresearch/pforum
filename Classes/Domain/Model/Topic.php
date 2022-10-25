@@ -186,13 +186,18 @@ class Topic extends AbstractEntity
         return $user;
     }
 
+    public function getOriginalImages(): ObjectStorage
+    {
+        return $this->images;
+    }
+
     /**
-     * Returns the images.
-     *
      * @return array|FileReference[]
      */
     public function getImages(): array
     {
+        // ObjectStorage has SplObjectHashes as key which we don't know in Fluid
+        // so we convert ObjectStorage to array to get numbered keys
         $references = [];
         foreach ($this->images as $image) {
             $references[] = $image;

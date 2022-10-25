@@ -13,6 +13,7 @@ namespace JWeiland\Pforum\Domain\Repository;
 
 use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
+use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -22,7 +23,7 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
  *
  * @method QueryResultInterface findByTopic(Topic $topic)
  */
-class PostRepository extends Repository
+class PostRepository extends Repository implements HiddenRepositoryInterface
 {
     /**
      * @var array
@@ -42,14 +43,21 @@ class PostRepository extends Repository
         return $query->matching($query->equals('hidden', 1))->execute();
     }
 
-    public function findHiddenEntryByUid(int $postUid): Post
+    /**
+     * @param mixed $value
+     */
+    public function findHiddenObject($value, string $property = 'uid'): ?Post
     {
         $query = $this->createQuery();
         $query->getQuerySettings()->setIgnoreEnableFields(true);
         $query->getQuerySettings()->setEnableFieldsToBeIgnored(['disabled']);
+        $query->getQuerySettings()->setRespectStoragePage(false);
 
-        /** @var Post $post */
-        $post = $query->matching($query->equals('uid', $postUid))->execute()->getFirst();
-        return $post;
+        $firstObject = $query->matching($query->equals($property, $value))->execute()->getFirst();
+        if ($firstObject instanceof Post) {
+            return $firstObject;
+        }
+
+        return null;
     }
 }

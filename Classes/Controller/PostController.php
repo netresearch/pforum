@@ -30,13 +30,13 @@ class PostController extends AbstractController
 {
     /**
      * @param Topic $topic
-     * @param Post|null $newPost
-     * @Extbase\IgnoreValidation("newPost")
+     * @param Post|null $post
+     * @Extbase\IgnoreValidation("post")
      */
-    public function newAction(Topic $topic, Post $newPost = null): void
+    public function newAction(Topic $topic, Post $post = null): void
     {
         $this->view->assign('topic', $topic);
-        $this->view->assign('newPost', $newPost);
+        $this->view->assign('post', $post);
     }
 
     /**
@@ -45,35 +45,27 @@ class PostController extends AbstractController
     public function initializeCreateAction(): void
     {
         $this->preProcessControllerAction();
-
-        if ($this->settings['useImages'] ?? false) {
-            $multipleFilesTypeConverter = GeneralUtility::makeInstance(UploadMultipleFilesConverter::class);
-            $this->arguments->getArgument('newPost')
-                ->getPropertyMappingConfiguration()
-                ->forProperty('images')
-                ->setTypeConverter($multipleFilesTypeConverter);
-        }
     }
 
-    public function createAction(Topic $topic, Post $newPost): void
+    public function createAction(Topic $topic, Post $post): void
     {
         // if auth = frontend user
         if ((int)$this->settings['auth'] === 2) {
-            $this->addFeUserToPost($topic, $newPost);
+            $this->addFeUserToPost($topic, $post);
         }
 
-        $topic->addPost($newPost);
+        $topic->addPost($post);
         $this->topicRepository->update($topic);
 
         // if a preview was requested direct to preview action
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
-            $newPost->setHidden(true); // post should not be visible while previewing
+            $post->setHidden(true); // post should not be visible while previewing
             $this->persistenceManager->persistAll(); // we need an uid before redirecting
             $this->redirect(
                 'edit',
                 'Post',
                 'Pforum',
-                ['post' => $newPost, 'isPreview' => true, 'isNew' => true]
+                ['post' => $post, 'isPreview' => true, 'isNew' => true]
             );
         }
 
@@ -81,23 +73,23 @@ class PostController extends AbstractController
             isset($this->settings['post']['hideAtCreation'])
             && $this->settings['post']['hideAtCreation'] === '1'
         ) {
-            $newPost->setHidden(true);
+            $post->setHidden(true);
         }
 
         // if auth = anonymous user
         /* send a mail to the user to activate, edit or delete his entry */
         if (((int)$this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
             $this->persistenceManager->persistAll(); // we need an uid for mailing
-            $this->mailToUser($newPost);
+            $this->mailToUser($post);
         }
 
         if (
-            $newPost->getHidden() === false
+            $post->getHidden() === false
             && $topic->getUser() instanceof User
             && $topic->getUser()->getEmail() !== ''
         ) {
             // Send an email to creator of topic to inform him about new comments/posts
-            $this->mailToTopicCreator($topic, $newPost);
+            $this->mailToTopicCreator($topic, $post);
         }
 
         $this->addFlashMessageForCreation();
@@ -110,6 +102,8 @@ class PostController extends AbstractController
      */
     public function initializeEditAction(): void
     {
+        $this->preProcessControllerAction();
+
         $this->registerPostFromRequest('post');
     }
 
@@ -136,22 +130,6 @@ class PostController extends AbstractController
         $this->preProcessControllerAction();
 
         $this->registerPostFromRequest('post');
-        $argument = $this->request->getArgument('post');
-        /** @var Post $post */
-        $post = $this->postRepository->findByIdentifier($argument['__identity']);
-        if ($this->settings['useImages'] ?? false) {
-            $multipleFilesTypeConverter = GeneralUtility::makeInstance(UploadMultipleFilesConverter::class);
-            $this->arguments->getArgument('post')
-                ->getPropertyMappingConfiguration()
-                ->forProperty('images')
-                ->setTypeConverter($multipleFilesTypeConverter)
-                ->setTypeConverterOptions(
-                    UploadMultipleFilesConverter::class,
-                    [
-                        'IMAGES' => $post->getImages()
-                    ]
-                );
-        }
     }
 
     /**
@@ -204,6 +182,8 @@ class PostController extends AbstractController
      */
     public function initializeDeleteAction(): void
     {
+        $this->preProcessControllerAction();
+
         $this->registerPostFromRequest('post');
     }
 
@@ -239,6 +219,8 @@ class PostController extends AbstractController
      */
     public function initializeActivateAction(): void
     {
+        $this->preProcessControllerAction();
+
         $this->registerPostFromRequest('post');
     }
 
@@ -260,16 +242,6 @@ class PostController extends AbstractController
     }
 
     /**
-     * @var PageRenderer
-     */
-    protected $pageRenderer;
-
-    public function injectPageRenderer(PageRenderer $pageRenderer): void
-    {
-        $this->pageRenderer = $pageRenderer;
-    }
-
-    /**
      * This is a workaround to help controller actions to find (hidden) posts.
      */
     protected function registerPostFromRequest(string $argumentName): void
@@ -277,21 +249,24 @@ class PostController extends AbstractController
         $argument = $this->request->getArgument($argumentName);
         if (is_array($argument)) {
             // get post from form ($_POST)
-            $post = $this->postRepository->findHiddenEntryByUid((int)$argument['__identity']);
+            $post = $this->postRepository->findHiddenObject((int)$argument['__identity']);
         } else {
             // get post from UID
-            $post = $this->postRepository->findHiddenEntryByUid((int)$argument);
+            $post = $this->postRepository->findHiddenObject((int)$argument);
         }
-        $this->session->registerObject($post, $post->getUid());
+
+        if ($post instanceof Post) {
+            $this->session->registerObject($post, $post->getUid());
+        }
     }
 
-    protected function addFeUserToPost(Topic $topic, Post $newPost): void
+    protected function addFeUserToPost(Topic $topic, Post $post): void
     {
         if (is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid']) {
             $user = $this->frontendUserRepository->findByUid(
                 (int)$GLOBALS['TSFE']->fe_user->user['uid']
             );
-            $newPost->setFrontendUser($user);
+            $post->setFrontendUser($user);
         } else {
             /* normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated */
             $this->addFlashMessage('You must be logged in before creating a post');

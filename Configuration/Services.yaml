@@ -16,6 +16,14 @@ services:
     tags:
     - name: event.listener
       event: JWeiland\Pforum\Event\PreProcessControllerActionEvent
+  JWeiland\Pforum\EventListener\AssignMediaTypeConverterForTopicEventListener:
+    tags:
+    - name: event.listener
+      event: JWeiland\Pforum\Event\PreProcessControllerActionEvent
+  JWeiland\Pforum\EventListener\AssignMediaTypeConverterForPostEventListener:
+    tags:
+    - name: event.listener
+      event: JWeiland\Pforum\Event\PreProcessControllerActionEvent
   JWeiland\Pforum\EventListener\ApplyUsernameAsMandatoryIfNeededEventListener:
     tags:
     - name: event.listener
