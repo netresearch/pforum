@@ -121,19 +121,6 @@
 	</f:if>
 </f:section>
 
-<f:section name="checkAndRenderCreationButton">
-	<f:if condition="{settings.auth} == 1">
-		<f:then>
-			<f:render section="renderCreationButton" arguments="{_all}" />
-		</f:then>
-		<f:else>
-			<f:security.ifHasRole role="{settings.uidOfUserGroup}">
-				<f:render section="renderCreationButton" arguments="{_all}" />
-			</f:security.ifHasRole>
-		</f:else>
-	</f:if>
-</f:section>
-
 <f:section name="renderCreationButton">
 	<f:if condition="{pf:isCreateButtonAllowed(authType: settings.auth, userGroupUid: uidOfUserGroup)}">
 		<p>
