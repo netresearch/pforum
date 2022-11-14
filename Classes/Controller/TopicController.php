@@ -14,7 +14,6 @@ namespace JWeiland\Pforum\Controller;
 use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Domain\Model\Topic;
 use JWeiland\Pforum\Helper\FrontendGroupHelper;
-use JWeiland\Pforum\Property\TypeConverter\UploadMultipleFilesConverter;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\FluidEmail;
 use TYPO3\CMS\Core\Mail\Mailer;
