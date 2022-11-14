@@ -18,10 +18,10 @@ use JWeiland\Pforum\Domain\Repository\TopicRepository;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Main controller to list and show postings/questions
@@ -56,19 +56,35 @@ class AdministrationController extends ActionController
 
     /**
      * Set up the doc header properly here
-     *
-     * @param ViewInterface $view
      */
-    protected function initializeView(ViewInterface $view)
+    protected function initializeView(ViewInterface $view): void
     {
-        /** @var BackendTemplateView $view */
-        parent::initializeView($view);
-        $view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation([]);
+        if ($view instanceof BackendTemplateView) {
+            parent::initializeView($view);
+            //$view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation([]);
 
-        $this->createButtons();
+            $this->createDocheaderActionButtons();
+            $this->createShortcutButton();
+        }
     }
 
-    protected function createButtons()
+    protected function createDocheaderActionButtons(): void
+    {
+        if (!in_array($this->actionMethodName, ['indexAction', 'listHiddenTopicsAction', 'listHiddenPostsAction'], true)) {
+            return;
+        }
+
+        $buttonBar = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
+        $uriBuilder = $this->controllerContext->getUriBuilder();
+
+        $button = $buttonBar->makeLinkButton()
+            ->setHref($uriBuilder->reset()->uriFor('index', [], 'Administration'))
+            ->setTitle('Back')
+            ->setIcon($this->view->getModuleTemplate()->getIconFactory()->getIcon('actions-view-go-back', Icon::SIZE_SMALL));
+        $buttonBar->addButton($button, ButtonBar::BUTTON_POSITION_LEFT);
+    }
+
+    protected function createShortcutButton(): void
     {
         $buttonBar = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
 
@@ -80,23 +96,18 @@ class AdministrationController extends ActionController
         $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
     }
 
-    public function listHiddenAction(): void
+    public function indexAction(): void
     {
-        $topics = $this->topicRepository->findAllHidden()->toArray();
-        $posts = $this->postRepository->findAllHidden()->toArray();
-        $hasRecords = !empty($topics) || !empty($posts);
+    }
 
-        if (!$hasRecords) {
-            $this->addFlashMessage(
-                LocalizationUtility::translate('be.noRecordsInStorage', 'Pforum'),
-                'No records found',
-                FlashMessage::NOTICE
-            );
-        }
+    public function listHiddenTopicsAction(): void
+    {
+        $this->view->assign('topics', $this->topicRepository->findAllHidden()->toArray());
+    }
 
-        $this->view->assign('hasRecords', $hasRecords);
-        $this->view->assign('topics', $topics);
-        $this->view->assign('posts', $posts);
+    public function listHiddenPostsAction(): void
+    {
+        $this->view->assign('posts', $this->postRepository->findAllHidden()->toArray());
     }
 
     /**
@@ -109,9 +120,9 @@ class AdministrationController extends ActionController
         $this->addFlashMessage(
             'Topic "' . $record->getTitle() . '" was activated.',
             'Topic activated',
-            FlashMessage::INFO
+            AbstractMessage::INFO
         );
-        $this->redirect('listHidden');
+        $this->redirect('listHiddenTopics');
     }
 
     /**
@@ -124,9 +135,9 @@ class AdministrationController extends ActionController
         $this->addFlashMessage(
             'Post "' . $record->getTitle() . '" was activated.',
             'Post activated',
-            FlashMessage::INFO
+            AbstractMessage::INFO
         );
-        $this->redirect('listHidden');
+        $this->redirect('listHiddenPosts');
     }
 
     protected function getBackendUser(): BackendUserAuthentication

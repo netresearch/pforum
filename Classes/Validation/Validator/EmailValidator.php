@@ -26,8 +26,12 @@ class EmailValidator extends AbstractValidator
      */
     public function isValid($value): void
     {
-        if ($this->settings['emailIsMandatory'] && is_string($value)) {
-            if (empty($value)) {
+        if (
+            isset($this->settings['emailIsMandatory'])
+            && $this->settings['emailIsMandatory'] === '1'
+            && is_string($value)
+        ) {
+            if ($value === '') {
                 $this->addError(
                     LocalizationUtility::translate('validator.anonymousUser.email', 'pforum'),
                     1378288238

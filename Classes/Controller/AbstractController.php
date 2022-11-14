@@ -18,6 +18,8 @@ use JWeiland\Pforum\Domain\Repository\ForumRepository;
 use JWeiland\Pforum\Domain\Repository\FrontendUserRepository;
 use JWeiland\Pforum\Domain\Repository\PostRepository;
 use JWeiland\Pforum\Domain\Repository\TopicRepository;
+use JWeiland\Pforum\Event\PostProcessFluidVariablesEvent;
+use JWeiland\Pforum\Event\PreProcessControllerActionEvent;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -120,13 +122,12 @@ class AbstractController extends ActionController
             ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
         );
 
-        if (is_array($mergedSettings)) {
-            foreach ($mergedSettings as $key => $value) {
-                if (!is_array($value) && empty($value)) {
-                    $mergedSettings[$key] = $tsSettings[$key];
-                }
+        foreach ($mergedSettings as $key => $value) {
+            if (!is_array($value) && empty($value)) {
+                $mergedSettings[$key] = $tsSettings[$key];
             }
         }
+
         $this->settings = $mergedSettings;
     }
 
@@ -150,7 +151,7 @@ class AbstractController extends ActionController
             empty($this->settings['topic']['activateByAdmin']) &&
             empty($this->settings['emailIsMandatory'])
         ) {
-            throw new \Exception(
+            throw new \RuntimeException(
                 'You can\'t hide topics at creation, deactivate admin activation and mark email as NOT mandatory.' .
                 'This would produce hidden records which will never be visible',
                 1378371532
@@ -161,7 +162,7 @@ class AbstractController extends ActionController
             empty($this->settings['post']['activateByAdmin']) &&
             empty($this->settings['emailIsMandatory'])
         ) {
-            throw new \Exception(
+            throw new \RuntimeException(
                 'You can\'t hide posts at creation, deactivate admin activation and mark email ' .
                 'as NOT mandatory. This would produce hidden records which will never be visible',
                 1378371541
@@ -172,8 +173,6 @@ class AbstractController extends ActionController
     /**
      * files will be uploaded in typeConverter automatically
      * But, if an error occurs we have to remove them.
-     *
-     * @param string $argument
      */
     protected function deleteUploadedFilesOnValidationErrors(string $argument): void
     {
@@ -185,5 +184,30 @@ class AbstractController extends ActionController
                 $image->getOriginalResource()->getOriginalFile()->delete();
             }
         }
+    }
+
+    protected function postProcessAndAssignFluidVariables(array $variables = []): void
+    {
+        /** @var PostProcessFluidVariablesEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            new PostProcessFluidVariablesEvent(
+                $this->request,
+                $this->settings,
+                $variables
+            )
+        );
+
+        $this->view->assignMultiple($event->getFluidVariables());
+    }
+
+    protected function preProcessControllerAction(): void
+    {
+        $this->eventDispatcher->dispatch(
+            new PreProcessControllerActionEvent(
+                $this->request,
+                $this->arguments,
+                $this->settings
+            )
+        );
     }
 }

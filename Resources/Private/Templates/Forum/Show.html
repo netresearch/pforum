@@ -1,51 +1,85 @@
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:pf="http://typo3.org/ns/JWeiland/Pforum/ViewHelper"
+			data-namespace-typo3-fluid="true">
+
 <f:layout name="Default" />
 
 <f:section name="main">
 	<f:flashMessages />
 
-	<div class="breadcrumb">
-		<f:link.action action="list">{f:translate(key: 'tx_pforum_domain_model_forum')} »</f:link.action> {forum.title}
-	</div>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<f:link.action action="list" controller="Forum">{f:translate(key: 'tx_pforum_domain_model_forum')}</f:link.action>
+			</li>
+			<li class="breadcrumb-item active" aria-current="page">{forum.title}</li>
+		</ol>
+	</nav>
 
-	<header>
-		<h2>{forum.title}</h2>
-	</header>
+	<h2>{forum.title}</h2>
 
-	<f:render partial="Auth/Content" arguments="{subpartial: 'Link', data: {pageUid: settings.pidOfDetailPage, action: 'new', controller: 'Topic', arguments: {forum: forum}, translationKey: 'newTopic'}}" />
+	<f:render section="renderCreationButton" arguments="{_all}" />
 
 	<f:if condition="{topics}">
 		<f:then>
-			<div class="container">
-				<f:widget.paginate objects="{topics}" as="paginatedTopics" configuration="{itemsPerPage: settings.pageBrowser.itemsPerPage, insertAbove: settings.pageBrowser.insertAbove, insertBelow: settings.pageBrowser.insertBelow, maximumNumberOfLinks: settings.pageBrowser.maximumNumberOfLinks}">
-					<f:for each="{paginatedTopics}" as="topic">
-						<div class="borderbottom">
-							<h3>
+			<f:for each="{topics}" as="topic">
+				<div class="row border-bottom mb-3">
+					<div class="col-md-12">
+						<div class="d-flex w-100 justify-content-between">
+							<h5 class="mb-1">
 								<f:link.action pageUid="{settings.pidOfDetailPage}"
-											   action="show"
-											   controller="Topic"
-											   arguments="{topic: topic, forum: forum}">
+															 action="show"
+															 controller="Topic"
+															 arguments="{topic: topic, forum: forum}">
 									{topic.title}
 								</f:link.action>
-							</h3>
-
-							<div>
-								{topic.crdate -> f:format.date(format: 'd.m.Y')}&nbsp;| <f:translate key="from"/>: <f:render partial="User/Username" arguments="{user: topic.user}" /> | {topic.posts ->f:count()}&nbsp;<f:translate key="tx_pforum_domain_model_topic.posts"/>
-							</div>
-
-							<f:if condition="{topic.hidden}">
-								<div>
-									<f:form action="activate" controller="Topic" name="topic" arguments="{topic: topic}">
-										<f:form.submit value="{f:translate(key: 'activate')}" />
-									</f:form>
-								</div>
-							</f:if>
+							</h5>
+							<small>
+								{topic.crdate -> f:format.date(format: 'd.m.Y')}&nbsp;|
+								{f:translate(key: 'from')}:
+								<f:render partial="User/Username" arguments="{user: topic.user}" /> |
+								{topic.posts -> f:count()}&nbsp;{f:translate(key: 'tx_pforum_domain_model_topic.posts')}
+							</small>
 						</div>
-					</f:for>
-				</f:widget.paginate>
-			</div>
+
+						<f:if condition="{topic.description}">
+							<p class="mb-1">{topic.description -> f:format.crop(maxCharacters: 150, respectWordBoundaries: true, respectHtml: true)}</p>
+						</f:if>
+
+						<f:if condition="{topic.hidden}">
+							<div>
+								<f:form action="activate" controller="Topic" name="topic" arguments="{topic: topic}">
+									<f:form.submit value="{f:translate(key: 'activate')}" />
+								</f:form>
+							</div>
+						</f:if>
+					</div>
+				</div>
+			</f:for>
+
+			<f:render partial="Component/Pagination"
+								arguments="{pagination: pagination, paginator: paginator, actionName: 'show'}" />
 		</f:then>
 		<f:else>
-			<p class="noResults">{f:translate(key: 'noTopics')}</p>
+			<div class="alert alert-info" role="alert">
+				{f:translate(key: 'noTopics')}
+			</div>
 		</f:else>
 	</f:if>
 </f:section>
+
+<f:section name="renderCreationButton">
+	<f:if condition="{pf:isCreateButtonAllowed(authType: settings.auth, userGroupUid: uidOfUserGroup)}">
+		<p>
+			<f:link.action action="new"
+										 controller="Topic"
+										 pageUid="{settings.pidOfDetailPage}"
+										 class="btn btn-primary"
+										 arguments="{forum: forum}">
+				{f:translate(key: 'newTopic')}
+			</f:link.action>
+		</p>
+	</f:if>
+</f:section>
+</html>

@@ -1,59 +1,137 @@
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:pf="http://typo3.org/ns/JWeiland/Pforum/ViewHelper"
+			data-namespace-typo3-fluid="true">
+
 <f:layout name="Default" />
 
 <f:section name="main">
-
 	<f:flashMessages />
-	<div class="breadcrumb"><f:link.action action="show" controller="Forum" arguments="{forum: topic.forum}">{topic.forum.title} » </f:link.action> {topic.title}</div>
 
-	<div class="marginbottom">
-		<header><h1>{topic.title}</h1></header>
-		<div class="csc-textpic csc-textpic-intext-left">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<f:link.action action="list" controller="Forum">{f:translate(key: 'tx_pforum_domain_model_forum')}</f:link.action>
+			</li>
+			<li class="breadcrumb-item">
+				<f:link.action action="show" controller="Forum" arguments="{forum: topic.forum}">
+					{topic.forum.title}
+				</f:link.action>
+			</li>
+			<li class="breadcrumb-item active" aria-current="page">
+				{topic.title}
+			</li>
+		</ol>
+	</nav>
+
+	<div class="card mb-3 bg-light">
+		<div class="row g-0">
 			<f:if condition="{topic.images}">
-				<div class="csc-textpic-imagewrap">
+				<div class="col-md-2">
 					<f:for each="{topic.images}" as="image">
-						<div class="csc-textpic-imagerow imagecol1">
-							<figure>
-								<f:image image="{image}" alt="{image.title}" width="{settings.image.width}" height="{settings.image.height}" minWidth="{settings.image.minWidth}" maxWidth="{settings.image.maxWidth}" minHeight="{settings.image.minHeight}" maxHeight="{settings.image.maxHeight}" />
-							</figure>
-						</div>
+						<f:image image="{image}"
+										 alt="{image.title}"
+										 class="img-fluid rounded-start mb-3"
+										 width="{settings.image.width}"
+										 height="{settings.image.height}"
+										 minWidth="{settings.image.minWidth}"
+										 maxWidth="{settings.image.maxWidth}"
+										 minHeight="{settings.image.minHeight}"
+										 maxHeight="{settings.image.maxHeight}"/>
 					</f:for>
 				</div>
 			</f:if>
-			<div class="csc-textpic-text"><p>{topic.description -> f:format.html(parseFuncTSPath: 'lib.parseFunc') ->f:format.nl2br()}</p></div>
+
+			<f:variable name="columns">{f:if(condition: topic.images, then: 10, else: 12)}</f:variable>
+
+			<div class="col-md-{columns}">
+				<div class="card-body">
+					<div class="d-flex w-100 justify-content-between">
+						<h5 class="mb-1">
+							{topic.title}
+						</h5>
+						<small>
+							{topic.crdate -> f:format.date(format: 'd.m.Y')}&nbsp;|
+							{f:translate(key: 'from')}:
+							<f:render partial="User/Username" arguments="{user: topic.user}" /> |
+							{topic.posts -> f:count()}&nbsp;{f:translate(key: 'tx_pforum_domain_model_topic.posts')}
+						</small>
+					</div>
+
+					<f:if condition="{topic.description}">
+						<p class="card-text">{topic.description -> f:format.html(parseFuncTSPath: 'lib.parseFunc') -> f:format.nl2br()}</p>
+					</f:if>
+				</div>
+			</div>
 		</div>
-		<div>{topic.crdate -> f:format.date(format: 'd.m.Y')} | <f:translate key="from"/>: <f:render partial="User/Username" arguments="{user: topic.user}"/></div>
 	</div>
 
-	<f:render partial="Auth/Content" arguments="{subpartial: 'Link', data: {pageUid: settings.pidOfDetailPage, action: 'new', controller: 'Post', arguments: {topic: topic, forum: forum}, translationKey: 'newPost'}}"/>
+	<f:render section="renderCreationButton" arguments="{_all}" />
 
 	<f:if condition="{posts}">
 		<f:then>
-			<header><h2 class="nobordertop"><f:translate key="tx_pforum_domain_model_topic.posts"/></h2></header>
-			<div class="list scroll-container">
-				<f:widget.paginate objects="{posts}" as="paginatedPosts" configuration="{itemsPerPage: settings.pageBrowser.itemsPerPage, insertAbove: settings.pageBrowser.insertAbove, insertBelow: settings.pageBrowser.insertBelow, maximumNumberOfLinks: settings.pageBrowser.maximumNumberOfLinks}">
-					<f:for each="{paginatedPosts}" as="post">
-						<div class="marginbottom scroll-item" style="{f:if(condition: post.hidden, then: 'border: 1px solid red;')}">
-							<div class="borderbottom">
-								<f:if condition="{post.title}"><header><h3 class="noborder nomargin">{post.title}</h3></header></f:if>
-								<div>{post.description -> f:format.html(parseFuncTSPath: 'lib.parseFunc') ->f:format.nl2br()}</div>
-								<div>
-									{post.crdate -> f:format.date(format: 'd.m.Y')} | <f:translate key="from" />:&nbsp;<f:render partial="User/Username" arguments="{user: post.user}" />
-								</div>
-							</div>
-							<f:if condition="{post.hidden}">
-								<div>
-									<f:form action="activate" controller="Post" name="post" arguments="{post: post}">
-										<f:form.submit value="{f:translate(key: 'activate')}" />
-									</f:form>
-								</div>
-							</f:if>
+			<f:for each="{posts}" as="post">
+				<div class="row border-bottom mb-3">
+					<div class="col-md-2">
+						<f:for each="{post.images}" as="image">
+							<f:image image="{image}"
+											 alt="{image.title}"
+											 class="img-fluid rounded-start mb-3"
+											 width="{settings.image.width}"
+											 height="{settings.image.height}"
+											 minWidth="{settings.image.minWidth}"
+											 maxWidth="{settings.image.maxWidth}"
+											 minHeight="{settings.image.minHeight}"
+											 maxHeight="{settings.image.maxHeight}"/>
+						</f:for>
+					</div>
+
+					<f:variable name="columns">{f:if(condition: post.images, then: 10, else: 12)}</f:variable>
+
+					<div class="col-md-{columns}">
+						<div class="d-flex w-100 justify-content-between">
+							<h5 class="mb-1">{post.title}</h5>
+							<small>
+								{post.crdate -> f:format.date(format: 'd.m.Y')} |
+								{f:translate(key: 'from')}:&nbsp;<f:render partial="User/Username" arguments="{user: post.user}" />
+							</small>
 						</div>
-					</f:for>
-				</f:widget.paginate>
-			</div>
+
+						<p class="mb-1">{post.description -> f:format.html(parseFuncTSPath: 'lib.parseFunc') ->f:format.nl2br()}</p>
+
+						<f:if condition="{post.hidden}">
+							<div>
+								<f:form action="activate" controller="Post" name="post" arguments="{post: post}">
+									<f:form.submit value="{f:translate(key: 'activate')}" />
+								</f:form>
+							</div>
+						</f:if>
+					</div>
+				</div>
+			</f:for>
+
+			<f:render partial="Component/Pagination"
+								arguments="{pagination: pagination, paginator: paginator, actionName: 'show'}" />
 		</f:then>
 		<f:else>
-			<div class="noResults"><f:translate key="noPosts" /></div>
+			<div class="alert alert-info" role="alert">
+				{f:translate(key: 'noPosts')}
+			</div>
 		</f:else>
 	</f:if>
 </f:section>
+
+<f:section name="renderCreationButton">
+	<f:if condition="{pf:isCreateButtonAllowed(authType: settings.auth, userGroupUid: uidOfUserGroup)}">
+		<p>
+			<f:link.action action="new"
+										 controller="Post"
+										 pageUid="{settings.pidOfDetailPage}"
+										 class="btn btn-primary"
+										 arguments="{topic: topic, forum: forum}">
+				{f:translate(key: 'newPost')}
+			</f:link.action>
+		</p>
+	</f:if>
+</f:section>
+</html>

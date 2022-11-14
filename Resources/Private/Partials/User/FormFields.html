@@ -1,29 +1,33 @@
-<fieldset class="grid_6">
-	<f:if condition="{topic.anonymousUser.uid}">
-		<f:form.hidden name="anonymousUser[__identity]" value="{topic.anonymousUser.uid}"/>
-	</f:if>
-	<div class="extdiv">
-		<label for="name" class="margintop">
-			<f:translate key="tx_pforum_domain_model_anonymoususer.name"/>
-		</label>
-		<f:form.textfield property="anonymousUser.name"/>
-	</div>
-	<div class="extdiv">
-		<label for="username" class="margintop">
-			<f:translate key="tx_pforum_domain_model_anonymoususer.username"/>
-			<f:if condition="{settings.usernameIsMandatory}">
-				<span class="required">*</span>
-			</f:if>
-		</label>
-		<f:form.textfield property="anonymousUser.username"/>
-	</div>
-	<div class="extdiv">
-		<label for="email" class="margintop">
-			<f:translate key="tx_pforum_domain_model_anonymoususer.email"/>
-			<f:if condition="{settings.emailIsMandatory}">
-				<span class="required">*</span>
-			</f:if>
-		</label>
-		<f:form.textfield property="anonymousUser.email"/>
-	</div>
-</fieldset>
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
+<f:if condition="{topic.anonymousUser.uid}">
+	<f:form.hidden name="anonymousUser[__identity]" value="{topic.anonymousUser.uid}"/>
+</f:if>
+
+<div class="mb-3">
+	<label for="name" class="form-label">{f:translate(key: 'tx_pforum_domain_model_anonymoususer.name')}</label>
+	<f:form.textfield class="form-control" property="anonymousUser.name"/>
+</div>
+
+<div class="mb-3">
+	<label for="username" class="form-label">
+		{f:translate(key: 'tx_pforum_domain_model_anonymoususer.username')}
+		<f:if condition="{settings.usernameIsMandatory}">
+			<span class="required">*</span>
+		</f:if>
+	</label>
+	<f:form.textfield class="form-control" property="anonymousUser.username"/>
+</div>
+
+<div class="mb-3">
+	<label for="email" class="form-label">
+		{f:translate(key: 'tx_pforum_domain_model_anonymoususer.email')}
+		<f:if condition="{settings.emailIsMandatory}">
+			<span class="required">*</span>
+		</f:if>
+	</label>
+	<f:form.textfield class="form-control" property="anonymousUser.email"/>
+</div>
+</html>

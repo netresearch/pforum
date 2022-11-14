@@ -14,86 +14,84 @@ namespace JWeiland\Pforum\Controller;
 use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
 use JWeiland\Pforum\Domain\Model\User;
-use TYPO3\CMS\Core\Mail\MailMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use Symfony\Component\Mime\Address;
+use TYPO3\CMS\Core\Mail\FluidEmail;
+use TYPO3\CMS\Core\Mail\Mailer;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Controller to manage (list and show) postings
  */
-class PostController extends AbstractPostController
+class PostController extends AbstractController
 {
     /**
      * @param Topic $topic
-     * @param Post|null $newPost
-     * @Extbase\IgnoreValidation("newPost")
+     * @param Post|null $post
+     * @Extbase\IgnoreValidation("post")
      */
-    public function newAction(Topic $topic, Post $newPost = null): void
+    public function newAction(Topic $topic, Post $post = null): void
     {
         $this->view->assign('topic', $topic);
-        $this->view->assign('newPost', $newPost);
+        $this->view->assign('post', $post);
     }
 
     /**
-     * Check if email of user object is mandatory or not.
+     * Convert images to array while passing them to post model
      */
     public function initializeCreateAction(): void
     {
-        if ($this->settings['useImages']) {
-            // we have our own implementation how to implement images
-            $this->arguments->getArgument('newPost')
-                ->getPropertyMappingConfiguration()
-                ->setTargetTypeForSubProperty(
-                    'images',
-                    'array'
-                );
-        }
+        $this->preProcessControllerAction();
     }
 
-    /**
-     * @param Topic $topic
-     * @param Post $newPost
-     */
-    public function createAction(Topic $topic, Post $newPost): void
+    public function createAction(Topic $topic, Post $post): void
     {
         // if auth = frontend user
-        if ($this->settings['auth'] == 2) {
-            $this->addFeUserToPost($topic, $newPost);
+        if ((int)$this->settings['auth'] === 2) {
+            $this->addFeUserToPost($topic, $post);
         }
 
-        $topic->addPost($newPost);
+        $topic->addPost($post);
         $this->topicRepository->update($topic);
 
         // if a preview was requested direct to preview action
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
-            $newPost->setHidden(true); // post should not be visible while previewing
+            $post->setHidden(true); // post should not be visible while previewing
             $this->persistenceManager->persistAll(); // we need an uid before redirecting
-            $this->redirect('edit', null, null, ['post' => $newPost, 'isPreview' => true, 'isNew' => true]);
+            $this->redirect(
+                'edit',
+                'Post',
+                'Pforum',
+                ['post' => $post, 'isPreview' => true, 'isNew' => true]
+            );
         }
 
-        if ($this->settings['post']['hideAtCreation']) {
-            $newPost->setHidden(true);
+        if (
+            isset($this->settings['post']['hideAtCreation'])
+            && $this->settings['post']['hideAtCreation'] === '1'
+        ) {
+            $post->setHidden(true);
         }
 
         // if auth = anonymous user
-        if ($this->settings['auth'] == 1) {
-            /* send a mail to the user to activate, edit or delete his entry */
-            if ($this->settings['emailIsMandatory']) {
-                $this->persistenceManager->persistAll(); // we need an uid for mailing
-                $this->mailToUser($newPost);
-            }
+        /* send a mail to the user to activate, edit or delete his entry */
+        if (((int)$this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
+            $this->persistenceManager->persistAll(); // we need an uid for mailing
+            $this->mailToUser($post);
         }
+
         if (
-            $newPost->getHidden() === false &&
-            $topic->getUser() instanceof User &&
-            $topic->getUser()->getEmail() != ''
+            $post->getHidden() === false
+            && $topic->getUser() instanceof User
+            && $topic->getUser()->getEmail() !== ''
         ) {
-            // send an email to creator of topic to inform him about new comments/posts
-            $this->mailToTopicCreator($topic, $newPost);
+            // Send an email to creator of topic to inform him about new comments/posts
+            $this->mailToTopicCreator($topic, $post);
         }
+
         $this->addFlashMessageForCreation();
-        $this->redirect('show', 'Topic', null, ['topic' => $topic]);
+        $this->redirect('show', 'Topic', 'Pforum', ['topic' => $topic]);
     }
 
     /**
@@ -102,6 +100,8 @@ class PostController extends AbstractPostController
      */
     public function initializeEditAction(): void
     {
+        $this->preProcessControllerAction();
+
         $this->registerPostFromRequest('post');
     }
 
@@ -112,11 +112,8 @@ class PostController extends AbstractPostController
      *                    If so we have to passthrough this information
      * @Extbase\IgnoreValidation("post")
      */
-    public function editAction(
-        Post $post = null,
-        bool $isPreview = false,
-        bool $isNew = false
-    ): void {
+    public function editAction(Post $post = null, bool $isPreview = false, bool $isNew = false): void
+    {
         $this->view->assign('post', $post);
         $this->view->assign('isPreview', $isPreview);
         $this->view->assign('isNew', $isNew);
@@ -128,14 +125,9 @@ class PostController extends AbstractPostController
      */
     public function initializeUpdateAction(): void
     {
+        $this->preProcessControllerAction();
+
         $this->registerPostFromRequest('post');
-        if ($this->settings['useImages']) {
-            // we have our own implementation how to implement images
-            $this->arguments->getArgument('post')->getPropertyMappingConfiguration()->setTargetTypeForSubProperty(
-                'images',
-                'array'
-            );
-        }
     }
 
     /**
@@ -150,7 +142,12 @@ class PostController extends AbstractPostController
         // if a preview was requested direct to preview action
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
             $post->setHidden(true);
-            $this->redirect('edit', null, null, ['post' => $post, 'isPreview' => true, 'isNew' => $isNew]);
+            $this->redirect(
+                'edit',
+                'Post',
+                'Pforum',
+                ['post' => $post, 'isPreview' => true, 'isNew' => $isNew]
+            );
         } else {
             if ($isNew) {
                 // if is new and preview was pressed we have to check for visibility again
@@ -160,20 +157,20 @@ class PostController extends AbstractPostController
                     $post->setHidden(false);
                 }
 
-                /* if auth = anonymous user */
-                if ($this->settings['auth'] == 1) {
-                    /* send a mail to the user to activate, edit or delete his entry */
-                    if ($this->settings['emailIsMandatory']) {
-                        $this->mailToUser($post);
-                    }
+                // if auth = anonymous user
+                // send a mail to the user to activate, edit or delete his entry
+                if (((int)$this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
+                    $this->mailToUser($post);
                 }
+
                 $this->addFlashMessageForCreation();
             } else {
                 // edited posts which are not new are visible
                 $post->setHidden(false);
-                $this->addFlashMessage(LocalizationUtility::translate('postUpdated', 'pforum'), '', FlashMessage::OK);
+                $this->addFlashMessage(LocalizationUtility::translate('postUpdated', 'pforum'));
             }
-            $this->redirect('show', 'Forum', '', ['forum' => $post->getTopic()->getForum()]);
+
+            $this->redirect('show', 'Topic', 'Pforum', ['topic' => $post->getTopic()]);
         }
     }
 
@@ -183,6 +180,8 @@ class PostController extends AbstractPostController
      */
     public function initializeDeleteAction(): void
     {
+        $this->preProcessControllerAction();
+
         $this->registerPostFromRequest('post');
     }
 
@@ -192,40 +191,24 @@ class PostController extends AbstractPostController
     public function deleteAction(Post $post): void
     {
         $this->postRepository->remove($post);
-        $this->addFlashMessage(LocalizationUtility::translate('postDeleted', 'pforum'), '', FlashMessage::OK);
-        $this->redirect('list', 'Forum');
+        $this->addFlashMessage(LocalizationUtility::translate('postDeleted', 'pforum'));
+        $this->redirect('list', 'Forum', 'Pforum');
     }
 
     protected function mailToTopicCreator(Topic $topic, Post $post): void
     {
-        $mail = $this->objectManager->get(MailMessage::class);
-        $mail->setFrom($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName());
-        $mail->setTo($topic->getUser()->getEmail(), $topic->getUser()->getName());
-        $mail->setSubject(
-            LocalizationUtility::translate(
-                'email.post.subject.newPost',
-                'pforum',
-                [$topic->getTitle()]
-            )
-        );
-
-        $content = LocalizationUtility::translate(
-            'email.post.text.newPost',
-            'pforum',
-            [
-                $topic->getUser()->getName(),
-                $topic->getTitle(),
-                $post->getDescription(),
-            ]
-        );
-
-        if (version_compare(TYPO3_branch, '10.0', '>=')) {
-            $mail->html($content);
-        } else {
-            $mail->setBody($content, 'text/html');
-        }
-
-        $mail->send();
+        $email = GeneralUtility::makeInstance(FluidEmail::class);
+        $email
+            ->to(new Address($topic->getUser()->getEmail(), $topic->getUser()->getName()))
+            ->from(new Address($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName()))
+            ->subject('New post at your topic:' . $topic->getTitle())
+            ->setTemplate('Default')
+            ->assignMultiple([
+                'headline' => 'Hello ' . $topic->getUser()->getName(),
+                'introduction' => 'There is a new post for your topic ' . $topic->getTitle() . ' with following content:',
+                'content' => nl2br($post->getDescription()),
+            ]);
+        GeneralUtility::makeInstance(Mailer::class)->send($email);
     }
 
     /**
@@ -234,6 +217,8 @@ class PostController extends AbstractPostController
      */
     public function initializeActivateAction(): void
     {
+        $this->preProcessControllerAction();
+
         $this->registerPostFromRequest('post');
     }
 
@@ -250,7 +235,76 @@ class PostController extends AbstractPostController
         // send an email to creator of topic to inform him about new comments/posts
         $this->mailToTopicCreator($post->getTopic(), $post);
 
-        $this->addFlashMessage(LocalizationUtility::translate('postActivated', 'pforum'), '', FlashMessage::OK);
-        $this->redirect('list', 'Forum');
+        $this->addFlashMessage(LocalizationUtility::translate('postActivated', 'pforum'));
+        $this->redirect('list', 'Forum', 'Pforum');
+    }
+
+    /**
+     * This is a workaround to help controller actions to find (hidden) posts.
+     */
+    protected function registerPostFromRequest(string $argumentName): void
+    {
+        $argument = $this->request->getArgument($argumentName);
+        if (is_array($argument)) {
+            // get post from form ($_POST)
+            $post = $this->postRepository->findHiddenObject((int)$argument['__identity']);
+        } else {
+            // get post from UID
+            $post = $this->postRepository->findHiddenObject((int)$argument);
+        }
+
+        if ($post instanceof Post) {
+            $this->session->registerObject($post, $post->getUid());
+        }
+    }
+
+    protected function addFeUserToPost(Topic $topic, Post $post): void
+    {
+        if (is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid']) {
+            $user = $this->frontendUserRepository->findByUid(
+                (int)$GLOBALS['TSFE']->fe_user->user['uid']
+            );
+            $post->setFrontendUser($user);
+        } else {
+            /* normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated */
+            $this->addFlashMessage('You must be logged in before creating a post');
+            $this->redirect('show', 'Forum', 'Pforum', ['forum' => $topic->getForum()]);
+        }
+    }
+
+    protected function mailToUser(Post $post): void
+    {
+        $email = GeneralUtility::makeInstance(FluidEmail::class);
+        $email
+            ->to(new Address($post->getUser()->getEmail(), $post->getUser()->getName()))
+            ->from(new Address($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName()))
+            ->subject(LocalizationUtility::translate('email.post.subject', 'pforum'))
+            ->format('html')
+            ->setTemplate('ConfigurePost')
+            ->assignMultiple([
+                'settings' => $this->settings,
+                'post' => $post,
+            ]);
+        GeneralUtility::makeInstance(Mailer::class)->send($email);
+    }
+
+    protected function addFlashMessageForCreation(): void
+    {
+        if ($this->settings['post']['hideAtCreation']) {
+            if ($this->settings['post']['activateByAdmin']) {
+                $this->addFlashMessage(
+                    LocalizationUtility::translate('hiddenPostCreatedAndActivateByAdmin', 'pforum')
+                );
+            } else {
+                $this->addFlashMessage(
+                    LocalizationUtility::translate('hiddenPostCreatedAndActivateByUser', 'pforum')
+                );
+            }
+        } else {
+            // if topic is not hidden at creation there is no need to activate it by admin
+            $this->addFlashMessage(
+                LocalizationUtility::translate('postCreated', 'pforum')
+            );
+        }
     }
 }

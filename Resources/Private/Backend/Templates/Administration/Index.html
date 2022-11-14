@@ -1,0 +1,39 @@
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+<f:section name="content">
+	<h1>{f:translate(key: 'be.administrateForumRecords')}</h1>
+	<div class="card-container">
+		<f:render section="renderCard" arguments="{type: 'Topics', icon: 'ext-pforum-table-topic', title: 'be.administrateTopicRecords', content: 'be.administrateTopicRecords.description'}"/>
+		<f:render section="renderCard" arguments="{type: 'Posts', icon: 'ext-pforum-table-post', title: 'be.administratePostRecords', content: 'be.administratePostRecords.description'}"/>
+	</div>
+</f:section>
+
+<f:section name="renderCard">
+	<div class="card card-size-fixed-small">
+		<div class="card-header">
+			<div class="card-icon">
+				<core:icon identifier="{icon}" size="large" />
+			</div>
+
+			<div class="card-header-body">
+				<h1 class="card-title">{f:translate(key: title)}</h1>
+				<span class="card-subtitle">{f:translate(key: 'be.administrateHiddenRecords')}</span>
+			</div>
+		</div>
+
+		<div class="card-content card-body">
+			<p class="card-text">{f:translate(key: content)}</p>
+		</div>
+
+		<div class="card-footer">
+			<f:link.action action="listHidden{type}" controller="Administration" class="btn btn-primary">
+				{f:translate(key: 'be.administrateRecords')}
+			</f:link.action>
+		</div>
+	</div>
+</f:section>
+</html>

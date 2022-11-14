@@ -11,6 +11,7 @@ namespace JWeiland\Pforum\Tests\Functional\Validation\Validator;
 
 use JWeiland\Pforum\Validation\Validator\EmailValidator;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -24,6 +25,8 @@ use TYPO3\CMS\Extbase\Validation\Error;
  */
 class EmailValidatorTest extends FunctionalTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var EmailValidator
      */
@@ -41,7 +44,7 @@ class EmailValidatorTest extends FunctionalTestCase
         'typo3conf/ext/pforum'
     ];
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
@@ -50,7 +53,7 @@ class EmailValidatorTest extends FunctionalTestCase
         $this->subject = new EmailValidator();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
         parent::tearDown();

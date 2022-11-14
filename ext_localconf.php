@@ -3,32 +3,37 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-call_user_func(function () {
+call_user_func(static function (): void {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'JWeiland.pforum',
+        'pforum',
         'Forum',
         [
-            'Forum' => 'list, show',
-            'Topic' => 'show, new, create, edit, update, delete, activate',
-            'Post' => 'new, create, edit, update, delete, activate',
+            \JWeiland\Pforum\Controller\ForumController::class => 'list, show',
+            \JWeiland\Pforum\Controller\TopicController::class => 'show, new, create, edit, update, delete, activate',
+            \JWeiland\Pforum\Controller\PostController::class => 'new, create, edit, update, delete, activate',
         ],
         // non-cacheable actions
         [
-            'Topic' => 'create, update, delete, activate',
-            'Post' => 'create, update, delete, activate',
+            \JWeiland\Pforum\Controller\TopicController::class => 'create, update, delete, activate',
+            \JWeiland\Pforum\Controller\PostController::class => 'create, update, delete, activate',
         ]
     );
 
-    // add pforum plugin to new element wizard
+    // Add pforum plugin to new element wizard
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:pforum/Configuration/TSconfig/ContentElementWizard.txt">'
+        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:pforum/Configuration/TSconfig/ContentElementWizard.tsconfig">'
     );
+
+    $GLOBALS['TYPO3_CONF_VARS']['MAIL']['templateRootPaths'][1666352112] = 'EXT:pforum/Resources/Private/Templates/Mail';
 
     $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
         \TYPO3\CMS\Core\Imaging\IconRegistry::class
     );
     $svgIcons = [
         'ext-pforum-wizard-icon' => 'module.svg',
+        'ext-pforum-table-forum' => 'tx_pforum_domain_model_forum.svg',
+        'ext-pforum-table-topic' => 'tx_pforum_domain_model_topic.svg',
+        'ext-pforum-table-post' => 'tx_pforum_domain_model_post.svg',
     ];
     foreach ($svgIcons as $identifier => $fileName) {
         $iconRegistry->registerIcon(

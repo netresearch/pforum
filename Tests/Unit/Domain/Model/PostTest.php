@@ -11,23 +11,26 @@ namespace JWeiland\Pforum\Tests\Unit\Domain\Model;
 
 use JWeiland\Pforum\Domain\Model\Post;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Test case
  */
 class PostTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var Post
      */
     protected $subject;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->subject = new Post();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
     }

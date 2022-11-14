@@ -113,7 +113,7 @@ class Topic extends AbstractEntity
         return $this->title;
     }
 
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = strip_tags($title);
     }
@@ -123,7 +123,7 @@ class Topic extends AbstractEntity
         return $this->description;
     }
 
-    public function setDescription(string $description)
+    public function setDescription(string $description): void
     {
         $this->description = strip_tags($description);
     }
@@ -186,13 +186,18 @@ class Topic extends AbstractEntity
         return $user;
     }
 
+    public function getOriginalImages(): ObjectStorage
+    {
+        return $this->images;
+    }
+
     /**
-     * Returns the images.
-     *
      * @return array|FileReference[]
      */
     public function getImages(): array
     {
+        // ObjectStorage has SplObjectHashes as key which we don't know in Fluid
+        // so we convert ObjectStorage to array to get numbered keys
         $references = [];
         foreach ($this->images as $image) {
             $references[] = $image;

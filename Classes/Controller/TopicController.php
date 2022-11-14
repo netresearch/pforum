@@ -13,46 +13,54 @@ namespace JWeiland\Pforum\Controller;
 
 use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Domain\Model\Topic;
-use JWeiland\Pforum\Property\TypeConverter\UploadMultipleFilesConverter;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use JWeiland\Pforum\Helper\FrontendGroupHelper;
+use Symfony\Component\Mime\Address;
+use TYPO3\CMS\Core\Mail\FluidEmail;
+use TYPO3\CMS\Core\Mail\Mailer;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Controller to list and show topics of forum
  */
-class TopicController extends AbstractTopicController
+class TopicController extends AbstractController
 {
     /**
-     * @param Topic $topic
+     * @var FrontendGroupHelper
      */
+    protected $frontendGroupHelper;
+
+    public function injectFrontendGroupHelper(FrontendGroupHelper $frontendGroupHelper): void
+    {
+        $this->frontendGroupHelper = $frontendGroupHelper;
+    }
+
     public function showAction(Topic $topic): void
     {
-        /* @var QueryResultInterface $topics */
         $posts = $this->postRepository->findByTopic($topic);
-        if (
-            !empty($this->settings['uidOfAdminGroup']) &&
-            is_array($GLOBALS['TSFE']->fe_user->groupData['uid']) &&
-            in_array($this->settings['uidOfAdminGroup'], $GLOBALS['TSFE']->fe_user->groupData['uid'])
-        ) {
+        if ($this->frontendGroupHelper->uidExistsInGroupData((int)($this->settings['uidOfAdminGroup'] ?? 0))) {
             $posts->getQuery()
                 ->getQuerySettings()
                 ->setIgnoreEnableFields(true)
                 ->setEnableFieldsToBeIgnored(['disabled']);
         }
-        $this->view->assign('topic', $topic);
-        $this->view->assign('posts', $posts);
+
+        $this->postProcessAndAssignFluidVariables([
+            'topic' => $topic,
+            'posts' => $posts,
+        ]);
     }
 
-    /**
-     * @param Forum $forum
-     */
     public function newAction(Forum $forum): void
     {
-        $this->deleteUploadedFilesOnValidationErrors('newTopic');
-        $this->view->assign('forum', $forum);
-        $this->view->assign('newTopic', $this->objectManager->get(Topic::class));
+        $this->deleteUploadedFilesOnValidationErrors('topic');
+
+        $this->postProcessAndAssignFluidVariables([
+            'forum' => $forum,
+            'topic' => GeneralUtility::makeInstance(Topic::class),
+        ]);
     }
 
     /**
@@ -60,50 +68,44 @@ class TopicController extends AbstractTopicController
      */
     public function initializeCreateAction(): void
     {
-        if ($this->settings['useImages']) {
-            $multipleFilesTypeConverter = $this->objectManager->get(UploadMultipleFilesConverter::class);
-            $this->arguments->getArgument('newTopic')
-                ->getPropertyMappingConfiguration()
-                ->forProperty('images')
-                ->setTypeConverter($multipleFilesTypeConverter);
-        }
+        $this->preProcessControllerAction();
     }
 
-    /**
-     * @param Forum $forum
-     * @param Topic $newTopic
-     */
-    public function createAction(Forum $forum, Topic $newTopic): void
+    public function createAction(Forum $forum, Topic $topic): void
     {
         // if auth = frontend user
-        if ($this->settings['auth'] == 2) {
-            $this->addFeUserToTopic($forum, $newTopic);
+        if ((int)$this->settings['auth'] === 2) {
+            $this->addFeUserToTopic($forum, $topic);
         }
 
-        $forum->addTopic($newTopic);
+        $forum->addTopic($topic);
         $this->forumRepository->update($forum);
 
         // if a preview was requested direct to preview action
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
-            $newTopic->setHidden(true); // topic should not be visible while previewing
+            $topic->setHidden(true); // topic should not be visible while previewing
             $this->persistenceManager->persistAll(); // we need an uid before redirecting
-            $this->redirect('edit', null, null, ['topic' => $newTopic, 'isPreview' => true, 'isNew' => true]);
+            $this->redirect(
+                'edit',
+                'Topic',
+                'Pforum',
+                ['topic' => $topic, 'isPreview' => true, 'isNew' => true]
+            );
         }
 
         if ($this->settings['topic']['hideAtCreation']) {
-            $newTopic->setHidden(true);
+            $topic->setHidden(true);
         }
 
         // if auth = anonymous user
-        if ($this->settings['auth'] == 1) {
-            /* send a mail to the user to activate, edit or delete his entry */
-            if ($this->settings['emailIsMandatory']) {
-                $this->persistenceManager->persistAll(); // we need an uid before mailing
-                $this->mailToUser($newTopic);
-            }
+        // send a mail to the user to activate, edit or delete his entry
+        if (((int)$this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
+            $this->persistenceManager->persistAll(); // we need an uid before mailing
+            $this->mailToUser($topic);
         }
+
         $this->addFlashMessageForCreation();
-        $this->redirect('show', 'Forum', null, ['forum' => $forum]);
+        $this->redirect('show', 'Forum', 'Pforum', ['forum' => $forum]);
     }
 
     /**
@@ -112,11 +114,12 @@ class TopicController extends AbstractTopicController
      */
     public function initializeEditAction(): void
     {
+        $this->preProcessControllerAction();
+
         $this->registerTopicFromRequest('topic');
     }
 
     /**
-     * @param Topic $topic
      * @param bool $isPreview If is preview there will be an additional output above edit form
      * @param bool $isNew We need the information if updateAction was called from createAction.
      *                    If so we have to passthrough this information
@@ -127,9 +130,11 @@ class TopicController extends AbstractTopicController
         bool $isPreview = false,
         bool $isNew = false
     ): void {
-        $this->view->assign('topic', $topic);
-        $this->view->assign('isPreview', $isPreview);
-        $this->view->assign('isNew', $isNew);
+        $this->postProcessAndAssignFluidVariables([
+            'topic' => $topic,
+            'isPreview' => $isPreview,
+            'isNew' => $isNew,
+        ]);
     }
 
     /**
@@ -138,27 +143,12 @@ class TopicController extends AbstractTopicController
      */
     public function initializeUpdateAction(): void
     {
+        $this->preProcessControllerAction();
+
         $this->registerTopicFromRequest('topic');
-        $argument = $this->request->getArgument('topic');
-        /** @var Topic $topic */
-        $topic = $this->topicRepository->findByIdentifier($argument['__identity']);
-        if ($this->settings['useImages']) {
-            $multipleFilesTypeConverter = $this->objectManager->get(UploadMultipleFilesConverter::class);
-            $this->arguments->getArgument('topic')
-                ->getPropertyMappingConfiguration()
-                ->forProperty('images')
-                ->setTypeConverter($multipleFilesTypeConverter)
-                ->setTypeConverterOptions(
-                    UploadMultipleFilesConverter::class,
-                    [
-                        'IMAGES' => $topic->getImages()
-                    ]
-                );
-        }
     }
 
     /**
-     * @param Topic $topic
      * @param bool $isNew We need the information if updateAction was called from createAction.
      *                    If so we have to add different messages
      */
@@ -169,7 +159,12 @@ class TopicController extends AbstractTopicController
         // if a preview was requested direct to preview action
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
             $topic->setHidden(true);
-            $this->redirect('edit', null, null, ['topic' => $topic, 'isPreview' => true, 'isNew' => $isNew]);
+            $this->redirect(
+                'edit',
+                'Topic',
+                'Pforum',
+                ['topic' => $topic, 'isPreview' => true, 'isNew' => $isNew]
+            );
         } else {
             if ($isNew) {
                 // if is new and preview was pressed we have to check for visibility again
@@ -179,21 +174,20 @@ class TopicController extends AbstractTopicController
                     $topic->setHidden(false);
                 }
 
-                /* if auth = anonymous user */
-                if ($this->settings['auth'] == 1) {
-                    /* send a mail to the user to activate, edit or delete his entry */
-                    if ($this->settings['emailIsMandatory']) {
-                        $this->mailToUser($topic);
-                    }
+                // if auth = anonymous user
+                // send a mail to the user to activate, edit or delete his entry
+                if (((int)$this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
+                    $this->mailToUser($topic);
                 }
 
                 $this->addFlashMessageForCreation();
             } else {
                 // edited topics which are not new are visible
                 $topic->setHidden(false);
-                $this->addFlashMessage(LocalizationUtility::translate('topicUpdated', 'pforum'), '', FlashMessage::OK);
+                $this->addFlashMessage(LocalizationUtility::translate('topicUpdated', 'pforum'));
             }
-            $this->redirect('show', 'Forum', '', ['forum' => $topic->getForum()]);
+
+            $this->redirect('show', 'Forum', 'Pforum', ['forum' => $topic->getForum()]);
         }
     }
 
@@ -203,17 +197,16 @@ class TopicController extends AbstractTopicController
      */
     public function initializeDeleteAction(): void
     {
+        $this->preProcessControllerAction();
+
         $this->registerTopicFromRequest('topic');
     }
 
-    /**
-     * @param Topic $topic
-     */
     public function deleteAction(Topic $topic): void
     {
         $this->topicRepository->remove($topic);
-        $this->addFlashMessage(LocalizationUtility::translate('topicDeleted', 'pforum'), '', FlashMessage::OK);
-        $this->redirect('list', 'Forum');
+        $this->addFlashMessage(LocalizationUtility::translate('topicDeleted', 'pforum'));
+        $this->redirect('list', 'Forum', 'Pforum');
     }
 
     /**
@@ -222,19 +215,94 @@ class TopicController extends AbstractTopicController
      */
     public function initializeActivateAction(): void
     {
+        $this->preProcessControllerAction();
+
         $this->registerTopicFromRequest('topic');
     }
 
     /**
      * We need this extra action, because hidden entries can't be found in FE mode.
-     *
-     * @param Topic $topic
      */
     public function activateAction(Topic $topic): void
     {
         $topic->setHidden(false);
         $this->topicRepository->update($topic);
-        $this->addFlashMessage(LocalizationUtility::translate('topicActivated', 'pforum'), '', FlashMessage::OK);
-        $this->redirect('list', 'Forum');
+        $this->addFlashMessage(LocalizationUtility::translate('topicActivated', 'pforum'));
+        $this->redirect('list', 'Forum', 'Pforum');
+    }
+
+    /**
+     * This is a workaround to help controller actions to find (hidden) topics.
+     *
+     * @param string $argumentName
+     */
+    protected function registerTopicFromRequest(string $argumentName): void
+    {
+        $argument = $this->request->getArgument($argumentName);
+        if (is_array($argument)) {
+            // get topic from form ($_POST)
+            $topic = $this->topicRepository->findHiddenObject((int)$argument['__identity']);
+        } else {
+            // get topic from UID
+            $topic = $this->topicRepository->findHiddenObject((int)$argument);
+        }
+
+        if ($topic instanceof Topic) {
+            $this->session->registerObject($topic, $topic->getUid());
+        }
+    }
+
+    protected function addFeUserToTopic(Forum $forum, Topic $topic): void
+    {
+        if (is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid']) {
+            $user = $this->frontendUserRepository->findByUid(
+                (int)$GLOBALS['TSFE']->fe_user->user['uid']
+            );
+            $topic->setFrontendUser($user);
+        } else {
+            /* normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated */
+            $this->addFlashMessage(
+                'You must be logged in before creating a topic',
+                '',
+                AbstractMessage::WARNING
+            );
+            $this->redirect('show', 'Forum', 'Pforum', ['forum' => $forum]);
+        }
+    }
+
+    protected function mailToUser(Topic $topic): void
+    {
+        $email = GeneralUtility::makeInstance(FluidEmail::class);
+        $email
+            ->to(new Address($topic->getUser()->getEmail(), $topic->getUser()->getName()))
+            ->from(new Address($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName()))
+            ->subject(LocalizationUtility::translate('email.topic.subject', 'pforum'))
+            ->format('html')
+            ->setTemplate('ConfigureTopic')
+            ->assignMultiple([
+                'settings' => $this->settings,
+                'topic' => $topic,
+            ]);
+        GeneralUtility::makeInstance(Mailer::class)->send($email);
+    }
+
+    protected function addFlashMessageForCreation(): void
+    {
+        if ($this->settings['topic']['hideAtCreation']) {
+            if ($this->settings['topic']['activateByAdmin']) {
+                $this->addFlashMessage(
+                    LocalizationUtility::translate('hiddenTopicCreatedAndActivateByAdmin', 'pforum')
+                );
+            } else {
+                $this->addFlashMessage(
+                    LocalizationUtility::translate('hiddenTopicCreatedAndActivateByUser', 'pforum')
+                );
+            }
+        } else {
+            // if topic is not hidden at creation there is no need to activate it by admin
+            $this->addFlashMessage(
+                LocalizationUtility::translate('topicCreated', 'pforum')
+            );
+        }
     }
 }

@@ -12,48 +12,43 @@ declare(strict_types=1);
 namespace JWeiland\Pforum\Controller;
 
 use JWeiland\Pforum\Domain\Model\Forum;
-use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use JWeiland\Pforum\Helper\FrontendGroupHelper;
 
 /**
- * Main controller to list and show postings/questions
+ * Main controller to list and show forum entries
  */
 class ForumController extends AbstractController
 {
     /**
-     * @var PageRenderer
+     * @var FrontendGroupHelper
      */
-    protected $pageRenderer;
+    protected $frontendGroupHelper;
 
-    public function injectPageRenderer(PageRenderer $pageRenderer): void
+    public function injectFrontendGroupHelper(FrontendGroupHelper $frontendGroupHelper): void
     {
-        $this->pageRenderer = $pageRenderer;
+        $this->frontendGroupHelper = $frontendGroupHelper;
     }
 
     public function listAction(): void
     {
-        $forums = $this->forumRepository->findAll();
-        $this->view->assign('forums', $forums);
+        $this->postProcessAndAssignFluidVariables([
+            'forums' => $this->forumRepository->findAll()
+        ]);
     }
 
-    /**
-     * @param Forum $forum
-     */
     public function showAction(Forum $forum): void
     {
-        /** @var QueryResultInterface $topics */
         $topics = $this->topicRepository->findByForum($forum);
-        if (
-            !empty($this->settings['uidOfAdminGroup']) &&
-            is_array($GLOBALS['TSFE']->fe_user->groupData['uid']) &&
-            in_array($this->settings['uidOfAdminGroup'], $GLOBALS['TSFE']->fe_user->groupData['uid'])
-        ) {
+        if ($this->frontendGroupHelper->uidExistsInGroupData((int)($this->settings['uidOfAdminGroup'] ?? 0))) {
             $topics->getQuery()
                 ->getQuerySettings()
                 ->setIgnoreEnableFields(true)
                 ->setEnableFieldsToBeIgnored(['disabled']);
         }
-        $this->view->assign('forum', $forum);
-        $this->view->assign('topics', $topics);
+
+        $this->postProcessAndAssignFluidVariables([
+            'forum' => $forum,
+            'topics' => $topics,
+        ]);
     }
 }

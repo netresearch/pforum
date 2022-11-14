@@ -1,12 +1,55 @@
-<p>Sie haben einen neuen Beitrag geschrieben. Folgende Optionen stehen Ihnen zur Verfuegung:</p>
-<div>
-	<f:if condition="{settings.post.hideAtCreation}">
-		<f:if condition="{settings.post.activateByAdmin} == 0">
-			<div>
-				<f:link.action pageUid="{settings.pidOfDetailPage}" action="activate" controller="Topic" pluginName="forum" extensionName="pforum" absolute="1" noCache="1" arguments="{topic: topic}"><f:translate key="activateTopic"/></f:link.action>
-			</div>
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
+<f:layout name="SystemEmail" />
+
+<f:section name="Title">{headline}</f:section>
+
+<f:section name="Main">
+	<p>Sie haben einen neuen Beitrag geschrieben. Folgende Optionen stehen Ihnen zur Verfuegung:</p>
+
+		<div>
+		<f:if condition="{settings.post.hideAtCreation}">
+			<f:if condition="{settings.post.activateByAdmin} == 0">
+				<div>
+					<f:link.action pageUid="{settings.pidOfDetailPage}"
+												 action="activate"
+												 controller="Topic"
+												 pluginName="Forum"
+												 extensionName="Pforum"
+												 absolute="1"
+												 noCache="1"
+												 arguments="{topic: topic}">
+						{f:translate(key: 'activateTopic', extensionName: 'Pforum')}
+					</f:link.action>
+				</div>
+			</f:if>
 		</f:if>
-	</f:if>
-	<div><f:link.action pageUid="{settings.pidOfDetailPage}" action="edit" controller="Topic" pluginName="forum" extensionName="pforum" absolute="1" arguments="{topic: topic}"><f:translate key="editTopic"/></f:link.action></div>
-	<div><f:link.action pageUid="{settings.pidOfDetailPage}" action="delete" controller="Topic" pluginName="forum" extensionName="pforum" absolute="1" arguments="{topic: topic}"><f:translate key="deleteTopic"/></f:link.action></div>
-</div>
+
+		<div>
+			<f:link.action pageUid="{settings.pidOfDetailPage}"
+										 action="edit"
+										 controller="Topic"
+										 pluginName="Forum"
+										 extensionName="Pforum"
+										 absolute="1"
+										 arguments="{topic: topic}">
+				{f:translate(key: 'editTopic', extensionName: 'Pforum')}
+			</f:link.action>
+		</div>
+
+		<div>
+			<f:link.action pageUid="{settings.pidOfDetailPage}"
+										 action="delete"
+										 controller="Topic"
+										 pluginName="Forum"
+										 extensionName="Pforum"
+										 absolute="1"
+										 arguments="{topic: topic}">
+				{f:translate(key: 'deleteTopic', extensionName: 'Pforum')}
+			</f:link.action>
+		</div>
+	</div>
+</f:section>
+</html>

@@ -12,6 +12,7 @@ namespace JWeiland\Pforum\Tests\Unit\Domain\Model;
 use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
@@ -19,17 +20,19 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class TopicTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var Topic
      */
     protected $subject;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->subject = new Topic();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
     }

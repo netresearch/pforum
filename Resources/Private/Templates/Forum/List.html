@@ -1,40 +1,42 @@
-<f:layout name="Default" />
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
+<f:layout name="Default"/>
 
 <f:section name="main">
-	<f:flashMessages />
+	<f:flashMessages/>
 
 	<h2>{f:translate(key: 'tx_pforum_domain_model_forum')}</h2>
 
 	<f:if condition="{forums -> f:count()}">
 		<f:then>
-			<f:for each="{forums}" as="forum">
-				<div>
-					<header>
-						<h3>
-							<f:link.action pageUid="{settings.pidOfDetailPage}"
-										   action="show"
-										   arguments="{forum: forum}">
-								{forum.title}
-							</f:link.action>
-						</h3>
-					</header>
+			<div class="list-group list-group-flush">
+				<f:for each="{forums}" as="forum">
+					<div class="list-group-item p-0 py-1">
+						<div class="d-flex w-100 justify-content-between">
+							<h5 class="mb-1">
+								<f:link.action pageUid="{settings.pidOfDetailPage}"
+															 action="show"
+															 arguments="{forum: forum}">
+									{forum.title}
+								</f:link.action>
+							</h5>
+							<small>{forum.topics -> f:count()} {f:translate(key: 'tx_pforum_domain_model_forum.topics')}</small>
+						</div>
 
-					<f:if condition="{forum.teaser}">
-						<p>{forum.teaser}</p>
-					</f:if>
-
-					<div>
-						<f:link.action pageUid="{settings.pidOfDetailPage}"
-									   action="show"
-									   arguments="{forum: forum}">
-							{forum.topics -> f:count()} {f:translate(key: 'tx_pforum_domain_model_forum.topics')}
-						</f:link.action>
+						<f:if condition="{forum.teaser}">
+							<p class="mb-1">{forum.teaser}</p>
+						</f:if>
 					</div>
-				</div>
-			</f:for>
+				</f:for>
+			</div>
 		</f:then>
 		<f:else>
-			<p>{f:translate(key: 'noResults')}</p>
+			<div class="alert alert-info" role="alert">
+				{f:translate(key: 'noResults')}
+			</div>
 		</f:else>
 	</f:if>
 </f:section>
+</html>
