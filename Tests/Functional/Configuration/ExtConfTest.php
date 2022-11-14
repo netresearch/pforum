@@ -11,12 +11,15 @@ namespace JWeiland\Pforum\Tests\Functional\Configuration;
 
 use JWeiland\Pforum\Configuration\ExtConf;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Test case
  */
 class ExtConfTest extends FunctionalTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ExtConf
      */

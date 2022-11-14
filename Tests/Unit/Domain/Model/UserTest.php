@@ -11,12 +11,15 @@ namespace JWeiland\Pforum\Tests\Unit\Domain\Model;
 
 use JWeiland\Pforum\Domain\Model\User;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Test case
  */
 class UserTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var User
      */
