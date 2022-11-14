@@ -22,12 +22,12 @@ class UserTest extends UnitTestCase
      */
     protected $subject;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->subject = new User();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
     }

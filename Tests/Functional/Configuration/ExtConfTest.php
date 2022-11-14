@@ -29,14 +29,14 @@ class ExtConfTest extends FunctionalTestCase
         'typo3conf/ext/pforum'
     ];
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->subject = new ExtConf();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
         $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'] = '';

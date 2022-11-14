@@ -41,7 +41,7 @@ class EmailValidatorTest extends FunctionalTestCase
         'typo3conf/ext/pforum'
     ];
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
@@ -50,7 +50,7 @@ class EmailValidatorTest extends FunctionalTestCase
         $this->subject = new EmailValidator();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
         parent::tearDown();

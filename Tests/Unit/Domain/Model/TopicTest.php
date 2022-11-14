@@ -24,12 +24,12 @@ class TopicTest extends UnitTestCase
      */
     protected $subject;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->subject = new Topic();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
     }
