@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Pforum\Property\TypeConverter;
 
 use JWeiland\Checkfaluploads\Service\FalUploadService;
-use JWeiland\Events2\Event\PostCheckFileReferenceEvent;
+use JWeiland\Pforum\Event\PostCheckFileReferenceEvent;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Resource\DuplicationBehavior;
 use TYPO3\CMS\Core\Resource\Exception\ResourceDoesNotExistException;
