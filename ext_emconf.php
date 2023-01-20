@@ -8,10 +8,10 @@ $EM_CONF[$_EXTKEY] = [
     'author_company' => 'jweiland.net',
     'state' => 'stable',
     'clearCacheOnLoad' => 0,
-    'version' => '4.0.1',
+    'version' => '4.0.2',
     'constraints' => [
         'depends' => [
-            'typo3' => '10.4.32-11.5.16',
+            'typo3' => '10.4.32-11.5.99',
         ],
         'conflicts' => [
         ],
