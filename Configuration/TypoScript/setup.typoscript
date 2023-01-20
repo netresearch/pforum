@@ -11,7 +11,6 @@ plugin.tx_pforum {
 
   settings {
     auth = {$plugin.tx_pforum.settings.auth}
-    useImages = 0
     emailIsMandatory = {$plugin.tx_pforum.settings.emailIsMandatory}
     usernameIsMandatory = {$plugin.tx_pforum.settings.usernameIsMandatory}
     useImages = {$plugin.tx_pforum.settings.useImages}
@@ -19,7 +18,7 @@ plugin.tx_pforum {
     uidOfUserGroup = {$plugin.tx_pforum.settings.uidOfUserGroup}
     pidOfDetailPage = {$plugin.tx_pforum.settings.pidOfDetailPage}
     topic {
-      hideAtCreation =
+      hideAtCreation = 0
       activateByAdmin = 0
     }
 
