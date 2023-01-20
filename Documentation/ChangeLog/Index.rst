@@ -7,6 +7,12 @@
 ChangeLog
 =========
 
+Version 4.0.2
+=============
+
+*   [DOCU] Add documentation
+*   [BUGFIX] Allow TYPO3 versions higher than 11.5.16
+
 Version 4.0.1
 =============
 
