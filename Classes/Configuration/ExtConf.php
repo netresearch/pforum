@@ -32,10 +32,10 @@ class ExtConf implements SingletonInterface
 
     public function __construct()
     {
-        // get global configuration
+        // Get global configuration
         $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('pforum');
         if (is_array($extConf)) {
-            // call setter method foreach configuration entry
+            // Call setter method foreach configuration entry
             foreach ($extConf as $key => $value) {
                 $methodName = 'set' . ucfirst($key);
                 if (method_exists($this, $methodName)) {
@@ -46,14 +46,14 @@ class ExtConf implements SingletonInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function getEmailFromAddress(): string
     {
-        if (empty($this->emailFromAddress)) {
-            $senderMail = $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'];
-            if (empty($senderMail)) {
-                throw new \RuntimeException('You have forgotten to set a sender email address in extension settings of pforum or in install tool', 1604694223);
+        if ($this->emailFromAddress === '') {
+            $senderMail = (string)$GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'];
+            if ($senderMail === '') {
+                throw new \InvalidArgumentException('You have forgotten to set a sender email address in extension settings of pforum or in install tool', 1604694223);
             }
 
             return $senderMail;
@@ -68,14 +68,14 @@ class ExtConf implements SingletonInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function getEmailFromName(): string
     {
-        if (empty($this->emailFromName)) {
-            $senderName = $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName'];
-            if (empty($senderName)) {
-                throw new \RuntimeException('You have forgotten to set a sender name in extension settings of pforum or in install tool', 1604694279);
+        if ($this->emailFromName === '') {
+            $senderName = (string)$GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName'];
+            if ($senderName === '') {
+                throw new \InvalidArgumentException('You have forgotten to set a sender name in extension settings of pforum or in install tool', 1604694279);
             }
 
             return $senderName;
