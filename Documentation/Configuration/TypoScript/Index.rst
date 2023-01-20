@@ -42,11 +42,11 @@ page of your website or to a specific page which contains the `pforum` plugin.
 
     Choose `PLUGIN.TX_PFORUM` from the category selectbox to show just `pforum` related constants
 
-6.  Configure constants
+7.  Configure constants
 
     Adapt the constants to your needs.
 
-7.  Configure TypoScript
+8.  Configure TypoScript
 
     As constants will only allow modifiying a fixed selection of TypoScript you also switch to `Info/Modify` again
     and click on `Setup`. Here you have the possibility to configure all `pforum` related configuration.
