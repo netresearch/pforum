@@ -117,7 +117,7 @@ class Post extends AbstractEntity
         $this->description = $description;
     }
 
-    public function getAnonymousUser(): AnonymousUser
+    public function getAnonymousUser(): ?AnonymousUser
     {
         return $this->anonymousUser;
     }
