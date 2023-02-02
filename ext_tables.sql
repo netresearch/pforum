@@ -12,7 +12,7 @@ CREATE TABLE tx_pforum_domain_model_forum (
 #
 CREATE TABLE tx_pforum_domain_model_topic (
 	title varchar(255) DEFAULT '' NOT NULL,
-	description text NOT NULL,
+	description text,
 	posts int(11) unsigned DEFAULT '0' NOT NULL,
 	anonymous_user int(11) unsigned DEFAULT '0',
 	frontend_user int(11) unsigned DEFAULT '0',
@@ -25,7 +25,7 @@ CREATE TABLE tx_pforum_domain_model_topic (
 #
 CREATE TABLE tx_pforum_domain_model_post (
 	title varchar(255) DEFAULT '' NOT NULL,
-	description varchar(255) DEFAULT '' NOT NULL,
+	description text,
 	anonymous_user int(11) unsigned DEFAULT '0',
 	frontend_user int(11) unsigned DEFAULT '0',
 	images int(11) unsigned DEFAULT '0' NOT NULL,
