@@ -25,6 +25,9 @@
 		"nimut/testing-framework": "^6.0",
 		"phpspec/prophecy-phpunit": "^2.0"
 	},
+	"replace": {
+		"typo3-ter/pforum": "self.version"
+	},
 	"autoload": {
 		"psr-4": {
 			"JWeiland\\Pforum\\": "Classes"
