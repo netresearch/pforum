@@ -1,69 +1,80 @@
 {
-	"name": "jweiland/pforum",
-	"type": "typo3-cms-extension",
-	"description": "Lightweight forum extension for TYPO3",
-	"license": "GPL-2.0-or-later",
-	"keywords": ["typo3", "TYPO3 CMS", "forum", "pforum", "lightweight"],
-	"homepage": "https://jweiland.net",
-	"authors": [
-		{
-			"name": "Stefan Froemken",
-			"email": "sfroemken@jweiland.net",
-			"role": "Developer"
-		}
-	],
-	"support": {
-		"email": "support@jweiland.net",
-		"issues": "https://github.com/jweiland-net/pforum/issues",
-		"source": "https://github.com/jweiland-net/pforum"
-	},
-	"require": {
-		"typo3/cms-core": "^10.4.32 || ^11.5.16"
-	},
-	"require-dev": {
-		"friendsofphp/php-cs-fixer": "^3.12",
-		"nimut/testing-framework": "^6.0",
-		"phpspec/prophecy-phpunit": "^2.0"
-	},
-	"replace": {
-		"typo3-ter/pforum": "self.version"
-	},
-	"autoload": {
-		"psr-4": {
-			"JWeiland\\Pforum\\": "Classes"
-		}
-	},
-	"autoload-dev": {
-		"psr-4": {
-			"JWeiland\\Pforum\\Tests\\": "Tests"
-		}
-	},
-	"config": {
-		"vendor-dir": ".build/vendor",
-		"allow-plugins": {
-			"typo3/class-alias-loader": true,
-			"typo3/cms-composer-installers": true
-		}
-	},
-	"extra": {
-		"typo3/cms": {
-			"extension-key": "pforum",
-			"app-dir": ".build",
-			"web-dir": ".build/public"
-		}
-	},
-	"scripts": {
-		"php:fix": ".build/vendor/bin/php-cs-fixer --config=Build/.php_cs.php fix Classes Tests",
-		"ci:php:lint": "find *.php Classes Configuration Tests -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l",
-		"ci:php:fixer": ".build/vendor/bin/php-cs-fixer --config=Build/.php_cs.php fix --dry-run -v --show-progress=dots --diff Classes Tests",
-		"ci:tests:unit": "php .build/vendor/bin/phpunit -c .build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit",
-		"ci:tests:functional": "find 'Tests/Functional' -wholename '*Test.php' | parallel --gnu 'echo; echo \"Running functional test suite {}\"; php .build/vendor/bin/phpunit -c .build/vendor/nimut/testing-framework/res/Configuration/FunctionalTests.xml {}';",
-		"link-extension": [
-			"@php -r 'is_dir($extFolder=__DIR__.\"/.build/public/typo3conf/ext/\") || mkdir($extFolder, 0777, true);'",
-			"@php -r 'file_exists($extFolder=__DIR__.\"/.build/public/typo3conf/ext/pforum\") || symlink(__DIR__,$extFolder);'"
-		],
-		"post-autoload-dump": [
-			"@link-extension"
-		]
-	}
+    "name": "jweiland/pforum",
+    "type": "typo3-cms-extension",
+    "description": "Lightweight forum extension for TYPO3",
+    "license": [
+        "GPL-2.0-or-later"
+    ],
+    "keywords": [
+        "TYPO3",
+        "TYPO3 CMS",
+        "forum",
+        "pforum",
+        "lightweight"
+    ],
+    "homepage": "https://jweiland.net",
+    "authors": [
+        {
+            "name": "Stefan Froemken",
+            "email": "sfroemken@jweiland.net",
+            "role": "Developer"
+        },
+        {
+            "name": "Rico Sonntag",
+            "email": "rico.sonntag@netresearch.de",
+            "role": "Developer",
+            "homepage": "https://www.netresearch.de/"
+        }
+    ],
+    "support": {
+        "email": "support@jweiland.net",
+        "issues": "https://github.com/jweiland-net/pforum/issues",
+        "source": "https://github.com/jweiland-net/pforum"
+    },
+    "require": {
+        "typo3/cms-core": "^10.4.32 || ^11.5.16"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.12",
+        "nimut/testing-framework": "^6.0",
+        "phpspec/prophecy-phpunit": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "JWeiland\\Pforum\\": "Classes"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JWeiland\\Pforum\\Tests\\": "Tests"
+        }
+    },
+    "config": {
+        "vendor-dir": ".build/vendor",
+        "allow-plugins": {
+            "typo3/class-alias-loader": true,
+            "typo3/cms-composer-installers": true
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "pforum",
+            "app-dir": ".build",
+            "web-dir": ".build/public"
+        }
+    },
+    "scripts": {
+        "php:fix": ".build/vendor/bin/php-cs-fixer --config=Build/.php_cs.php fix Classes Tests",
+        "ci:php:lint": "find *.php Classes Configuration Tests -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l",
+        "ci:php:fixer": ".build/vendor/bin/php-cs-fixer --config=Build/.php_cs.php fix --dry-run -v --show-progress=dots --diff Classes Tests",
+        "ci:tests:unit": "php .build/vendor/bin/phpunit -c .build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit",
+        "ci:tests:functional": "find 'Tests/Functional' -wholename '*Test.php' | parallel --gnu 'echo; echo \"Running functional test suite {}\"; php .build/vendor/bin/phpunit -c .build/vendor/nimut/testing-framework/res/Configuration/FunctionalTests.xml {}';",
+        "link-extension": [
+            "@php -r 'is_dir($extFolder=__DIR__.\"/.build/public/typo3conf/ext/\") || mkdir($extFolder, 0777, true);'",
+            "@php -r 'file_exists($extFolder=__DIR__.\"/.build/public/typo3conf/ext/pforum\") || symlink(__DIR__,$extFolder);'"
+        ],
+        "post-autoload-dump": [
+            "@link-extension"
+        ]
+    }
 }
