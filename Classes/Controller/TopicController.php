@@ -13,7 +13,9 @@ namespace JWeiland\Pforum\Controller;
 
 use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Domain\Model\Topic;
+use JWeiland\Pforum\Event\AfterTopicCreateEvent;
 use JWeiland\Pforum\Helper\FrontendGroupHelper;
+use Netresearch\NrcPforumExtend\Event\PostProcessControllerActionEvent;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\FluidEmail;
 use TYPO3\CMS\Core\Mail\Mailer;
@@ -80,6 +82,15 @@ class TopicController extends AbstractController
 
         $forum->addTopic($topic);
         $this->forumRepository->update($forum);
+
+        // Dispatch event to allow handling after a new topic was created
+        $this->eventDispatcher->dispatch(
+            new AfterTopicCreateEvent(
+                $this->request,
+                $forum,
+                $topic
+            )
+        );
 
         // if a preview was requested direct to preview action
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
