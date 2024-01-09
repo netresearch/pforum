@@ -28,7 +28,7 @@
 		</ol>
 	</nav>
 
-	<f:form action="create" name="post" object="{post}" arguments="{topic: topic}" enctype="multipart/form-data">
+	<f:form action="create" name="post" arguments="{topic: topic}" enctype="multipart/form-data">
 		<f:render partial="FormErrors" arguments="{object: 'post'}" />
 
 		<f:if condition="{settings.auth} == 1">
