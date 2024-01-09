@@ -124,7 +124,7 @@ class AbstractController extends ActionController
 
         foreach ($mergedSettings as $key => $value) {
             if (!is_array($value) && empty($value)) {
-                $mergedSettings[$key] = $tsSettings[$key];
+                $mergedSettings[$key] = $tsSettings[$key] ?? '';
             }
         }
 
