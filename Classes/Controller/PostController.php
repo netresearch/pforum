@@ -14,6 +14,7 @@ namespace JWeiland\Pforum\Controller;
 use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
 use JWeiland\Pforum\Domain\Model\User;
+use JWeiland\Pforum\Event\AfterPostCreateEvent;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\FluidEmail;
 use TYPO3\CMS\Core\Mail\Mailer;
@@ -33,8 +34,10 @@ class PostController extends AbstractController
      */
     public function newAction(Topic $topic, Post $post = null): void
     {
-        $this->view->assign('topic', $topic);
-        $this->view->assign('post', $post);
+        $this->postProcessAndAssignFluidVariables([
+            'topic' => $topic,
+            'post'  => $post,
+        ]);
     }
 
     /**
@@ -54,6 +57,15 @@ class PostController extends AbstractController
 
         $topic->addPost($post);
         $this->topicRepository->update($topic);
+
+        // Dispatch event to allow handling after a new topic was created
+        $this->eventDispatcher->dispatch(
+            new AfterPostCreateEvent(
+                $this->request,
+                $topic,
+                $post
+            )
+        );
 
         // if a preview was requested direct to preview action
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
