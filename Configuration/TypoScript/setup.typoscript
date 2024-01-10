@@ -14,6 +14,7 @@ plugin.tx_pforum {
     emailIsMandatory = {$plugin.tx_pforum.settings.emailIsMandatory}
     usernameIsMandatory = {$plugin.tx_pforum.settings.usernameIsMandatory}
     useImages = {$plugin.tx_pforum.settings.useImages}
+    imageMimeTypes = {$plugin.tx_pforum.settings.imageMimeTypes}
     uidOfAdminGroup = {$plugin.tx_pforum.settings.uidOfAdminGroup}
     uidOfUserGroup = {$plugin.tx_pforum.settings.uidOfUserGroup}
     pidOfDetailPage = {$plugin.tx_pforum.settings.pidOfDetailPage}

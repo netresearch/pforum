@@ -15,13 +15,13 @@ use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Domain\Model\Topic;
 use JWeiland\Pforum\Event\AfterTopicCreateEvent;
 use JWeiland\Pforum\Helper\FrontendGroupHelper;
-use Netresearch\NrcPforumExtend\Event\PostProcessControllerActionEvent;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\FluidEmail;
 use TYPO3\CMS\Core\Mail\Mailer;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -48,7 +48,7 @@ class TopicController extends AbstractController
                 ->setIgnoreEnableFields(true)
                 ->setEnableFieldsToBeIgnored(['disabled']);
         }
-
+DebuggerUtility::var_dump($posts);
         $this->postProcessAndAssignFluidVariables([
             'topic' => $topic,
             'posts' => $posts,

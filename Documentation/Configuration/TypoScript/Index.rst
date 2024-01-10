@@ -135,6 +135,16 @@ Example: `plugin.tx_pforum.settings.useImages = 1`
 
 If activated two additional upload fields will be added to the form of new topics and posts.
 
+settings.imageMimeTypes
+-----------------------
+Comma separated list of image mime types.
+
+Default: 0
+
+Example: `plugin.tx_pforum.settings.imageMimeTypes = image/jpeg, image/png`
+
+Sets the allowed mime type for the image upload fields.
+
 settings.uidOfAdminGroup
 ------------------------
 

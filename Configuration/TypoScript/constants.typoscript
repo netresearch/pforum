@@ -20,8 +20,10 @@ plugin.tx_pforum {
     emailIsMandatory = 0
     # cat=plugin.tx_pforum//c; type=boolean; label=Username is mandatory
     usernameIsMandatory = 0
-    # cat=plugin.tx_pforum//c; type=boolean; label=Enable the image uploads field
+    # cat=plugin.tx_pforum//c; type=boolean; label=Enable the image upload fields
     useImages = 0
+    # cat=plugin.tx_pforum//c; type=string; label=Allowed image mime types for image upload fields
+    imageMimeTypes = image/jpeg, image/png, image/gif
     # cat=plugin.tx_pforum/basic/dims; type=int+; label=UID of Admin Group: Which FE-Group should act as the admin group
     uidOfAdminGroup = 0
     # cat=plugin.tx_pforum/basic/dims; type=int+; label=UID of User Group: Which FE-Group should act as forum members
