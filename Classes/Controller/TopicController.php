@@ -21,7 +21,6 @@ use TYPO3\CMS\Core\Mail\Mailer;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -48,7 +47,7 @@ class TopicController extends AbstractController
                 ->setIgnoreEnableFields(true)
                 ->setEnableFieldsToBeIgnored(['disabled']);
         }
-DebuggerUtility::var_dump($posts);
+
         $this->postProcessAndAssignFluidVariables([
             'topic' => $topic,
             'posts' => $posts,
