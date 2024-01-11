@@ -30,7 +30,7 @@
 				<div class="col-md-2">
 					<f:for each="{topic.images}" as="image">
 						<f:image image="{image}"
-										 alt="{image.title}"
+										 alt="{image.originalResource.title}"
 										 class="img-fluid rounded-start mb-3"
 										 width="{settings.image.width}"
 										 height="{settings.image.height}"
@@ -75,7 +75,7 @@
 					<div class="col-md-2">
 						<f:for each="{post.images}" as="image">
 							<f:image image="{image}"
-											 alt="{image.title}"
+											 alt="{image.originalResource.title}"
 											 class="img-fluid rounded-start mb-3"
 											 width="{settings.image.width}"
 											 height="{settings.image.height}"
