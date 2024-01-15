@@ -58,7 +58,7 @@ class PostController extends AbstractController
         $topic->addPost($post);
         $this->topicRepository->update($topic);
 
-        // Dispatch event to allow handling after a new topic was created
+        // Dispatch event to allow handling after a new post was created
         $this->eventDispatcher->dispatch(
             new AfterPostCreateEvent(
                 $this->request,
