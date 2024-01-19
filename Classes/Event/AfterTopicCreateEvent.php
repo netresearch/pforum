@@ -39,14 +39,23 @@ final class AfterTopicCreateEvent
      */
     private Topic $topic;
 
+    /**
+     * Contains the settings of the current extension.
+     *
+     * @var array
+     */
+    protected array $settings;
+
     public function __construct(
         ServerRequestInterface $request,
         Forum $forum,
-        Topic $topic
+        Topic $topic,
+        array $settings
     ) {
         $this->request = $request;
         $this->forum = $forum;
         $this->topic = $topic;
+        $this->settings = $settings;
     }
 
     /**
@@ -71,5 +80,13 @@ final class AfterTopicCreateEvent
     public function getTopic(): Topic
     {
         return $this->topic;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSettings(): array
+    {
+        return $this->settings;
     }
 }
