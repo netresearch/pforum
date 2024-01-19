@@ -87,7 +87,8 @@ class TopicController extends AbstractController
             new AfterTopicCreateEvent(
                 $this->request,
                 $forum,
-                $topic
+                $topic,
+                $this->settings,
             )
         );
 
