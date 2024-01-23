@@ -63,7 +63,8 @@ class PostController extends AbstractController
             new AfterPostCreateEvent(
                 $this->request,
                 $topic,
-                $post
+                $post,
+                $this->settings
             )
         );
 

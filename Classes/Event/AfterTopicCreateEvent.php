@@ -46,6 +46,14 @@ final class AfterTopicCreateEvent
      */
     protected array $settings;
 
+    /**
+     * Constructor.
+     *
+     * @param ServerRequestInterface $request
+     * @param Forum                  $forum
+     * @param Topic                  $topic
+     * @param array                  $settings
+     */
     public function __construct(
         ServerRequestInterface $request,
         Forum $forum,

@@ -39,14 +39,31 @@ final class AfterPostCreateEvent
      */
     private Post $post;
 
+    /**
+     * Contains the settings of the current extension.
+     *
+     * @var array
+     */
+    protected array $settings;
+
+    /**
+     * Constructor.
+     *
+     * @param ServerRequestInterface $request
+     * @param Topic                  $topic
+     * @param Post                   $post
+     * @param array                  $settings
+     */
     public function __construct(
         ServerRequestInterface $request,
         Topic $topic,
-        Post $post
+        Post $post,
+        array $settings
     ) {
         $this->request = $request;
         $this->topic = $topic;
         $this->post = $post;
+        $this->settings = $settings;
     }
 
     /**
@@ -71,5 +88,13 @@ final class AfterPostCreateEvent
     public function getPost(): Post
     {
         return $this->post;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSettings(): array
+    {
+        return $this->settings;
     }
 }

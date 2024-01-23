@@ -88,7 +88,7 @@ class TopicController extends AbstractController
                 $this->request,
                 $forum,
                 $topic,
-                $this->settings,
+                $this->settings
             )
         );
 
