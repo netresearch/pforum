@@ -210,6 +210,9 @@ class PostController extends AbstractController
 
     protected function mailToTopicCreator(Topic $topic, Post $post): void
     {
+        // TODO Prevent calling “mailToTopicCreator” should be an event that allows third-party extensions to customize the mail content.
+        return;
+
         $email = GeneralUtility::makeInstance(FluidEmail::class);
         $email
             ->to(new Address($topic->getUser()->getEmail(), $topic->getUser()->getName()))
