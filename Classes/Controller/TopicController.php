@@ -80,7 +80,9 @@ class TopicController extends AbstractController
         }
 
         $forum->addTopic($topic);
+
         $this->forumRepository->update($forum);
+        $this->persistenceManager->persistAll();
 
         // Dispatch event to allow handling after a new topic was created
         $this->eventDispatcher->dispatch(
