@@ -97,6 +97,7 @@ class TopicController extends AbstractController
         // if a preview was requested direct to preview action
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
             $topic->setHidden(true); // topic should not be visible while previewing
+            $this->forumRepository->update($forum);
             $this->persistenceManager->persistAll(); // we need an uid before redirecting
             $this->redirect(
                 'edit',
@@ -108,6 +109,8 @@ class TopicController extends AbstractController
 
         if ($this->settings['topic']['hideAtCreation']) {
             $topic->setHidden(true);
+            $this->forumRepository->update($forum);
+            $this->persistenceManager->persistAll();
         }
 
         // if auth = anonymous user
@@ -187,6 +190,9 @@ class TopicController extends AbstractController
                     $topic->setHidden(false);
                 }
 
+                $this->topicRepository->update($topic);
+                $this->persistenceManager->persistAll();
+
                 // if auth = anonymous user
                 // send a mail to the user to activate, edit or delete his entry
                 if (((int)$this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
@@ -197,6 +203,9 @@ class TopicController extends AbstractController
             } else {
                 // edited topics which are not new are visible
                 $topic->setHidden(false);
+                $this->topicRepository->update($topic);
+                $this->persistenceManager->persistAll();
+
                 $this->addFlashMessage(LocalizationUtility::translate('topicUpdated', 'pforum'));
             }
 
