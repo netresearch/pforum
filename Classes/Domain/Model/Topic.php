@@ -12,14 +12,13 @@ declare(strict_types=1);
 namespace JWeiland\Pforum\Domain\Model;
 
 use TYPO3\CMS\Extbase\Annotation as Extbase;
-use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * Topic model as part of a forum entry
  */
-class Topic extends AbstractEntity
+class Topic extends AbstractEntity implements TopicInterface
 {
     /**
      * @var bool
