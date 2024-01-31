@@ -59,19 +59,36 @@ class ApplyEmailAsMandatoryIfNeededEventListener extends AbstractControllerEvent
             && ($argumentName = $this->getArgumentName($controllerActionEvent))
         ) {
             /** @var ConjunctionValidator $eventValidator */
-            $eventValidator = $controllerActionEvent->getArguments()->getArgument($argumentName)->getValidator();
+            $eventValidator = $controllerActionEvent
+                ->getArguments()
+                ->getArgument($argumentName)
+                ->getValidator();
+
             /** @var ConjunctionValidator $conjunctionValidator */
-            $conjunctionValidator = $eventValidator->getValidators()->current();
+            $conjunctionValidator = $eventValidator
+                ->getValidators()
+                ->current();
+
             /** @var GenericObjectValidator $genericEventValidator */
-            $genericEventValidator = $conjunctionValidator->getValidators()->current();
-            $genericEventValidator->addPropertyValidator(
-                $this->getUsersPropertyName($controllerActionEvent->getRequest(), $argumentName),
-                $notEmptyValidator
+            $genericEventValidator = $conjunctionValidator
+                ->getValidators()
+                ->current();
+
+            $propertyName = $this->getUsersPropertyName(
+                $controllerActionEvent->getRequest(),
+                $argumentName
             );
-            $genericEventValidator->addPropertyValidator(
-                $this->getUsersPropertyName($controllerActionEvent->getRequest(), $argumentName),
-                $emailValidator
-            );
+
+            if ($propertyName !== '') {
+                $genericEventValidator->addPropertyValidator(
+                    $propertyName,
+                    $notEmptyValidator
+                );
+                $genericEventValidator->addPropertyValidator(
+                    $propertyName,
+                    $emailValidator
+                );
+            }
         }
     }
 
