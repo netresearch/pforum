@@ -20,6 +20,7 @@ use JWeiland\Pforum\Domain\Repository\PostRepository;
 use JWeiland\Pforum\Domain\Repository\TopicRepository;
 use JWeiland\Pforum\Event\PostProcessFluidVariablesEvent;
 use JWeiland\Pforum\Event\PreProcessControllerActionEvent;
+use JWeiland\Pforum\Service\FrontendUserAccessService;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -69,6 +70,35 @@ class AbstractController extends ActionController
      * @var PersistenceManager
      */
     protected $persistenceManager;
+
+    /**
+     * @var FrontendUserAccessService
+     */
+    protected FrontendUserAccessService $frontendUserAccessService;
+
+    /**
+     * Constructor.
+     *
+     * @param FrontendUserAccessService $frontendUserAccessService
+     */
+    public function __construct(
+        FrontendUserAccessService $frontendUserAccessService
+    ) {
+        $this->frontendUserAccessService = $frontendUserAccessService;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function accessCheck(): bool
+    {
+        return $this->frontendUserAccessService
+            ->accessCheck(
+                (int) $this->settings['auth'],
+                (int) $this->settings['userGroupUid']
+            );
+    }
+
 
     public function injectExtConf(ExtConf $extConf): void
     {
