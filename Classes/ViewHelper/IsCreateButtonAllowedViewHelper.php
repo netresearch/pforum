@@ -21,6 +21,8 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithContentArgumentAndRenderS
 
 /**
  * ViewHelper to simplify the condition to show create button for topics and posts
+ *
+ * @TODO Extend from \TYPO3\CMS\Fluid\ViewHelpers\Security\IfHasRoleViewHelper
  */
 class IsCreateButtonAllowedViewHelper extends AbstractViewHelper
 {
