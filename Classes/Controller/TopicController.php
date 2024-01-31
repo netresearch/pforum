@@ -56,6 +56,10 @@ class TopicController extends AbstractController
 
     public function newAction(Forum $forum): void
     {
+        if (!$this->accessCheck()) {
+            $this->redirect('list', 'Forum', 'Pforum');
+        }
+
         $this->deleteUploadedFilesOnValidationErrors('topic');
 
         $this->postProcessAndAssignFluidVariables([

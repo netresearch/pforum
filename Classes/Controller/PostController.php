@@ -34,6 +34,10 @@ class PostController extends AbstractController
      */
     public function newAction(Topic $topic, Post $post = null): void
     {
+        if (!$this->accessCheck()) {
+            $this->redirect('list', 'Forum', 'Pforum');
+        }
+
         $this->postProcessAndAssignFluidVariables([
             'topic' => $topic,
             'post'  => $post,
