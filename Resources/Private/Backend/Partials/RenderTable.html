@@ -1,38 +1,49 @@
 <html lang="en"
-			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-			data-namespace-typo3-fluid="true">
-
-<f:if condition="{records}">
-	<f:then>
-		<table class="table table-striped table-hover">
-			<thead>
-			<tr>
-				<th>{f:translate(key: 'tx_pforum_domain_model_{type}.title')}</th>
-				<th>{f:translate(key: 'tx_pforum_domain_model_{type}.description')}</th>
-				<th>&nbsp;</th>
-			</tr>
-			</thead>
-			<tbody>
-			<f:for each="{records}" as="record">
-				<tr>
-					<td>{record.title}</td>
-					<td>{record.description}</td>
-					<td>
-						<f:link.action action="{action}"
-													 class="btn btn-default"
-													 arguments="{record: record}">
-							{f:translate(key: 'activate')}
-						</f:link.action>
-					</td>
-				</tr>
-			</f:for>
-			</tbody>
-		</table>
-	</f:then>
-	<f:else>
-		<f:be.infobox disableIcon="false" state="-1">
-			{f:translate(key: 'noHiddenRecords')}
-		</f:be.infobox>
-	</f:else>
-</f:if>
+      xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      data-namespace-typo3-fluid="true"
+>
+    <f:if condition="{records}">
+        <f:then>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>{f:translate(key: 'tx_pforum_domain_model_{type}.title')}</th>
+                        <th>{f:translate(key: 'tx_pforum_domain_model_{type}.description')}</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <f:for each="{records}" as="record">
+                        <tr>
+                            <td style="vertical-align: top;"{f:if(condition: record.images, then: ' rowspan="2"')}>{record.title}</td>
+                            <td style="vertical-align: top;">
+                                <f:format.raw>{record.description}</f:format.raw>
+                            </td>
+                            <td style="vertical-align: top;"{f:if(condition: record.images, then: ' rowspan="2"')}>
+                                <f:link.action action="{action}"
+                                               class="btn btn-default"
+                                               arguments="{record: record}">
+                                    {f:translate(key: 'activate')}
+                                </f:link.action>
+                            </td>
+                        </tr>
+                        <f:if condition="{record.images}">
+                            <tr>
+                                <td>
+                                    <f:for each="{record.images}" as="image">
+                                        <f:image image="{image}" alt="{image.originalResource.title}" height="200px" style="margin-right: 10px;" />
+                                    </f:for>
+                                </td>
+                            </tr>
+                        </f:if>
+                    </f:for>
+                </tbody>
+            </table>
+        </f:then>
+        <f:else>
+            <f:be.infobox disableIcon="false" state="-1">
+                {f:translate(key: 'noHiddenRecords')}
+            </f:be.infobox>
+        </f:else>
+    </f:if>
 </html>
