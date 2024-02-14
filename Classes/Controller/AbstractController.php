@@ -95,10 +95,9 @@ class AbstractController extends ActionController
         return $this->frontendUserAccessService
             ->accessCheck(
                 (int) $this->settings['auth'],
-                (int) $this->settings['userGroupUid']
+                (int) $this->settings['uidOfUserGroup']
             );
     }
-
 
     public function injectExtConf(ExtConf $extConf): void
     {
