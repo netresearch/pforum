@@ -37,13 +37,15 @@ class IsCreateButtonAllowedViewHelper extends AbstractViewHelper
         $this->registerArgument(
             'authType',
             'int',
-            'The authentication type. 1 = None, 2 = Needs authentication.'
+            'The authentication type. 1 = None, 2 = Needs authentication.',
+            true
         );
 
         $this->registerArgument(
             'userGroupUid',
             'int',
-            'The usergroup UID.'
+            'The usergroup UID.',
+            true
         );
     }
 
