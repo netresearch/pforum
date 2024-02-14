@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-/*
+/**
  * This file is part of the package jweiland/pforum.
  *
  * For the full copyright and license information, please read the
