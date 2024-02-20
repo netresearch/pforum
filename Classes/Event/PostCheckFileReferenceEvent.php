@@ -58,7 +58,7 @@ class PostCheckFileReferenceEvent
         $this->source = $source;
         $this->key = $key;
         $this->alreadyPersistedImage = $alreadyPersistedImage;
-        $this->uploadedFile= $uploadedFile;
+        $this->uploadedFile = $uploadedFile;
     }
 
     public function getSource(): array
