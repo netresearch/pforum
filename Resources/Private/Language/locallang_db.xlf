@@ -22,6 +22,9 @@
 			<trans-unit id="tx_pforum_domain_model_forum.topics">
 				<source>Topics</source>
 			</trans-unit>
+            <trans-unit id="tx_pforum_domain_model_forum.archived">
+                <source>Archived</source>
+            </trans-unit>
 
 			<trans-unit id="tx_pforum_domain_model_topic">
 				<source>Topic</source>
