@@ -1,0 +1,23 @@
+includes:
+    - .build/vendor/phpstan/phpstan-strict-rules/rules.neon
+    - .build/vendor/phpstan/phpstan-deprecation-rules/rules.neon
+
+parameters:
+    # You can currently choose from 10 levels (0 is the loosest and 9 is the strictest).
+    level: 6
+
+    paths:
+        - Classes/
+        - Configuration/
+        - Resources/
+        - ext_localconf.php
+        - ext_tables.php
+
+    excludePaths:
+        - vendor/*
+        - ext_emconf.php
+
+    checkGenericClassInNonGenericObjectType: false
+
+    # Ignore error, mainly due invalid PHP in TYPO3
+    ignoreErrors:
