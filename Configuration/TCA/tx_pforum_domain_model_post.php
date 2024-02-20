@@ -22,7 +22,6 @@ return [
         'sortby'                   => 'sorting',
         'default_sortby'           => 'title',
         'versioningWS'             => true,
-        'rootLevel'                => -1,
         'iconfile'                 => 'EXT:pforum/Resources/Public/Icons/tx_pforum_domain_model_post.svg',
         'origUid'                  => 't3_origuid',
         'languageField'            => 'sys_language_uid',
@@ -39,17 +38,40 @@ return [
     'types'    => [
         '1' => [
             'showitem' => '
-            --palette--;;languageHidden, title, description, anonymous_user, frontend_user, images, 
-            --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
-            --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access',
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
+                    --palette--;;standard,
+                    --palette--;;users,
+                    --palette--;;media,
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,
+                    --palette--;;language,
+                --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access,
+                    --palette--;;visibility,
+                    --palette--;;access,
+            ',
         ],
     ],
     'palettes' => [
-        'languageHidden' => [
-            'showitem' => 'sys_language_uid, l10n_parent, hidden',
+        'standard'   => [
+            'label'    => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:CType.div.standard',
+            'showitem' => 'title, --linebreak--, description',
         ],
-        'access'         => [
-            'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel',
+        'users'      => [
+            'showitem' => 'anonymous_user, --linebreak--, frontend_user',
+        ],
+        'media'      => [
+            'showitem' => 'images',
+        ],
+        'language'   => [
+            'label'    => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.language',
+            'showitem' => 'sys_language_uid, l10n_parent',
+        ],
+        'visibility' => [
+            'label'    => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
+            'showitem' => 'hidden;LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
+        ],
+        'access'     => [
+            'label'    => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access',
+            'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel, endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel',
         ],
     ],
     'columns'  => [
@@ -152,8 +174,9 @@ return [
             'exclude' => true,
             'label'   => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_post.description',
             'config'  => [
-                'type' => 'input',
-                'size' => 30,
+                'type' => 'text',
+                'cols' => 30,
+                'rows' => 10,
                 'eval' => 'trim',
             ],
         ],
