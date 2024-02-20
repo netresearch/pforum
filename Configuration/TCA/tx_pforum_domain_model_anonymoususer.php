@@ -20,7 +20,6 @@ return [
         'sortby'                   => 'sorting',
         'default_sortby'           => 'name',
         'versioningWS'             => true,
-        'rootLevel'                => -1,
         'iconfile'                 => 'EXT:pforum/Resources/Public/Icons/tx_pforum_domain_model_anonymoususer.svg',
         'origUid'                  => 't3_origuid',
         'languageField'            => 'sys_language_uid',
