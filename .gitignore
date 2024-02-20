@@ -15,3 +15,10 @@
 .project
 .webprj
 
+/.build/
+/vendor/
+/public/
+/composer.lock
+.buildpath
+.idea
+
