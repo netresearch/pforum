@@ -78,13 +78,15 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
     {
         // check if $source consists of uploaded files
         foreach ($source as $uploadedFile) {
-            if (!isset(
-                $uploadedFile['error'],
-                $uploadedFile['name'],
-                $uploadedFile['size'],
-                $uploadedFile['tmp_name'],
-                $uploadedFile['type']
-            )) {
+            if (
+                !isset(
+                    $uploadedFile['error'],
+                    $uploadedFile['name'],
+                    $uploadedFile['size'],
+                    $uploadedFile['tmp_name'],
+                    $uploadedFile['type']
+                )
+            ) {
                 return false;
             }
         }
