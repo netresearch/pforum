@@ -62,7 +62,7 @@ return [
         ],
         'visibility' => [
             'label'    => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
-            'showitem' => 'hidden;LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
+            'showitem' => 'hidden;LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden, --linebreak--, archived',
         ],
         'access'     => [
             'label'    => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access',
@@ -183,6 +183,21 @@ return [
                     'showSynchronizationLink'         => true,
                     'showPossibleLocalizationRecords' => true,
                     'showAllLocalizationLink'         => true,
+                ],
+            ],
+        ],
+        'archived'         => [
+            'exclude' => true,
+            'label'   => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_forum.archived',
+            'config'  => [
+                'type'       => 'check',
+                'renderType' => 'checkboxToggle',
+                'default'    => 0,
+                'items'      => [
+                    [
+                        0 => '',
+                        1 => '',
+                    ],
                 ],
             ],
         ],

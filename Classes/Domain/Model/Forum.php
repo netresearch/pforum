@@ -32,6 +32,11 @@ class Forum extends AbstractEntity
     protected $teaser = '';
 
     /**
+     * @var bool
+     */
+    protected bool $archived = false;
+
+    /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Pforum\Domain\Model\Topic>
      * @Extbase\ORM\Lazy
      */
@@ -80,5 +85,24 @@ class Forum extends AbstractEntity
     public function setTopics(ObjectStorage $topics): void
     {
         $this->topics = $topics;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isArchived(): bool
+    {
+        return $this->archived;
+    }
+
+    /**
+     * @param bool $archived
+     *
+     * @return Forum
+     */
+    public function setArchived(bool $archived): Forum
+    {
+        $this->archived = $archived;
+        return $this;
     }
 }

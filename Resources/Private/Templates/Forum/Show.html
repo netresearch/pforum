@@ -70,7 +70,7 @@
 </f:section>
 
 <f:section name="renderCreationButton">
-	<f:if condition="{pf:isCreateButtonAllowed(authType: settings.auth, userGroupUid: uidOfUserGroup)}">
+	<f:if condition="!{forum.archived} && {pf:isCreateButtonAllowed(authType: settings.auth, userGroupUid: uidOfUserGroup)}">
 		<p>
 			<f:link.action action="new"
 										 controller="Topic"
