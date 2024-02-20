@@ -151,7 +151,7 @@ return [
             ],
         ],
         'topics'           => [
-            'exclude' => 0,
+            'exclude' => false,
             'label'   => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_forum.topics',
             'config'  => [
                 'type'          => 'inline',
@@ -159,11 +159,11 @@ return [
                 'foreign_field' => 'forum',
                 'maxitems'      => 9999,
                 'appearance'    => [
-                    'collapseAll'                     => 0,
+                    'collapseAll'                     => true,
                     'levelLinksPosition'              => 'top',
-                    'showSynchronizationLink'         => 1,
-                    'showPossibleLocalizationRecords' => 1,
-                    'showAllLocalizationLink'         => 1,
+                    'showSynchronizationLink'         => true,
+                    'showPossibleLocalizationRecords' => true,
+                    'showAllLocalizationLink'         => true,
                 ],
             ],
         ],

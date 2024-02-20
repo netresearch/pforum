@@ -158,7 +158,7 @@ return [
             ],
         ],
         'anonymous_user'   => [
-            'exclude' => 0,
+            'exclude' => false,
             'label'   => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_post.user',
             'config'  => [
                 'type'          => 'select',
@@ -169,7 +169,7 @@ return [
             ],
         ],
         'frontend_user'    => [
-            'exclude' => 0,
+            'exclude' => false,
             'label'   => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_post.user',
             'config'  => [
                 'type'          => 'select',
