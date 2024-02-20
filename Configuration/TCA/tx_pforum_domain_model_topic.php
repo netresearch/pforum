@@ -83,14 +83,6 @@ return [
                 'default' => '',
             ],
         ],
-        't3ver_label'      => [
-            'label'  => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.versionLabel',
-            'config' => [
-                'type' => 'input',
-                'size' => '30',
-                'max'  => '255',
-            ],
-        ],
         'hidden'           => [
             'exclude' => true,
             'label'   => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
@@ -107,25 +99,25 @@ return [
             ],
         ],
         'starttime'        => [
-            'exclude'      => true,
-            'label'        => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
-            'config'       => [
+            'exclude' => true,
+            'label'   => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
+            'config'  => [
                 'type'       => 'input',
-                'size'       => '13',
-                'eval'       => 'datetime',
-                'default'    => 0,
                 'renderType' => 'inputDateTime',
+                'eval'       => 'datetime,int',
+                'default'    => 0,
+                'behaviour'  => [
+                    'allowLanguageSynchronization' => true,
+                ],
             ],
-            'l10n_mode'    => 'exclude',
-            'l10n_display' => 'defaultAsReadonly',
         ],
         'endtime'          => [
-            'exclude'      => true,
-            'label'        => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
-            'config'       => [
+            'exclude' => true,
+            'label'   => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
+            'config'  => [
                 'type'       => 'input',
-                'size'       => '13',
-                'eval'       => 'datetime',
+                'renderType' => 'inputDateTime',
+                'eval'       => 'datetime,int',
                 'default'    => 0,
                 'range'      => [
                     'upper' => mktime(
@@ -137,10 +129,10 @@ return [
                         2038
                     ),
                 ],
-                'renderType' => 'inputDateTime',
+                'behaviour'  => [
+                    'allowLanguageSynchronization' => true,
+                ],
             ],
-            'l10n_mode'    => 'exclude',
-            'l10n_display' => 'defaultAsReadonly',
         ],
         'crdate'           => [
             'config' => [
