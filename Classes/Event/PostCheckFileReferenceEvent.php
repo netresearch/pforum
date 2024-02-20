@@ -13,7 +13,7 @@ namespace JWeiland\Pforum\Event;
 
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 
-/*
+/**
  * Use this event, if you want to add further checks for uploaded images of pforum frontend form
  */
 class PostCheckFileReferenceEvent

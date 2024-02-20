@@ -7,18 +7,22 @@
  * LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace JWeiland\Pforum\Tests\Functional\Validation\Validator;
 
+use Doctrine\DBAL\DBALException;
 use JWeiland\Pforum\Validation\Validator\EmailValidator;
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Error\Result;
 use TYPO3\CMS\Extbase\Validation\Error;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * Test case
@@ -30,20 +34,24 @@ class EmailValidatorTest extends FunctionalTestCase
     /**
      * @var EmailValidator
      */
-    protected $subject;
+    protected EmailValidator $subject;
 
     /**
      * @var ConfigurationManagerInterface|ObjectProphecy
      */
-    protected $configurationManagerProphecy;
+    protected ObjectProphecy|ConfigurationManagerInterface $configurationManagerProphecy;
 
     /**
      * @var array
      */
-    protected $testExtensionsToLoad = [
+    protected array $testExtensionsToLoad = [
         'typo3conf/ext/pforum'
     ];
 
+    /**
+     * @return void
+     * @throws DBALException
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -53,6 +61,9 @@ class EmailValidatorTest extends FunctionalTestCase
         $this->subject = new EmailValidator();
     }
 
+    /**
+     * @return void
+     */
     protected function tearDown(): void
     {
         unset($this->subject);
@@ -62,7 +73,7 @@ class EmailValidatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function validateWillNotAddAnyErrorIfEmailIsNotMandatory()
+    public function validateWillNotAddAnyErrorIfEmailIsNotMandatory(): void
     {
         $this->setEmailIsMandatory(false);
 
@@ -75,7 +86,7 @@ class EmailValidatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function validateWillNotAddAnyErrorIfEmailIsNotString()
+    public function validateWillNotAddAnyErrorIfEmailIsNotString(): void
     {
         $this->setEmailIsMandatory(true);
 
@@ -88,7 +99,7 @@ class EmailValidatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function validateWillNotAddAnyErrorIfEmailIsValidAndIsString()
+    public function validateWillNotAddAnyErrorIfEmailIsValidAndIsString(): void
     {
         $this->setEmailIsMandatory(true);
 
@@ -101,7 +112,7 @@ class EmailValidatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function validateWillAddErrorIfEmailIsStringAndEmpty()
+    public function validateWillAddErrorIfEmailIsStringAndEmpty(): void
     {
         $this->setEmailIsMandatory(true);
 
@@ -122,7 +133,7 @@ class EmailValidatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function validateWillAddErrorIfEmailIsStringAndNotValid()
+    public function validateWillAddErrorIfEmailIsStringAndNotValid(): void
     {
         $this->setEmailIsMandatory(true);
 
@@ -140,7 +151,13 @@ class EmailValidatorTest extends FunctionalTestCase
         );
     }
 
-    protected function setEmailIsMandatory(bool $isMandatory)
+    /**
+     * @param bool $isMandatory
+     *
+     * @return void
+     * @throws InvalidConfigurationTypeException
+     */
+    protected function setEmailIsMandatory(bool $isMandatory): void
     {
         $this->configurationManagerProphecy
             ->getConfiguration(

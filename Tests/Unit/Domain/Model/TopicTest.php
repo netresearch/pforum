@@ -7,13 +7,15 @@
  * LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace JWeiland\Pforum\Tests\Unit\Domain\Model;
 
 use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * Test case
@@ -25,13 +27,19 @@ class TopicTest extends UnitTestCase
     /**
      * @var Topic
      */
-    protected $subject;
+    protected Topic $subject;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->subject = new Topic();
     }
 
+    /**
+     * @return void
+     */
     protected function tearDown(): void
     {
         unset($this->subject);
@@ -40,7 +48,7 @@ class TopicTest extends UnitTestCase
     /**
      * @test
      */
-    public function getTitleInitiallyReturnsEmptyString()
+    public function getTitleInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -51,7 +59,7 @@ class TopicTest extends UnitTestCase
     /**
      * @test
      */
-    public function setTitleSetsTitle()
+    public function setTitleSetsTitle(): void
     {
         $this->subject->setTitle('foo bar');
 
@@ -64,25 +72,7 @@ class TopicTest extends UnitTestCase
     /**
      * @test
      */
-    public function setTitleWithIntegerResultsInString()
-    {
-        $this->subject->setTitle(123);
-        self::assertSame('123', $this->subject->getTitle());
-    }
-
-    /**
-     * @test
-     */
-    public function setTitleWithBooleanResultsInString()
-    {
-        $this->subject->setTitle(true);
-        self::assertSame('1', $this->subject->getTitle());
-    }
-
-    /**
-     * @test
-     */
-    public function getDescriptionInitiallyReturnsEmptyString()
+    public function getDescriptionInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -93,7 +83,7 @@ class TopicTest extends UnitTestCase
     /**
      * @test
      */
-    public function setDescriptionSetsDescription()
+    public function setDescriptionSetsDescription(): void
     {
         $this->subject->setDescription('foo bar');
 
@@ -106,25 +96,7 @@ class TopicTest extends UnitTestCase
     /**
      * @test
      */
-    public function setDescriptionWithIntegerResultsInString()
-    {
-        $this->subject->setDescription(123);
-        self::assertSame('123', $this->subject->getDescription());
-    }
-
-    /**
-     * @test
-     */
-    public function setDescriptionWithBooleanResultsInString()
-    {
-        $this->subject->setDescription(true);
-        self::assertSame('1', $this->subject->getDescription());
-    }
-
-    /**
-     * @test
-     */
-    public function getPostsInitiallyReturnsObjectStorage()
+    public function getPostsInitiallyReturnsObjectStorage(): void
     {
         self::assertEquals(
             new ObjectStorage(),
@@ -135,7 +107,7 @@ class TopicTest extends UnitTestCase
     /**
      * @test
      */
-    public function setPostsSetsPosts()
+    public function setPostsSetsPosts(): void
     {
         $object = new Post();
         $objectStorage = new ObjectStorage();
@@ -151,7 +123,7 @@ class TopicTest extends UnitTestCase
     /**
      * @test
      */
-    public function addPostAddsOnePost()
+    public function addPostAddsOnePost(): void
     {
         $objectStorage = new ObjectStorage();
         $this->subject->setPosts($objectStorage);
@@ -170,7 +142,7 @@ class TopicTest extends UnitTestCase
     /**
      * @test
      */
-    public function removePostRemovesOnePost()
+    public function removePostRemovesOnePost(): void
     {
         $object = new Post();
         $objectStorage = new ObjectStorage();

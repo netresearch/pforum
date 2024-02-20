@@ -286,7 +286,7 @@ class TopicController extends AbstractController
             );
             $topic->setFrontendUser($user);
         } else {
-            /* normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated */
+            // normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated
             $this->addFlashMessage(
                 'You must be logged in before creating a topic',
                 '',

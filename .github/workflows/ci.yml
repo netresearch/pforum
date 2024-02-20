@@ -1,7 +1,9 @@
 # Adapted from https://github.com/TYPO3GmbH/blog/blob/master/.github/workflows/ci.yml
 name: CI
 
-on: [ pull_request ]
+on:
+    push:
+    pull_request:
 
 jobs:
     build:
@@ -10,75 +12,89 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                typo3: [ ^11.5 ]
-                php: [ '7.4' ]
-                include:
-                    -   typo3: ^11.5
-                        php: '8.0'
-                    -   typo3: ^11.5
-                        php: '8.1'
-                    -   typo3: ^11.5
-                        php: '8.2'
-
-        services:
-            mysql:
-                image: mysql:5.6
-                env:
-                    MYSQL_ALLOW_EMPTY_PASSWORD: false
-                    MYSQL_ROOT_PASSWORD: password
-                    MYSQL_DATABASE: test
-                ports:
-                    - 3306/tcp
-                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+                typo3: [ '^11' ]
+                php: [ '8.0', '8.1', '8.2' ]
+                mysql: [ '5.7' ]
 
         steps:
-            -   name: Checkout
-                uses: actions/checkout@v2
+            -   id: checkout
+                name: Checkout
+                uses: actions/checkout@v4
 
-            -   name: Setup PHP ${{ matrix.php }}, with composer and extensions
+            -   id: setup_mysql
+                name: Set up MySQL ${{ matrix.mysql }}
+                uses: mirromutth/mysql-action@v1.1
+                with:
+                    mysql version: ${{ matrix.mysql }}
+                    mysql root password: 'root'
+
+            -   id: setup_php
+                name: Set up PHP version ${{ matrix.php }}
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php }}
-                    extensions: mbstring, dom, zip, mysql
-
-            -   name: Start mysql service
-                run: sudo /etc/init.d/mysql start
+                    tools: composer:v2, php-cs-fixer
 
             -   name: Validate composer.json and composer.lock
                 run: composer validate
 
-            -   name: Get composer cache directory
-                id: composer-cache
-                run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+            -   id: composer-cache-vars
+                name: Composer Cache Vars
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+                    echo "timestamp=$(date +"%s")" >> $GITHUB_OUTPUT
 
-            -   name: Cache composer dependencies
-                uses: actions/cache@v2
+            -   id: composer-cache-dependencies
+                name: Cache Composer dependencies
+                uses: actions/cache@v4
                 with:
-                    path: ${{ steps.composer-cache.outputs.dir }}
-                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-                    restore-keys: ${{ runner.os }}-composer-
+                    path: ${{ steps.composer-cache-vars.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.typo3 }}-${{ steps.composer-cache-vars.outputs.timestamp }}
+                    restore-keys: |
+                        ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.typo3 }}-
+                        ${{ runner.os }}-composer-${{ matrix.php }}-
+                        ${{ runner.os }}-composer-
 
-            -   name: Install dependencies with typo3/cms-core:${{ matrix.typo3 }}
+            -   id: install
+                name: Install dependencies with typo3/cms-core:${{ matrix.typo3 }}
                 run: |
                     composer require typo3/cms-core:${{ matrix.typo3 }} --no-progress
                     composer require typo3/cms-extensionmanager:${{ matrix.typo3 }} --no-progress
                     git checkout composer.json
 
-            -   name: php-cs-fixer
-                run: composer ci:php:fixer
+            -   id: lint
+                name: Lint
+                if: ${{ always() && steps.install.conclusion == 'success' }}
+                run: |
+                    composer ci:test:php:lint
 
-            -   name: Lint PHP
-                run: composer ci:php:lint
+            -   id: cgl
+                name: CGL
+                if: ${{ always() && steps.install.conclusion == 'success' }}
+                run: |
+                    php-cs-fixer fix --dry-run --verbose
 
-            -   name: Unit Tests
-                run: composer ci:tests:unit
+            -   id: phpstan
+                name: PHPStan
+                continue-on-error: true
+                if: ${{ always() && steps.install.conclusion == 'success' }}
+                run: |
+                    composer ci:test:php:phpstan -- --error-format=github
 
-            -   name: Functional Tests
+            -   id: tests_unit
+                name: Unit Tests
+                if: ${{ always() && steps.install.conclusion == 'success' }}
+                run: |
+                    composer ci:test:php:unit
+
+            -   id: tests_functional
+                name: Functional Tests
+                if: ${{ always() && steps.install.conclusion == 'success' }}
+                run: |
+                    composer ci:test:php:functional
                 env:
+                    COMPOSER_PROCESS_TIMEOUT: 1200
+                    typo3DatabaseHost: 127.0.0.1
                     typo3DatabaseName: test
                     typo3DatabaseUsername: root
-                    typo3DatabasePassword: password
-                    typo3DatabaseHost: 127.0.0.1
-                    typo3DatabasePort: ${{ job.services.mysql.ports['3306'] }}
-                run: |
-                    composer ci:tests:functional
+                    typo3DatabasePassword: root

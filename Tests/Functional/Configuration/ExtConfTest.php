@@ -7,11 +7,14 @@
  * LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace JWeiland\Pforum\Tests\Functional\Configuration;
 
+use Doctrine\DBAL\DBALException;
 use JWeiland\Pforum\Configuration\ExtConf;
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * Test case
@@ -23,15 +26,19 @@ class ExtConfTest extends FunctionalTestCase
     /**
      * @var ExtConf
      */
-    protected $subject;
+    protected ExtConf $subject;
 
     /**
      * @var array
      */
-    protected $testExtensionsToLoad = [
+    protected array $testExtensionsToLoad = [
         'typo3conf/ext/pforum'
     ];
 
+    /**
+     * @return void
+     * @throws DBALException
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -39,6 +46,9 @@ class ExtConfTest extends FunctionalTestCase
         $this->subject = new ExtConf();
     }
 
+    /**
+     * @return void
+     */
     protected function tearDown(): void
     {
         unset($this->subject);
@@ -50,16 +60,16 @@ class ExtConfTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getEmailFromAddressInitiallyThrowsException()
+    public function getEmailFromAddressInitiallyThrowsException(): void
     {
-        self::expectExceptionCode(1604694223);
+        $this->expectExceptionCode(1604694223);
         $this->subject->getEmailFromAddress();
     }
 
     /**
      * @test
      */
-    public function getEmailFromAddressInitiallyReturnsEmailFromInstallTool()
+    public function getEmailFromAddressInitiallyReturnsEmailFromInstallTool(): void
     {
         $email = 'info@example.com';
         $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'] = $email;
@@ -72,7 +82,7 @@ class ExtConfTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setEmailFromAddressSetsEmailAddress()
+    public function setEmailFromAddressSetsEmailAddress(): void
     {
         $email = 'abc@example.com';
         $this->subject->setEmailFromAddress($email);
@@ -86,16 +96,16 @@ class ExtConfTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getEmailFromNameInitiallyThrowsException()
+    public function getEmailFromNameInitiallyThrowsException(): void
     {
-        self::expectExceptionCode(1604694279);
+        $this->expectExceptionCode(1604694279);
         $this->subject->getEmailFromName();
     }
 
     /**
      * @test
      */
-    public function getEmailFromNameInitiallyReturnsEmailNameFromInstallTool()
+    public function getEmailFromNameInitiallyReturnsEmailNameFromInstallTool(): void
     {
         $name = 'stefan';
         $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName'] = $name;
@@ -108,7 +118,7 @@ class ExtConfTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setEmailFromNameSetsEmailName()
+    public function setEmailFromNameSetsEmailName(): void
     {
         $name = 'stefan';
         $this->subject->setEmailFromName($name);

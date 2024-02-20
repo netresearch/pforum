@@ -27,7 +27,7 @@ use TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface;
 use TYPO3\CMS\Extbase\Property\TypeConverter\AbstractTypeConverter;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
-/*
+/**
  * A for PropertyMapper to convert multiple file uploads into an array
  */
 class UploadMultipleFilesConverter extends AbstractTypeConverter
