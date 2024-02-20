@@ -32,7 +32,9 @@
         "source": "https://github.com/jweiland-net/pforum"
     },
     "require": {
-        "typo3/cms-core": "^11.5.16"
+        "typo3/cms-core": "^11.5.16",
+        "typo3/cms-backend": "^11.5.16",
+        "typo3/cms-extbase": "^11.5.16"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.12",
