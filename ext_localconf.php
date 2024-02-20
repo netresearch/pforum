@@ -12,10 +12,7 @@ declare(strict_types=1);
 use JWeiland\Pforum\Controller\ForumController;
 use JWeiland\Pforum\Controller\PostController;
 use JWeiland\Pforum\Controller\TopicController;
-use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
-use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 defined('TYPO3') || die('Access denied.');
@@ -42,23 +39,4 @@ call_user_func(static function (): void {
     );
 
     $GLOBALS['TYPO3_CONF_VARS']['MAIL']['templateRootPaths'][1_666_352_112] = 'EXT:pforum/Resources/Private/Templates/Mail';
-
-    $iconRegistry = GeneralUtility::makeInstance(
-        IconRegistry::class
-    );
-
-    $svgIcons = [
-        'ext-pforum-wizard-icon' => 'module.svg',
-        'ext-pforum-table-forum' => 'tx_pforum_domain_model_forum.svg',
-        'ext-pforum-table-topic' => 'tx_pforum_domain_model_topic.svg',
-        'ext-pforum-table-post' => 'tx_pforum_domain_model_post.svg',
-    ];
-
-    foreach ($svgIcons as $identifier => $fileName) {
-        $iconRegistry->registerIcon(
-            $identifier,
-            SvgIconProvider::class,
-            ['source' => 'EXT:pforum/Resources/Public/Icons/' . $fileName]
-        );
-    }
 });
