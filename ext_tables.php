@@ -9,21 +9,24 @@
 
 declare(strict_types=1);
 
-if (!defined('TYPO3_MODE')) {
-    die('Access denied.');
-}
+use JWeiland\Pforum\Controller\AdministrationController;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-    'pforum',
-    'web',
-    'administration',
-    '',
-    [
-        \JWeiland\Pforum\Controller\AdministrationController::class => 'index, listHiddenTopics, listHiddenPosts, activateTopic, activatePost',
-    ],
-    [
-        'access' => 'user,group',
-        'icon' => 'EXT:pforum/Resources/Public/Icons/module.svg',
-        'labels' => 'LLL:EXT:pforum/Resources/Private/Language/locallang_mod_administration.xlf',
-    ]
-);
+defined('TYPO3') || die('Access denied.');
+
+call_user_func(static function (): void {
+    ExtensionUtility::registerModule(
+        'pforum',
+        'web',
+        'administration',
+        '',
+        [
+            AdministrationController::class => 'index, listHiddenTopics, listHiddenPosts, activateTopic, activatePost',
+        ],
+        [
+            'access' => 'user,group',
+            'icon'   => 'EXT:pforum/Resources/Public/Icons/module.svg',
+            'labels' => 'LLL:EXT:pforum/Resources/Private/Language/locallang_mod_administration.xlf',
+        ]
+    );
+});
