@@ -159,7 +159,7 @@ return [
             ],
         ],
         'posts'            => [
-            'exclude' => 0,
+            'exclude' => false,
             'label'   => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_topic.posts',
             'config'  => [
                 'type'          => 'inline',
@@ -167,16 +167,16 @@ return [
                 'foreign_field' => 'topic',
                 'maxitems'      => 9999,
                 'appearance'    => [
-                    'collapseAll'                     => 0,
+                    'collapseAll'                     => true,
                     'levelLinksPosition'              => 'top',
-                    'showSynchronizationLink'         => 1,
-                    'showPossibleLocalizationRecords' => 1,
-                    'showAllLocalizationLink'         => 1,
+                    'showSynchronizationLink'         => true,
+                    'showPossibleLocalizationRecords' => true,
+                    'showAllLocalizationLink'         => true,
                 ],
             ],
         ],
         'anonymous_user'   => [
-            'exclude' => 0,
+            'exclude' => false,
             'label'   => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_topic.user',
             'config'  => [
                 'type'          => 'select',
@@ -187,7 +187,7 @@ return [
             ],
         ],
         'frontend_user'    => [
-            'exclude' => 0,
+            'exclude' => false,
             'label'   => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_topic.user',
             'config'  => [
                 'type'          => 'select',
