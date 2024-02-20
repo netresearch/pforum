@@ -97,7 +97,7 @@ class PostController extends AbstractController
         }
 
         // if auth = anonymous user
-        /* send a mail to the user to activate, edit or delete his entry */
+        // send a mail to the user to activate, edit or delete his entry
         if (((int)$this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
             $this->persistenceManager->persistAll(); // we need an uid for mailing
             $this->mailToUser($post);
@@ -297,7 +297,7 @@ class PostController extends AbstractController
             );
             $post->setFrontendUser($user);
         } else {
-            /* normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated */
+            // normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated
             $this->addFlashMessage('You must be logged in before creating a post');
             $this->redirect('show', 'Forum', 'Pforum', ['forum' => $topic->getForum()]);
         }

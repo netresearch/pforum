@@ -7,18 +7,22 @@
  * LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace JWeiland\Pforum\Tests\Functional\Validation\Validator;
 
+use Doctrine\DBAL\DBALException;
 use JWeiland\Pforum\Validation\Validator\UsernameValidator;
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Error\Result;
 use TYPO3\CMS\Extbase\Validation\Error;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * Test case
@@ -30,29 +34,37 @@ class UsernameValidatorTest extends FunctionalTestCase
     /**
      * @var UsernameValidator
      */
-    protected $subject;
+    protected UsernameValidator $subject;
 
     /**
      * @var ConfigurationManagerInterface|ObjectProphecy
      */
-    protected $configurationManagerProphecy;
+    protected ObjectProphecy|ConfigurationManagerInterface $configurationManagerProphecy;
 
     /**
      * @var array
      */
-    protected $testExtensionsToLoad = [
+    protected array $testExtensionsToLoad = [
         'typo3conf/ext/pforum'
     ];
 
+    /**
+     * @return void
+     * @throws DBALException
+     */
     protected function setUp(): void
     {
         parent::setUp();
+
         $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
         $this->configurationManagerProphecy = $this->prophesize(ConfigurationManager::class);
 
         $this->subject = new UsernameValidator();
     }
 
+    /**
+     * @return void
+     */
     protected function tearDown(): void
     {
         unset($this->subject);
@@ -62,7 +74,7 @@ class UsernameValidatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function validateWillNotAddAnyErrorIfUsernameIsNotMandatory()
+    public function validateWillNotAddAnyErrorIfUsernameIsNotMandatory(): void
     {
         $this->setUsernameIsMandatory(false);
 
@@ -75,7 +87,7 @@ class UsernameValidatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function validateWillNotAddAnyErrorIfUsernameIsNotString()
+    public function validateWillNotAddAnyErrorIfUsernameIsNotString(): void
     {
         $this->setUsernameIsMandatory(true);
 
@@ -88,7 +100,7 @@ class UsernameValidatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function validateWillNotAddAnyErrorIfUsernameIsNotEmpty()
+    public function validateWillNotAddAnyErrorIfUsernameIsNotEmpty(): void
     {
         $this->setUsernameIsMandatory(true);
 
@@ -101,7 +113,7 @@ class UsernameValidatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function validateWillAddErrorIfUsernameIsEmpty()
+    public function validateWillAddErrorIfUsernameIsEmpty(): void
     {
         $this->setUsernameIsMandatory(true);
 
@@ -119,7 +131,13 @@ class UsernameValidatorTest extends FunctionalTestCase
         );
     }
 
-    protected function setUsernameIsMandatory(bool $isMandatory)
+    /**
+     * @param bool $isMandatory
+     *
+     * @return void
+     * @throws InvalidConfigurationTypeException
+     */
+    protected function setUsernameIsMandatory(bool $isMandatory): void
     {
         $this->configurationManagerProphecy
             ->getConfiguration(
@@ -131,6 +149,7 @@ class UsernameValidatorTest extends FunctionalTestCase
             ->willReturn([
                 'usernameIsMandatory' => $isMandatory ? '1' : '0'
             ]);
+
         $this->subject->injectConfigurationManager($this->configurationManagerProphecy->reveal());
     }
 }

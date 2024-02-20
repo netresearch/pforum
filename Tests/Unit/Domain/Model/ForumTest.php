@@ -7,13 +7,15 @@
  * LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace JWeiland\Pforum\Tests\Unit\Domain\Model;
 
 use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Domain\Model\Topic;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * Test case
@@ -25,13 +27,19 @@ class ForumTest extends UnitTestCase
     /**
      * @var Forum
      */
-    protected $subject;
+    protected Forum $subject;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->subject = new Forum();
     }
 
+    /**
+     * @return void
+     */
     protected function tearDown(): void
     {
         unset($this->subject);
@@ -40,7 +48,7 @@ class ForumTest extends UnitTestCase
     /**
      * @test
      */
-    public function getTitleInitiallyReturnsEmptyString()
+    public function getTitleInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -51,7 +59,7 @@ class ForumTest extends UnitTestCase
     /**
      * @test
      */
-    public function setTitleSetsTitle()
+    public function setTitleSetsTitle(): void
     {
         $this->subject->setTitle('foo bar');
 
@@ -64,25 +72,7 @@ class ForumTest extends UnitTestCase
     /**
      * @test
      */
-    public function setTitleWithIntegerResultsInString()
-    {
-        $this->subject->setTitle(123);
-        self::assertSame('123', $this->subject->getTitle());
-    }
-
-    /**
-     * @test
-     */
-    public function setTitleWithBooleanResultsInString()
-    {
-        $this->subject->setTitle(true);
-        self::assertSame('1', $this->subject->getTitle());
-    }
-
-    /**
-     * @test
-     */
-    public function getTeaserInitiallyReturnsEmptyString()
+    public function getTeaserInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -93,7 +83,7 @@ class ForumTest extends UnitTestCase
     /**
      * @test
      */
-    public function setTeaserSetsTeaser()
+    public function setTeaserSetsTeaser(): void
     {
         $this->subject->setTeaser('foo bar');
 
@@ -106,25 +96,7 @@ class ForumTest extends UnitTestCase
     /**
      * @test
      */
-    public function setTeaserWithIntegerResultsInString()
-    {
-        $this->subject->setTeaser(123);
-        self::assertSame('123', $this->subject->getTeaser());
-    }
-
-    /**
-     * @test
-     */
-    public function setTeaserWithBooleanResultsInString()
-    {
-        $this->subject->setTeaser(true);
-        self::assertSame('1', $this->subject->getTeaser());
-    }
-
-    /**
-     * @test
-     */
-    public function getTopicsInitiallyReturnsObjectStorage()
+    public function getTopicsInitiallyReturnsObjectStorage(): void
     {
         self::assertEquals(
             new ObjectStorage(),
@@ -135,7 +107,7 @@ class ForumTest extends UnitTestCase
     /**
      * @test
      */
-    public function setTopicsSetsTopics()
+    public function setTopicsSetsTopics(): void
     {
         $object = new Topic();
         $objectStorage = new ObjectStorage();
@@ -151,7 +123,7 @@ class ForumTest extends UnitTestCase
     /**
      * @test
      */
-    public function addTopicAddsOneTopic()
+    public function addTopicAddsOneTopic(): void
     {
         $objectStorage = new ObjectStorage();
         $this->subject->setTopics($objectStorage);
@@ -170,7 +142,7 @@ class ForumTest extends UnitTestCase
     /**
      * @test
      */
-    public function removeTopicRemovesOneTopic()
+    public function removeTopicRemovesOneTopic(): void
     {
         $object = new Topic();
         $objectStorage = new ObjectStorage();

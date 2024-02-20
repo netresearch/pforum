@@ -7,11 +7,13 @@
  * LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace JWeiland\Pforum\Tests\Unit\Domain\Model;
 
 use JWeiland\Pforum\Domain\Model\Post;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * Test case
@@ -23,13 +25,19 @@ class PostTest extends UnitTestCase
     /**
      * @var Post
      */
-    protected $subject;
+    protected Post $subject;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->subject = new Post();
     }
 
+    /**
+     * @return void
+     */
     protected function tearDown(): void
     {
         unset($this->subject);
@@ -38,7 +46,7 @@ class PostTest extends UnitTestCase
     /**
      * @test
      */
-    public function getTitleInitiallyReturnsEmptyString()
+    public function getTitleInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -49,7 +57,7 @@ class PostTest extends UnitTestCase
     /**
      * @test
      */
-    public function setTitleSetsTitle()
+    public function setTitleSetsTitle(): void
     {
         $this->subject->setTitle('foo bar');
 
@@ -62,25 +70,7 @@ class PostTest extends UnitTestCase
     /**
      * @test
      */
-    public function setTitleWithIntegerResultsInString()
-    {
-        $this->subject->setTitle(123);
-        self::assertSame('123', $this->subject->getTitle());
-    }
-
-    /**
-     * @test
-     */
-    public function setTitleWithBooleanResultsInString()
-    {
-        $this->subject->setTitle(true);
-        self::assertSame('1', $this->subject->getTitle());
-    }
-
-    /**
-     * @test
-     */
-    public function getDescriptionInitiallyReturnsEmptyString()
+    public function getDescriptionInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -91,7 +81,7 @@ class PostTest extends UnitTestCase
     /**
      * @test
      */
-    public function setDescriptionSetsDescription()
+    public function setDescriptionSetsDescription(): void
     {
         $this->subject->setDescription('foo bar');
 
@@ -99,23 +89,5 @@ class PostTest extends UnitTestCase
             'foo bar',
             $this->subject->getDescription()
         );
-    }
-
-    /**
-     * @test
-     */
-    public function setDescriptionWithIntegerResultsInString()
-    {
-        $this->subject->setDescription(123);
-        self::assertSame('123', $this->subject->getDescription());
-    }
-
-    /**
-     * @test
-     */
-    public function setDescriptionWithBooleanResultsInString()
-    {
-        $this->subject->setDescription(true);
-        self::assertSame('1', $this->subject->getDescription());
     }
 }
