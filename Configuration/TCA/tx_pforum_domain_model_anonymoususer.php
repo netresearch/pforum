@@ -89,10 +89,13 @@ return [
             'exclude' => true,
             'label'   => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
             'config'  => [
-                'type'  => 'check',
-                'items' => [
-                    '1' => [
-                        '0' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:hidden.I.0',
+                'type'       => 'check',
+                'renderType' => 'checkboxToggle',
+                'default'    => 0,
+                'items'      => [
+                    [
+                        0 => '',
+                        1 => '',
                     ],
                 ],
             ],
