@@ -21,6 +21,7 @@ use TYPO3\CMS\Core\Mail\Mailer;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -41,6 +42,7 @@ class TopicController extends AbstractController
     public function showAction(Topic $topic): void
     {
         $posts = $this->postRepository->findByTopic($topic);
+
         if ($this->frontendGroupHelper->uidExistsInGroupData((int)($this->settings['uidOfAdminGroup'] ?? 0))) {
             $posts->getQuery()
                 ->getQuerySettings()

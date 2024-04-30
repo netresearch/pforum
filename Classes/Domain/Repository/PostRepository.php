@@ -13,14 +13,15 @@ namespace JWeiland\Pforum\Domain\Repository;
 
 use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Repo to retrieve records for postings
- *
- * @method QueryResultInterface findByTopic(Topic $topic)
  */
 class PostRepository extends Repository implements HiddenRepositoryInterface
 {
@@ -30,6 +31,44 @@ class PostRepository extends Repository implements HiddenRepositoryInterface
     protected $defaultOrderings = [
         'crdate' => QueryInterface::ORDER_DESCENDING,
     ];
+
+    /**
+     * Always return hidden and deleted records from this Repository
+     */
+    public function initializeObject(): void
+    {
+        $querySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
+
+        // Ignore hidden and deleted records
+        $querySettings
+            ->setRespectStoragePage(false)
+            ->setIgnoreEnableFields(true)
+            ->setIncludeDeleted(true);
+
+        $this->setDefaultQuerySettings($querySettings);
+    }
+
+    /**
+     * @param Topic $topic
+     *
+     * @return QueryResultInterface
+     */
+    public function findByTopic(Topic $topic): QueryResultInterface
+    {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setIgnoreEnableFields(true);
+        $query->getQuerySettings()->setEnableFieldsToBeIgnored(['disabled']);
+        $query->getQuerySettings()->setRespectStoragePage(false);
+
+        return $query
+            ->matching(
+                $query->logicalAnd(
+//                    $query->equals('deleted', 1),
+                    $query->equals('topic', $topic)
+                )
+            )
+            ->execute();
+    }
 
     public function findAllHidden(): QueryResultInterface
     {

@@ -26,6 +26,11 @@ class Post extends AbstractEntity implements PostInterface
     protected $hidden = false;
 
     /**
+     * @var bool
+     */
+    protected $deleted = false;
+
+    /**
      * @var \DateTime
      */
     protected $crdate;
@@ -64,6 +69,25 @@ class Post extends AbstractEntity implements PostInterface
     public function __construct()
     {
         $this->images = new ObjectStorage();
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDeleted(): bool
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * @param bool $deleted
+     *
+     * @return Post
+     */
+    public function setDeleted(bool $deleted): Post
+    {
+        $this->deleted = $deleted;
+        return $this;
     }
 
     public function getHidden(): bool
