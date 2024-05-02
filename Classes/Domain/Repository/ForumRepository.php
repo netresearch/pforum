@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Pforum\Domain\Repository;
 
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
@@ -25,4 +26,23 @@ class ForumRepository extends Repository
     protected $defaultOrderings = [
         'sorting' => QueryInterface::ORDER_ASCENDING,
     ];
+
+    /**
+     * @return QueryResultInterface
+     */
+    public function findAllNotArchived(): QueryResultInterface
+    {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setIgnoreEnableFields(true);
+        $query->getQuerySettings()->setEnableFieldsToBeIgnored(['disabled']);
+        $query->getQuerySettings()->setRespectStoragePage(false);
+
+        return $query
+            ->matching(
+                $query->logicalAnd(
+                    $query->equals('archived', 0)
+                )
+            )
+            ->execute();
+    }
 }
