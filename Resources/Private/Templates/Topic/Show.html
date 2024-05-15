@@ -8,21 +8,8 @@
 <f:section name="main">
 	<f:flashMessages />
 
-	<nav aria-label="breadcrumb">
-		<ol class="breadcrumb">
-			<li class="breadcrumb-item">
-				<f:link.action action="list" controller="Forum">{f:translate(key: 'tx_pforum_domain_model_forum')}</f:link.action>
-			</li>
-			<li class="breadcrumb-item">
-				<f:link.action action="show" controller="Forum" arguments="{forum: topic.forum}">
-					{topic.forum.title}
-				</f:link.action>
-			</li>
-			<li class="breadcrumb-item active" aria-current="page">
-				{topic.title}
-			</li>
-		</ol>
-	</nav>
+	<f:render partial="Component/Topic/Breadcrumb"
+				arguments="{topic: topic}" />
 
 	<div class="card mb-3 bg-light">
 		<div class="row g-0">

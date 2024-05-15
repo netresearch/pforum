@@ -1,0 +1,17 @@
+<html data-namespace-typo3-fluid="true"
+      xmlns="http://www.w3.org/1999/xhtml" lang="en"
+      xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <f:link.action action="list" controller="Forum">
+                    {f:translate(key: 'tx_pforum_domain_model_forum')}
+                </f:link.action>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                {forum.title}
+            </li>
+        </ol>
+    </nav>
+</html>
