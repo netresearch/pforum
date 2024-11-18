@@ -234,10 +234,10 @@
 				<source>topics</source>
 			</trans-unit>
 			<trans-unit id="numword.post">
-				<source>topic</source>
+				<source>post</source>
 			</trans-unit>
-			<trans-unit id="numword.post">
-				<source>topics</source>
+			<trans-unit id="numword.posts">
+				<source>posts</source>
 			</trans-unit>
 			<trans-unit id="numword.comment">
 				<source>comments</source>
