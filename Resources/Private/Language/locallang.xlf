@@ -224,6 +224,27 @@
 			<trans-unit id="be.noRecordsInStorage">
 				<source>Currently, there are no hidden records for selected record type.</source>
 			</trans-unit>
+			<trans-unit id="numword.no">
+				<source>no</source>
+			</trans-unit>
+			<trans-unit id="numword.topic">
+				<source>topic</source>
+			</trans-unit>
+			<trans-unit id="numword.topics">
+				<source>topics</source>
+			</trans-unit>
+			<trans-unit id="numword.post">
+				<source>topic</source>
+			</trans-unit>
+			<trans-unit id="numword.post">
+				<source>topics</source>
+			</trans-unit>
+			<trans-unit id="numword.comment">
+				<source>comments</source>
+			</trans-unit>
+			<trans-unit id="numword.comments">
+				<source>comments</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
