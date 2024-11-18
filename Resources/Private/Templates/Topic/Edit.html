@@ -1,5 +1,6 @@
 <html lang="en"
 			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	  		xmlns:pf="http://typo3.org/ns/JWeiland/Pforum/ViewHelper"
 			data-namespace-typo3-fluid="true">
 
 <f:layout name="Default" />
@@ -39,7 +40,7 @@
 							{topic.crdate -> f:format.date(format: 'd.m.Y')}&nbsp;|
 							{f:translate(key: 'from')}:
 							<f:render partial="User/Username" arguments="{user: topic.user}" /> |
-							{topic.posts -> f:count()}&nbsp;{f:translate(key: 'tx_pforum_domain_model_topic.posts')}
+							<pf:numerusWord number="{topic.posts -> f:count()}" singular="{f:translate(key: 'numword.post')}" plural="{f:translate(key: 'numword.posts')}" />
 						</small>
 					</div>
 
