@@ -100,7 +100,7 @@ class Forum extends AbstractEntity
      *
      * @return Forum
      */
-    public function setArchived(bool $archived): Forum
+    public function setArchived(bool $archived): self
     {
         $this->archived = $archived;
         return $this;
