@@ -104,7 +104,7 @@ return [
                 'default' => '',
             ],
         ],
-        'l10n_source' => [
+        'l10n_source'      => [
             'config' => [
                 'type' => 'passthrough',
             ],
@@ -205,11 +205,12 @@ return [
                 'items'         => [
                     [
                         '',
-                        '',
+                        0,
                     ],
                 ],
                 'minitems'      => 0,
                 'maxitems'      => 1,
+                'default'       => 0,
             ],
         ],
         'images'           => [
