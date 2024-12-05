@@ -226,11 +226,12 @@ return [
                 'items'         => [
                     [
                         '',
-                        '',
+                        0,
                     ],
                 ],
                 'minitems'      => 0,
                 'maxitems'      => 1,
+                'default'       => 0,
             ],
         ],
         'images'           => [
