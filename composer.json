@@ -76,6 +76,9 @@
         "typo3/cms": {
             "extension-key": "pforum",
             "web-dir": ".build/public"
+        },
+        "branch-alias": {
+            "dev-main": "5.0.x-dev"
         }
     },
     "scripts": {
