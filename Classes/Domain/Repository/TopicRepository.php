@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -18,7 +18,7 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
- * Repo to retrieve records for topics
+ * Repo to retrieve records for topics.
  *
  * @method QueryResultInterface findByForum(Forum $forum)
  */
@@ -35,8 +35,8 @@ class TopicRepository extends Repository implements HiddenRepositoryInterface
     {
         $query = $this->createQuery();
         $query->setOrderings([
-            'title' => QueryInterface::ORDER_ASCENDING,
-            'description' => QueryInterface::ORDER_ASCENDING
+            'title'       => QueryInterface::ORDER_ASCENDING,
+            'description' => QueryInterface::ORDER_ASCENDING,
         ]);
 
         return $query->matching($query->equals('hidden', 1))->execute();
@@ -44,6 +44,7 @@ class TopicRepository extends Repository implements HiddenRepositoryInterface
 
     /**
      * @param mixed $value
+     *
      * @return Topic|null
      */
     public function findHiddenObject($value, string $property = 'uid'): ?Topic

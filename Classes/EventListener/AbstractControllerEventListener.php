@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -19,7 +19,7 @@ use JWeiland\Pforum\Event\ControllerActionEventInterface;
 class AbstractControllerEventListener
 {
     /**
-     * Only execute this EventListener if controller and action matches
+     * Only execute this EventListener if controller and action matches.
      *
      * @var array
      */

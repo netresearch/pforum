@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -25,10 +25,10 @@ class AddPaginatorEventListener extends AbstractControllerEventListener
 
     protected $allowedControllerActions = [
         'Forum' => [
-            'show'
+            'show',
         ],
         'Topic' => [
-            'show'
+            'show',
         ],
     ];
 
@@ -60,7 +60,7 @@ class AddPaginatorEventListener extends AbstractControllerEventListener
             // $currentPage have to be positive and greater than 0
             // See: AbstractPaginator::setCurrentPageNumber()
             $currentPage = MathUtility::forceIntegerInRange(
-                (int)$event->getRequest()->getArgument('currentPage'),
+                (int) $event->getRequest()->getArgument('currentPage'),
                 1
             );
         }
@@ -71,6 +71,7 @@ class AddPaginatorEventListener extends AbstractControllerEventListener
     protected function getItemsPerPage(PostProcessFluidVariablesEvent $event): int
     {
         $itemsPerPage = $event->getSettings()['pageBrowser']['itemsPerPage'] ?? $this->itemsPerPage;
-        return (int)$itemsPerPage;
+
+        return (int) $itemsPerPage;
     }
 }

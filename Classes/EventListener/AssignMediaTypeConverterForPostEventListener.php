@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -34,15 +34,15 @@ class AssignMediaTypeConverterForPostEventListener extends AbstractControllerEve
     protected $allowedControllerActions = [
         'Post' => [
             'create',
-            'update'
-        ]
+            'update',
+        ],
     ];
 
     public function __construct(
         PostRepository $postRepository,
-        UploadMultipleFilesConverter $uploadMultipleFilesConverter
+        UploadMultipleFilesConverter $uploadMultipleFilesConverter,
     ) {
-        $this->postRepository = $postRepository;
+        $this->postRepository               = $postRepository;
         $this->uploadMultipleFilesConverter = $uploadMultipleFilesConverter;
     }
 
@@ -66,7 +66,7 @@ class AssignMediaTypeConverterForPostEventListener extends AbstractControllerEve
     {
         // Needed to get the previously stored images
         $persistedPost = $this->postRepository->findHiddenObject(
-            (int)$controllerActionEvent->getRequest()->getArgument('post')['__identity']
+            (int) $controllerActionEvent->getRequest()->getArgument('post')['__identity']
         );
 
         if ($persistedPost instanceof Post) {
@@ -81,7 +81,7 @@ class AssignMediaTypeConverterForPostEventListener extends AbstractControllerEve
     protected function setTypeConverterForProperty(
         string $property,
         ?ObjectStorage $persistedFiles,
-        PreProcessControllerActionEvent $controllerActionEvent
+        PreProcessControllerActionEvent $controllerActionEvent,
     ): void {
         $propertyMappingConfiguration = $this->getPropertyMappingConfigurationForEvent($controllerActionEvent)
             ->forProperty($property)
@@ -104,7 +104,7 @@ class AssignMediaTypeConverterForPostEventListener extends AbstractControllerEve
     }
 
     protected function getPropertyMappingConfigurationForEvent(
-        PreProcessControllerActionEvent $controllerActionEvent
+        PreProcessControllerActionEvent $controllerActionEvent,
     ): MvcPropertyMappingConfiguration {
         return $controllerActionEvent->getArguments()
             ->getArgument('post')
@@ -114,7 +114,7 @@ class AssignMediaTypeConverterForPostEventListener extends AbstractControllerEve
     protected function addOptionToUploadFilesConverter(
         PropertyMappingConfiguration $propertyMappingConfiguration,
         string $optionKey,
-        $optionValue
+        $optionValue,
     ): void {
         $propertyMappingConfiguration->setTypeConverterOption(
             UploadMultipleFilesConverter::class,

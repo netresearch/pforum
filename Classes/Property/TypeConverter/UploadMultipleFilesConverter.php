@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Property\TypeConverter;
 
+use Exception;
 use JWeiland\Checkfaluploads\Service\FalUploadService;
 use JWeiland\Pforum\Event\PostCheckFileReferenceEvent;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
@@ -28,7 +29,7 @@ use TYPO3\CMS\Extbase\Property\TypeConverter\AbstractTypeConverter;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
- * A for PropertyMapper to convert multiple file uploads into an array
+ * A for PropertyMapper to convert multiple file uploads into an array.
  */
 class UploadMultipleFilesConverter extends AbstractTypeConverter
 {
@@ -63,7 +64,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
     protected $eventDispatcher;
 
     /**
-     * Do not inject this property, as EXT:checkfaluploads may not be loaded
+     * Do not inject this property, as EXT:checkfaluploads may not be loaded.
      *
      * @var FalUploadService
      */
@@ -95,13 +96,13 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
     }
 
     /**
-     * @return \TYPO3\CMS\Extbase\Error\Error|mixed|\TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     * @return Error|mixed|ObjectStorage
      */
     public function convertFrom(
         $source,
         string $targetType,
         array $convertedChildProperties = [],
-        PropertyMappingConfigurationInterface $configuration = null
+        ?PropertyMappingConfigurationInterface $configuration = null,
     ) {
         $this->initialize($configuration);
         $originalSource = $source;
@@ -140,7 +141,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
                         'error.fileExtension',
                         'pforum',
                         [
-                            $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
+                            $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
                         ]
                     ),
                     1402981282
@@ -175,7 +176,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
     protected function initialize(?PropertyMappingConfigurationInterface $configuration): void
     {
         if ($configuration === null) {
-            throw new \Exception(
+            throw new Exception(
                 'Missing PropertyMapper configuration in UploadMultipleFilesConverter',
                 1666698966
             );
@@ -198,7 +199,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
 
     protected function getAlreadyPersistedFileReferenceByPosition(
         ObjectStorage $alreadyPersistedFileReferences,
-        int $position
+        int $position,
     ): ?FileReference {
         return $alreadyPersistedFileReferences->toArray()[$position] ?? null;
     }
@@ -217,7 +218,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
     {
         $combinedUploadFolderIdentifier = $this->getTypoScriptPluginSettings()['new']['uploadFolder'] ?? '';
         if ($combinedUploadFolderIdentifier === '') {
-            throw new \Exception(
+            throw new Exception(
                 'You have forgotten to set an Upload Folder in TypoScript for pforum',
                 1666698952
             );
@@ -228,8 +229,8 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
             $uploadFolder = $resourceFactory->getObjectFromCombinedIdentifier($combinedUploadFolderIdentifier);
         } catch (ResourceDoesNotExistException $resourceDoesNotExistException) {
             [$storageUid, $folderName] = GeneralUtility::trimExplode(':', $combinedUploadFolderIdentifier);
-            $resourceStorage = $resourceFactory->getStorageObject((int)$storageUid);
-            $uploadFolder = $resourceStorage->createFolder($folderName);
+            $resourceStorage           = $resourceFactory->getStorageObject((int) $storageUid);
+            $uploadFolder              = $resourceStorage->createFolder($folderName);
         }
 
         $this->uploadFolder = $uploadFolder;
@@ -237,7 +238,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
 
     /**
      * Check, if we have a valid uploaded file
-     * Error = 4: No file uploaded
+     * Error = 4: No file uploaded.
      */
     protected function isValidUploadFile(array $uploadedFile): bool
     {
@@ -265,7 +266,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
             if ($fileReference->getStorage()->isWithinFolder($this->uploadFolder, $fileReference)) {
                 try {
                     $fileReference->getOriginalFile()->delete();
-                } catch (\Exception $exception) {
+                } catch (Exception $exception) {
                     // Do nothing. File already deleted or not found
                 }
             }
@@ -289,14 +290,14 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
     protected function getCoreFileReference(array $source): \TYPO3\CMS\Core\Resource\FileReference
     {
         $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
-        $uploadedFile = $this->uploadFolder->addUploadedFile($source, DuplicationBehavior::RENAME);
+        $uploadedFile    = $this->uploadFolder->addUploadedFile($source, DuplicationBehavior::RENAME);
 
         // create Core FileReference
         return $resourceFactory->createFileReferenceObject(
             [
-                'uid_local' => $uploadedFile->getUid(),
+                'uid_local'   => $uploadedFile->getUid(),
                 'uid_foreign' => uniqid('NEW_', true),
-                'uid' => uniqid('NEW_', true),
+                'uid'         => uniqid('NEW_', true),
             ]
         );
     }

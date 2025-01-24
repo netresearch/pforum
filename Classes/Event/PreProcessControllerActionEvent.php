@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -34,11 +34,11 @@ class PreProcessControllerActionEvent implements ControllerActionEventInterface
     public function __construct(
         Request $request,
         Arguments $arguments,
-        array $settings
+        array $settings,
     ) {
-        $this->request = $request;
+        $this->request   = $request;
         $this->arguments = $arguments;
-        $this->settings = $settings;
+        $this->settings  = $settings;
     }
 
     public function getRequest(): Request

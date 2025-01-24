@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -18,7 +18,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
- * Test case
+ * Test case.
  */
 class TopicTest extends UnitTestCase
 {
@@ -109,7 +109,7 @@ class TopicTest extends UnitTestCase
      */
     public function setPostsSetsPosts(): void
     {
-        $object = new Post();
+        $object        = new Post();
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($object);
         $this->subject->setPosts($objectStorage);
@@ -144,7 +144,7 @@ class TopicTest extends UnitTestCase
      */
     public function removePostRemovesOnePost(): void
     {
-        $object = new Post();
+        $object        = new Post();
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($object);
         $this->subject->setPosts($objectStorage);

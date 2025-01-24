@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -19,7 +19,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithContentArgumentAndRenderStatic;
 
 /**
- * ViewHelper to simplify the condition to show create button for topics and posts
+ * ViewHelper to simplify the condition to show create button for topics and posts.
  */
 class IsCreateButtonAllowedViewHelper extends AbstractViewHelper
 {
@@ -57,7 +57,7 @@ class IsCreateButtonAllowedViewHelper extends AbstractViewHelper
     public static function renderStatic(
         array $arguments,
         Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
+        RenderingContextInterface $renderingContext,
     ): bool {
         return GeneralUtility::makeInstance(FrontendUserAccessService::class)
             ->accessCheck(

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -17,7 +17,7 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
- * Test case
+ * Test case.
  */
 class ExtConfTest extends FunctionalTestCase
 {
@@ -32,11 +32,12 @@ class ExtConfTest extends FunctionalTestCase
      * @var array
      */
     protected array $testExtensionsToLoad = [
-        'typo3conf/ext/pforum'
+        'typo3conf/ext/pforum',
     ];
 
     /**
      * @return void
+     *
      * @throws DBALException
      */
     protected function setUp(): void
@@ -53,7 +54,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         unset($this->subject);
         $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'] = '';
-        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName'] = '';
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName']    = '';
         parent::tearDown();
     }
 
@@ -71,7 +72,7 @@ class ExtConfTest extends FunctionalTestCase
      */
     public function getEmailFromAddressInitiallyReturnsEmailFromInstallTool(): void
     {
-        $email = 'info@example.com';
+        $email                                                        = 'info@example.com';
         $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'] = $email;
         self::assertSame(
             $email,
@@ -107,7 +108,7 @@ class ExtConfTest extends FunctionalTestCase
      */
     public function getEmailFromNameInitiallyReturnsEmailNameFromInstallTool(): void
     {
-        $name = 'stefan';
+        $name                                                      = 'stefan';
         $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName'] = $name;
         self::assertSame(
             $name,

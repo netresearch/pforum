@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -10,7 +10,7 @@
 declare(strict_types=1);
 
 return [
-    'ctrl'     => [
+    'ctrl' => [
         'title'                    => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_forum',
         'label'                    => 'title',
         'tstamp'                   => 'tstamp',
@@ -33,7 +33,7 @@ return [
             'endtime'   => 'endtime',
         ],
     ],
-    'types'    => [
+    'types' => [
         '1' => [
             'showitem' => '
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
@@ -48,15 +48,15 @@ return [
         ],
     ],
     'palettes' => [
-        'standard'   => [
+        'standard' => [
             'label'    => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:CType.div.standard',
             'showitem' => 'title, --linebreak--, teaser',
         ],
-        'topics'     => [
+        'topics' => [
             'label'    => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_forum.topics',
             'showitem' => 'topics',
         ],
-        'language'   => [
+        'language' => [
             'label'    => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.language',
             'showitem' => 'sys_language_uid, l10n_parent',
         ],
@@ -64,12 +64,12 @@ return [
             'label'    => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.visibility',
             'showitem' => 'hidden;LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden, --linebreak--, archived',
         ],
-        'access'     => [
+        'access' => [
             'label'    => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access',
             'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel, endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel',
         ],
     ],
-    'columns'  => [
+    'columns' => [
         'sys_language_uid' => [
             'exclude' => true,
             'label'   => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
@@ -77,13 +77,13 @@ return [
                 'type' => 'language',
             ],
         ],
-        'l10n_parent'      => [
+        'l10n_parent' => [
             'displayCond' => 'FIELD:sys_language_uid:>:0',
             'label'       => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config'      => [
-                'type'                => 'select',
-                'renderType'          => 'selectSingle',
-                'items'               => [
+                'type'       => 'select',
+                'renderType' => 'selectSingle',
+                'items'      => [
                     [
                         '',
                         0,
@@ -94,7 +94,7 @@ return [
                 'default'             => 0,
             ],
         ],
-        'l10n_diffsource'  => [
+        'l10n_diffsource' => [
             'config' => [
                 'type'    => 'passthrough',
                 'default' => '',
@@ -105,7 +105,7 @@ return [
                 'type' => 'passthrough',
             ],
         ],
-        'hidden'           => [
+        'hidden' => [
             'exclude' => true,
             'label'   => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
             'config'  => [
@@ -120,7 +120,7 @@ return [
                 ],
             ],
         ],
-        'starttime'        => [
+        'starttime' => [
             'exclude' => true,
             'label'   => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
             'config'  => [
@@ -133,7 +133,7 @@ return [
                 ],
             ],
         ],
-        'endtime'          => [
+        'endtime' => [
             'exclude' => true,
             'label'   => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
             'config'  => [
@@ -151,12 +151,12 @@ return [
                         2038
                     ),
                 ],
-                'behaviour'  => [
+                'behaviour' => [
                     'allowLanguageSynchronization' => true,
                 ],
             ],
         ],
-        'title'            => [
+        'title' => [
             'exclude' => true,
             'label'   => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_forum.title',
             'config'  => [
@@ -165,7 +165,7 @@ return [
                 'eval' => 'trim,required',
             ],
         ],
-        'teaser'           => [
+        'teaser' => [
             'exclude' => true,
             'label'   => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_forum.teaser',
             'config'  => [
@@ -174,7 +174,7 @@ return [
                 'eval' => 'trim',
             ],
         ],
-        'topics'           => [
+        'topics' => [
             'exclude' => false,
             'label'   => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_forum.topics',
             'config'  => [
@@ -191,7 +191,7 @@ return [
                 ],
             ],
         ],
-        'archived'         => [
+        'archived' => [
             'exclude' => true,
             'label'   => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_forum.archived',
             'config'  => [

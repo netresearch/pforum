@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -24,7 +24,7 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
 /**
- * Main controller to list and show postings/questions
+ * Main controller to list and show postings/questions.
  */
 class AdministrationController extends ActionController
 {
@@ -51,17 +51,17 @@ class AdministrationController extends ActionController
     public function __construct(TopicRepository $topicRepository, PostRepository $postRepository)
     {
         $this->topicRepository = $topicRepository;
-        $this->postRepository = $postRepository;
+        $this->postRepository  = $postRepository;
     }
 
     /**
-     * Set up the doc header properly here
+     * Set up the doc header properly here.
      */
     protected function initializeView(ViewInterface $view): void
     {
         if ($view instanceof BackendTemplateView) {
             parent::initializeView($view);
-            //$view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation([]);
+            // $view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation([]);
 
             $this->createDocheaderActionButtons();
             $this->createShortcutButton();
@@ -74,7 +74,7 @@ class AdministrationController extends ActionController
             return;
         }
 
-        $buttonBar = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
+        $buttonBar  = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
         $uriBuilder = $this->controllerContext->getUriBuilder();
 
         $button = $buttonBar->makeLinkButton()

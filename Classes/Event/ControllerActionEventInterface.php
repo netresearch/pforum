@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -25,7 +25,7 @@ interface ControllerActionEventInterface
 
     /**
      * Get action name without appended "Action".
-     * It's just "list" or "show"
+     * It's just "list" or "show".
      */
     public function getActionName(): string;
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -23,6 +23,7 @@ interface HiddenRepositoryInterface
      * Find object by a given property value whether it is hidden or not.
      *
      * @param mixed $value The Value to compare against $property
+     *
      * @return AbstractDomainObject
      */
     public function findHiddenObject($value, string $property = 'uid');

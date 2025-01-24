@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -14,20 +14,20 @@ namespace JWeiland\Pforum\Event;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 
 /**
- * Use this event, if you want to add further checks for uploaded images of pforum frontend form
+ * Use this event, if you want to add further checks for uploaded images of pforum frontend form.
  */
 class PostCheckFileReferenceEvent
 {
     /**
      * Array containing the original source (all files of $_FILES) of the request
-     * just before PropertyMapping (UploadMultipleFilesConverter) will start
+     * just before PropertyMapping (UploadMultipleFilesConverter) will start.
      *
      * @var array
      */
     protected $source;
 
     /**
-     * Array key of the currently looped file
+     * Array key of the currently looped file.
      *
      * @var int
      */
@@ -43,7 +43,7 @@ class PostCheckFileReferenceEvent
 
     /**
      * This is the value of the currently looped uploaded file.
-     * It contains one file out of $_FILES
+     * It contains one file out of $_FILES.
      *
      * @var array
      */
@@ -53,12 +53,12 @@ class PostCheckFileReferenceEvent
         array $source,
         int $key,
         ?FileReference $alreadyPersistedImage,
-        array $uploadedFile
+        array $uploadedFile,
     ) {
-        $this->source = $source;
-        $this->key = $key;
+        $this->source                = $source;
+        $this->key                   = $key;
         $this->alreadyPersistedImage = $alreadyPersistedImage;
-        $this->uploadedFile = $uploadedFile;
+        $this->uploadedFile          = $uploadedFile;
     }
 
     public function getSource(): array

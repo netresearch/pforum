@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -10,7 +10,7 @@
 declare(strict_types=1);
 
 return [
-    'ctrl'     => [
+    'ctrl' => [
         'title'                    => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_anonymoususer',
         'label'                    => 'name',
         'tstamp'                   => 'tstamp',
@@ -33,7 +33,7 @@ return [
             'endtime'   => 'endtime',
         ],
     ],
-    'types'    => [
+    'types' => [
         '1' => [
             'showitem' => '
             --palette--;;languageHidden, name, username, email,
@@ -45,11 +45,11 @@ return [
         'languageHidden' => [
             'showitem' => 'sys_language_uid, l10n_parent, hidden',
         ],
-        'access'         => [
+        'access' => [
             'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel',
         ],
     ],
-    'columns'  => [
+    'columns' => [
         'sys_language_uid' => [
             'exclude' => true,
             'label'   => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
@@ -57,13 +57,13 @@ return [
                 'type' => 'language',
             ],
         ],
-        'l10n_parent'      => [
+        'l10n_parent' => [
             'displayCond' => 'FIELD:sys_language_uid:>:0',
             'label'       => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config'      => [
-                'type'                => 'select',
-                'renderType'          => 'selectSingle',
-                'items'               => [
+                'type'       => 'select',
+                'renderType' => 'selectSingle',
+                'items'      => [
                     [
                         '',
                         0,
@@ -74,7 +74,7 @@ return [
                 'default'             => 0,
             ],
         ],
-        'l10n_diffsource'  => [
+        'l10n_diffsource' => [
             'config' => [
                 'type'    => 'passthrough',
                 'default' => '',
@@ -85,7 +85,7 @@ return [
                 'type' => 'passthrough',
             ],
         ],
-        'hidden'           => [
+        'hidden' => [
             'exclude' => true,
             'label'   => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
             'config'  => [
@@ -100,7 +100,7 @@ return [
                 ],
             ],
         ],
-        'starttime'        => [
+        'starttime' => [
             'exclude' => true,
             'label'   => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
             'config'  => [
@@ -113,7 +113,7 @@ return [
                 ],
             ],
         ],
-        'endtime'          => [
+        'endtime' => [
             'exclude' => true,
             'label'   => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
             'config'  => [
@@ -131,12 +131,12 @@ return [
                         2038
                     ),
                 ],
-                'behaviour'  => [
+                'behaviour' => [
                     'allowLanguageSynchronization' => true,
                 ],
             ],
         ],
-        'name'             => [
+        'name' => [
             'exclude' => true,
             'label'   => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_anonymoususer.name',
             'config'  => [
@@ -145,7 +145,7 @@ return [
                 'eval' => 'trim',
             ],
         ],
-        'username'         => [
+        'username' => [
             'exclude' => true,
             'label'   => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_anonymoususer.username',
             'config'  => [
@@ -154,7 +154,7 @@ return [
                 'eval' => 'trim',
             ],
         ],
-        'email'            => [
+        'email' => [
             'exclude' => true,
             'label'   => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_anonymoususer.email',
             'config'  => [

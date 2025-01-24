@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -16,12 +16,13 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
- * Forum model manages topics and postings
+ * Forum model manages topics and postings.
  */
 class Forum extends AbstractEntity
 {
     /**
      * @var string
+     *
      * @Extbase\Validate("NotEmpty")
      */
     protected $title = '';
@@ -103,6 +104,7 @@ class Forum extends AbstractEntity
     public function setArchived(bool $archived): self
     {
         $this->archived = $archived;
+
         return $this;
     }
 }

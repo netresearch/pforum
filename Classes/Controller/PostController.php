@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -23,16 +23,17 @@ use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
- * Controller to manage (list and show) postings
+ * Controller to manage (list and show) postings.
  */
 class PostController extends AbstractController
 {
     /**
-     * @param Topic $topic
+     * @param Topic     $topic
      * @param Post|null $post
+     *
      * @Extbase\IgnoreValidation("post")
      */
-    public function newAction(Topic $topic, Post $post = null): void
+    public function newAction(Topic $topic, ?Post $post = null): void
     {
         if (!$this->accessCheck()) {
             $this->redirect('list', 'Forum', 'Pforum');
@@ -45,7 +46,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * Convert images to array while passing them to post model
+     * Convert images to array while passing them to post model.
      */
     public function initializeCreateAction(): void
     {
@@ -55,7 +56,7 @@ class PostController extends AbstractController
     public function createAction(Topic $topic, Post $post): void
     {
         // if auth = frontend user
-        if ((int)$this->settings['auth'] === 2) {
+        if ((int) $this->settings['auth'] === 2) {
             $this->addFeUserToPost($topic, $post);
         }
 
@@ -98,7 +99,7 @@ class PostController extends AbstractController
 
         // if auth = anonymous user
         // send a mail to the user to activate, edit or delete his entry
-        if (((int)$this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
+        if (((int) $this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
             $this->persistenceManager->persistAll(); // we need an uid for mailing
             $this->mailToUser($post);
         }
@@ -129,12 +130,13 @@ class PostController extends AbstractController
 
     /**
      * @param Post|null $post
-     * @param bool $isPreview
-     * @param bool $isNew We need the information if updateAction was called from createAction.
-     *                    If so we have to passthrough this information
+     * @param bool      $isPreview
+     * @param bool      $isNew     We need the information if updateAction was called from createAction.
+     *                             If so we have to passthrough this information
+     *
      * @Extbase\IgnoreValidation("post")
      */
-    public function editAction(Post $post = null, bool $isPreview = false, bool $isNew = false): void
+    public function editAction(?Post $post = null, bool $isPreview = false, bool $isNew = false): void
     {
         $this->view->assign('post', $post);
         $this->view->assign('isPreview', $isPreview);
@@ -184,7 +186,7 @@ class PostController extends AbstractController
 
                 // if auth = anonymous user
                 // send a mail to the user to activate, edit or delete his entry
-                if (((int)$this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
+                if (((int) $this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
                     $this->mailToUser($post);
                 }
 
@@ -235,9 +237,9 @@ class PostController extends AbstractController
             ->subject('New post at your topic:' . $topic->getTitle())
             ->setTemplate('Default')
             ->assignMultiple([
-                'headline' => 'Hello ' . $topic->getUser()->getName(),
+                'headline'     => 'Hello ' . $topic->getUser()->getName(),
                 'introduction' => 'There is a new post for your topic ' . $topic->getTitle() . ' with following content:',
-                'content' => nl2br($post->getDescription()),
+                'content'      => nl2br($post->getDescription()),
             ]);
         GeneralUtility::makeInstance(Mailer::class)->send($email);
     }
@@ -278,10 +280,10 @@ class PostController extends AbstractController
         $argument = $this->request->getArgument($argumentName);
         if (is_array($argument)) {
             // get post from form ($_POST)
-            $post = $this->postRepository->findHiddenObject((int)$argument['__identity']);
+            $post = $this->postRepository->findHiddenObject((int) $argument['__identity']);
         } else {
             // get post from UID
-            $post = $this->postRepository->findHiddenObject((int)$argument);
+            $post = $this->postRepository->findHiddenObject((int) $argument);
         }
 
         if ($post instanceof Post) {
@@ -293,7 +295,7 @@ class PostController extends AbstractController
     {
         if (is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid']) {
             $user = $this->frontendUserRepository->findByUid(
-                (int)$GLOBALS['TSFE']->fe_user->user['uid']
+                (int) $GLOBALS['TSFE']->fe_user->user['uid']
             );
             $post->setFrontendUser($user);
         } else {
@@ -314,7 +316,7 @@ class PostController extends AbstractController
             ->setTemplate('ConfigurePost')
             ->assignMultiple([
                 'settings' => $this->settings,
-                'post' => $post,
+                'post'     => $post,
             ]);
         GeneralUtility::makeInstance(Mailer::class)->send($email);
     }

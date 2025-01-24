@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -15,7 +15,7 @@ use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Helper\FrontendGroupHelper;
 
 /**
- * Main controller to list and show forum entries
+ * Main controller to list and show forum entries.
  */
 class ForumController extends AbstractController
 {
@@ -32,14 +32,14 @@ class ForumController extends AbstractController
     public function listAction(): void
     {
         $this->postProcessAndAssignFluidVariables([
-            'forums' => $this->forumRepository->findAll()
+            'forums' => $this->forumRepository->findAll(),
         ]);
     }
 
     public function showAction(Forum $forum): void
     {
         $topics = $this->topicRepository->findByForum($forum);
-        if ($this->frontendGroupHelper->uidExistsInGroupData((int)($this->settings['uidOfAdminGroup'] ?? 0))) {
+        if ($this->frontendGroupHelper->uidExistsInGroupData((int) ($this->settings['uidOfAdminGroup'] ?? 0))) {
             $topics->getQuery()
                 ->getQuerySettings()
                 ->setIgnoreEnableFields(true)
@@ -47,7 +47,7 @@ class ForumController extends AbstractController
         }
 
         $this->postProcessAndAssignFluidVariables([
-            'forum' => $forum,
+            'forum'  => $forum,
             'topics' => $topics,
         ]);
     }

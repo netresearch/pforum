@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -21,13 +21,14 @@ use JWeiland\Pforum\Domain\Repository\TopicRepository;
 use JWeiland\Pforum\Event\PostProcessFluidVariablesEvent;
 use JWeiland\Pforum\Event\PreProcessControllerActionEvent;
 use JWeiland\Pforum\Service\FrontendUserAccessService;
+use RuntimeException;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Session;
 
 /**
- * Abstract class with useful methods for all other extending classes
+ * Abstract class with useful methods for all other extending classes.
  */
 class AbstractController extends ActionController
 {
@@ -82,7 +83,7 @@ class AbstractController extends ActionController
      * @param FrontendUserAccessService $frontendUserAccessService
      */
     public function __construct(
-        FrontendUserAccessService $frontendUserAccessService
+        FrontendUserAccessService $frontendUserAccessService,
     ) {
         $this->frontendUserAccessService = $frontendUserAccessService;
     }
@@ -142,7 +143,7 @@ class AbstractController extends ActionController
     public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager): void
     {
         $this->configurationManager = $configurationManager;
-        $tsSettings = $this->configurationManager->getConfiguration(
+        $tsSettings                 = $this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
             'pforum',
             'doNotLoadFlexFormSettings'
@@ -176,22 +177,22 @@ class AbstractController extends ActionController
     protected function checkForMisconfiguration(): void
     {
         if (
-            $this->settings['topic']['hideAtCreation'] &&
-            empty($this->settings['topic']['activateByAdmin']) &&
-            empty($this->settings['emailIsMandatory'])
+            $this->settings['topic']['hideAtCreation']
+            && empty($this->settings['topic']['activateByAdmin'])
+            && empty($this->settings['emailIsMandatory'])
         ) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'You can\'t hide topics at creation, deactivate admin activation and mark email as NOT mandatory.' .
                 'This would produce hidden records which will never be visible',
                 1378371532
             );
         }
         if (
-            $this->settings['post']['hideAtCreation'] &&
-            empty($this->settings['post']['activateByAdmin']) &&
-            empty($this->settings['emailIsMandatory'])
+            $this->settings['post']['hideAtCreation']
+            && empty($this->settings['post']['activateByAdmin'])
+            && empty($this->settings['emailIsMandatory'])
         ) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'You can\'t hide posts at creation, deactivate admin activation and mark email ' .
                 'as NOT mandatory. This would produce hidden records which will never be visible',
                 1378371541
@@ -207,7 +208,7 @@ class AbstractController extends ActionController
     {
         if ($this->getControllerContext()->getRequest()->hasArgument($argument)) {
             /** @var Topic $topic */
-            $topic = $this->getControllerContext()->getRequest()->getArgument($argument);
+            $topic  = $this->getControllerContext()->getRequest()->getArgument($argument);
             $images = $topic->getImages();
             foreach ($images as $image) {
                 $image->getOriginalResource()->getOriginalFile()->delete();

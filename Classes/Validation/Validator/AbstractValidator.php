@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -14,7 +14,7 @@ namespace JWeiland\Pforum\Validation\Validator;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
- * This abstract Validator adds TS settings to all extending Validators
+ * This abstract Validator adds TS settings to all extending Validators.
  */
 abstract class AbstractValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator
 {
@@ -41,7 +41,7 @@ abstract class AbstractValidator extends \TYPO3\CMS\Extbase\Validation\Validator
     public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager): void
     {
         $this->configurationManager = $configurationManager;
-        $this->settings = $this->configurationManager->getConfiguration(
+        $this->settings             = $this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
             'pforum',
             'forum'

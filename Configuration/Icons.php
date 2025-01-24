@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -24,7 +24,7 @@ return [
         'provider' => SvgIconProvider::class,
         'source'   => 'EXT:pforum/Resources/Public/Icons/tx_pforum_domain_model_topic.svg',
     ],
-    'ext-pforum-table-post'  => [
+    'ext-pforum-table-post' => [
         'provider' => SvgIconProvider::class,
         'source'   => 'EXT:pforum/Resources/Public/Icons/tx_pforum_domain_model_post.svg',
     ],

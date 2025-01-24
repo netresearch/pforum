@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -15,7 +15,7 @@ use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
- * This is an abstract class for anonymous/fe_user models
+ * This is an abstract class for anonymous/fe_user models.
  */
 class User extends AbstractEntity
 {
@@ -26,12 +26,14 @@ class User extends AbstractEntity
 
     /**
      * @var string
+     *
      * @Extbase\Validate("JWeiland\Pforum\Validation\Validator\UsernameValidator")
      */
     protected $username = '';
 
     /**
      * @var string
+     *
      * @Extbase\Validate("JWeiland\Pforum\Validation\Validator\EmailValidator")
      */
     protected $email = '';

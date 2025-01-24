@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -58,11 +58,11 @@ final class AfterPostCreateEvent
         ServerRequestInterface $request,
         Topic $topic,
         Post $post,
-        array $settings
+        array $settings,
     ) {
-        $this->request = $request;
-        $this->topic = $topic;
-        $this->post = $post;
+        $this->request  = $request;
+        $this->topic    = $topic;
+        $this->post     = $post;
         $this->settings = $settings;
     }
 

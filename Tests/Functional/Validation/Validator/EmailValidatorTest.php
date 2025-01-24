@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -25,7 +25,7 @@ use TYPO3\CMS\Extbase\Validation\Error;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
- * Test case
+ * Test case.
  */
 class EmailValidatorTest extends FunctionalTestCase
 {
@@ -45,17 +45,18 @@ class EmailValidatorTest extends FunctionalTestCase
      * @var array
      */
     protected array $testExtensionsToLoad = [
-        'typo3conf/ext/pforum'
+        'typo3conf/ext/pforum',
     ];
 
     /**
      * @return void
+     *
      * @throws DBALException
      */
     protected function setUp(): void
     {
         parent::setUp();
-        $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
+        $GLOBALS['LANG']                    = GeneralUtility::makeInstance(LanguageService::class);
         $this->configurationManagerProphecy = $this->prophesize(ConfigurationManager::class);
 
         $this->subject = new EmailValidator();
@@ -155,6 +156,7 @@ class EmailValidatorTest extends FunctionalTestCase
      * @param bool $isMandatory
      *
      * @return void
+     *
      * @throws InvalidConfigurationTypeException
      */
     protected function setEmailIsMandatory(bool $isMandatory): void
@@ -167,7 +169,7 @@ class EmailValidatorTest extends FunctionalTestCase
             )
             ->shouldBeCalled()
             ->willReturn([
-                'emailIsMandatory' => $isMandatory ? '1' : '0'
+                'emailIsMandatory' => $isMandatory ? '1' : '0',
             ]);
         $this->subject->injectConfigurationManager($this->configurationManagerProphecy->reveal());
     }

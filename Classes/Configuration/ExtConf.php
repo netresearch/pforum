@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -11,12 +11,13 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Configuration;
 
+use InvalidArgumentException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Class ExtConf
+ * Class ExtConf.
  */
 class ExtConf implements SingletonInterface
 {
@@ -46,14 +47,14 @@ class ExtConf implements SingletonInterface
     }
 
     /**
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getEmailFromAddress(): string
     {
         if ($this->emailFromAddress === '') {
-            $senderMail = (string)$GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'];
+            $senderMail = (string) $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'];
             if ($senderMail === '') {
-                throw new \InvalidArgumentException('You have forgotten to set a sender email address in extension settings of pforum or in install tool', 1604694223);
+                throw new InvalidArgumentException('You have forgotten to set a sender email address in extension settings of pforum or in install tool', 1604694223);
             }
 
             return $senderMail;
@@ -68,14 +69,14 @@ class ExtConf implements SingletonInterface
     }
 
     /**
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getEmailFromName(): string
     {
         if ($this->emailFromName === '') {
-            $senderName = (string)$GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName'];
+            $senderName = (string) $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName'];
             if ($senderName === '') {
-                throw new \InvalidArgumentException('You have forgotten to set a sender name in extension settings of pforum or in install tool', 1604694279);
+                throw new InvalidArgumentException('You have forgotten to set a sender name in extension settings of pforum or in install tool', 1604694279);
             }
 
             return $senderName;

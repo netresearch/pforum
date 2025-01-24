@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -25,7 +25,7 @@ use TYPO3\CMS\Extbase\Validation\Error;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
- * Test case
+ * Test case.
  */
 class UsernameValidatorTest extends FunctionalTestCase
 {
@@ -45,18 +45,19 @@ class UsernameValidatorTest extends FunctionalTestCase
      * @var array
      */
     protected array $testExtensionsToLoad = [
-        'typo3conf/ext/pforum'
+        'typo3conf/ext/pforum',
     ];
 
     /**
      * @return void
+     *
      * @throws DBALException
      */
     protected function setUp(): void
     {
         parent::setUp();
 
-        $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
+        $GLOBALS['LANG']                    = GeneralUtility::makeInstance(LanguageService::class);
         $this->configurationManagerProphecy = $this->prophesize(ConfigurationManager::class);
 
         $this->subject = new UsernameValidator();
@@ -135,6 +136,7 @@ class UsernameValidatorTest extends FunctionalTestCase
      * @param bool $isMandatory
      *
      * @return void
+     *
      * @throws InvalidConfigurationTypeException
      */
     protected function setUsernameIsMandatory(bool $isMandatory): void
@@ -147,7 +149,7 @@ class UsernameValidatorTest extends FunctionalTestCase
             )
             ->shouldBeCalled()
             ->willReturn([
-                'usernameIsMandatory' => $isMandatory ? '1' : '0'
+                'usernameIsMandatory' => $isMandatory ? '1' : '0',
             ]);
 
         $this->subject->injectConfigurationManager($this->configurationManagerProphecy->reveal());

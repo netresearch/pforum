@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -21,7 +21,7 @@ use TYPO3\CMS\Extbase\Validation\Validator\NotEmptyValidator;
 use TYPO3\CMS\Extbase\Validation\ValidatorResolver;
 
 /**
- * Add validator for email in topic/post records, if it is was configured in typoscript
+ * Add validator for email in topic/post records, if it is was configured in typoscript.
  */
 class ApplyEmailAsMandatoryIfNeededEventListener extends AbstractControllerEventListener
 {
@@ -33,12 +33,12 @@ class ApplyEmailAsMandatoryIfNeededEventListener extends AbstractControllerEvent
     protected $allowedControllerActions = [
         'Topic' => [
             'create',
-            'update'
+            'update',
         ],
         'Post' => [
             'create',
-            'update'
-        ]
+            'update',
+        ],
     ];
 
     public function __construct(ObjectManagerInterface $objectManager)

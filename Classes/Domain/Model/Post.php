@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -11,12 +11,13 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Domain\Model;
 
+use DateTime;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
- * Model for postings as part of a topic
+ * Model for postings as part of a topic.
  */
 class Post extends AbstractEntity implements PostInterface
 {
@@ -26,7 +27,7 @@ class Post extends AbstractEntity implements PostInterface
     protected $hidden = false;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     protected $crdate;
 
@@ -42,6 +43,7 @@ class Post extends AbstractEntity implements PostInterface
 
     /**
      * @var string
+     *
      * @Extbase\Validate("NotEmpty")
      */
     protected $description = '';
@@ -76,12 +78,12 @@ class Post extends AbstractEntity implements PostInterface
         $this->hidden = $hidden;
     }
 
-    public function getCrdate(): \DateTime
+    public function getCrdate(): DateTime
     {
         return $this->crdate;
     }
 
-    public function setCrdate(\DateTime $crdate): void
+    public function setCrdate(DateTime $crdate): void
     {
         $this->crdate = $crdate;
     }
@@ -139,7 +141,7 @@ class Post extends AbstractEntity implements PostInterface
     /**
      * Helper method to get user.
      *
-     * @return null|User
+     * @return User|null
      */
     public function getUser(): ?User
     {

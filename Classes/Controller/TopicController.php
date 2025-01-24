@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -24,7 +24,7 @@ use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
- * Controller to list and show topics of forum
+ * Controller to list and show topics of forum.
  */
 class TopicController extends AbstractController
 {
@@ -41,7 +41,7 @@ class TopicController extends AbstractController
     public function showAction(Topic $topic): void
     {
         $posts = $this->postRepository->findByTopic($topic);
-        if ($this->frontendGroupHelper->uidExistsInGroupData((int)($this->settings['uidOfAdminGroup'] ?? 0))) {
+        if ($this->frontendGroupHelper->uidExistsInGroupData((int) ($this->settings['uidOfAdminGroup'] ?? 0))) {
             $posts->getQuery()
                 ->getQuerySettings()
                 ->setIgnoreEnableFields(true)
@@ -69,7 +69,7 @@ class TopicController extends AbstractController
     }
 
     /**
-     * Set typeConverter for images
+     * Set typeConverter for images.
      */
     public function initializeCreateAction(): void
     {
@@ -79,7 +79,7 @@ class TopicController extends AbstractController
     public function createAction(Forum $forum, Topic $topic): void
     {
         // if auth = frontend user
-        if ((int)$this->settings['auth'] === 2) {
+        if ((int) $this->settings['auth'] === 2) {
             $this->addFeUserToTopic($forum, $topic);
         }
 
@@ -119,7 +119,7 @@ class TopicController extends AbstractController
 
         // if auth = anonymous user
         // send a mail to the user to activate, edit or delete his entry
-        if (((int)$this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
+        if (((int) $this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
             $this->persistenceManager->persistAll(); // we need an uid before mailing
             $this->mailToUser($topic);
         }
@@ -141,19 +141,20 @@ class TopicController extends AbstractController
 
     /**
      * @param bool $isPreview If is preview there will be an additional output above edit form
-     * @param bool $isNew We need the information if updateAction was called from createAction.
-     *                    If so we have to passthrough this information
+     * @param bool $isNew     We need the information if updateAction was called from createAction.
+     *                        If so we have to passthrough this information
+     *
      * @Extbase\IgnoreValidation("topic")
      */
     public function editAction(
-        Topic $topic = null,
+        ?Topic $topic = null,
         bool $isPreview = false,
-        bool $isNew = false
+        bool $isNew = false,
     ): void {
         $this->postProcessAndAssignFluidVariables([
-            'topic' => $topic,
+            'topic'     => $topic,
             'isPreview' => $isPreview,
-            'isNew' => $isNew,
+            'isNew'     => $isNew,
         ]);
     }
 
@@ -199,7 +200,7 @@ class TopicController extends AbstractController
 
                 // if auth = anonymous user
                 // send a mail to the user to activate, edit or delete his entry
-                if (((int)$this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
+                if (((int) $this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
                     $this->mailToUser($topic);
                 }
 
@@ -267,10 +268,10 @@ class TopicController extends AbstractController
         $argument = $this->request->getArgument($argumentName);
         if (is_array($argument)) {
             // get topic from form ($_POST)
-            $topic = $this->topicRepository->findHiddenObject((int)$argument['__identity']);
+            $topic = $this->topicRepository->findHiddenObject((int) $argument['__identity']);
         } else {
             // get topic from UID
-            $topic = $this->topicRepository->findHiddenObject((int)$argument);
+            $topic = $this->topicRepository->findHiddenObject((int) $argument);
         }
 
         if ($topic instanceof Topic) {
@@ -282,7 +283,7 @@ class TopicController extends AbstractController
     {
         if (is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid']) {
             $user = $this->frontendUserRepository->findByUid(
-                (int)$GLOBALS['TSFE']->fe_user->user['uid']
+                (int) $GLOBALS['TSFE']->fe_user->user['uid']
             );
             $topic->setFrontendUser($user);
         } else {
@@ -307,7 +308,7 @@ class TopicController extends AbstractController
             ->setTemplate('ConfigureTopic')
             ->assignMultiple([
                 'settings' => $this->settings,
-                'topic' => $topic,
+                'topic'    => $topic,
             ]);
         GeneralUtility::makeInstance(Mailer::class)->send($email);
     }

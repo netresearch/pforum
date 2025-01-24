@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package jweiland/pforum.
+ * This file is part of the package netresearch/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -19,7 +19,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use function in_array;
 
 /**
- * Controller to manage (list and show) postings
+ * Controller to manage (list and show) postings.
  */
 class FrontendUserAccessService
 {
@@ -27,7 +27,7 @@ class FrontendUserAccessService
      * Returns TRUE if the current frontend user is allowed to access.
      *
      * @param int $authenticationType The authentication type (1 or 2)
-     * @param int $userGroupUid       The desired frontend user group to check.
+     * @param int $userGroupUid       the desired frontend user group to check
      *
      * @return bool
      */
@@ -63,7 +63,7 @@ class FrontendUserAccessService
     /**
      * Returns the user aspect with information about a user.
      *
-     * @return null|UserAspect
+     * @return UserAspect|null
      */
     protected function getUserAspect(): ?UserAspect
     {
