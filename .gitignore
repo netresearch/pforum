@@ -12,9 +12,8 @@ composer.lock
 
 # Build stuff
 .build/
-Build/.phpunit.cache/
-Build/.phpunit.result.cache
 
 # Cache
 .php-cs-fixer.cache
 .phplint.cache
+.phpunit.result.cache

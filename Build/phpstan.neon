@@ -2,7 +2,7 @@ includes:
     - %currentWorkingDirectory%/.build/vendor/phpstan/phpstan-phpunit/extension.neon
     - %currentWorkingDirectory%/.build/vendor/phpstan/phpstan-strict-rules/rules.neon
     - %currentWorkingDirectory%/.build/vendor/phpstan/phpstan-deprecation-rules/rules.neon
-    - %currentWorkingDirectory%/.build/vendor/friendsoftypo3/phpstan-typo3/extension.neon
+    - %currentWorkingDirectory%/.build/vendor/saschaegerer/phpstan-typo3/extension.neon
     - %currentWorkingDirectory%/Build/phpstan-baseline.neon
 
 parameters:
@@ -14,13 +14,10 @@ parameters:
         - %currentWorkingDirectory%/Configuration/
         - %currentWorkingDirectory%/Resources/
         - %currentWorkingDirectory%/ext_localconf.php
-        - %currentWorkingDirectory%/ext_tables.php
 
     excludePaths:
-        - vendor/*
-        - ext_emconf.php
+        - %currentWorkingDirectory%/.build/*
+        - %currentWorkingDirectory%/ext_emconf.php
 
-    checkGenericClassInNonGenericObjectType: false
+    treatPhpDocTypesAsCertain: false
 
-    # Ignore error, mainly due invalid PHP in TYPO3
-    ignoreErrors:

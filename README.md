@@ -1,3 +1,7 @@
+[![Latest version](https://img.shields.io/github/v/release/netresearch/pforum?sort=semver)](https://github.com/netresearch/pforum/releases/latest)
+[![License](https://img.shields.io/github/license/netresearch/pforum)](https://github.com/netresearch/pforum/blob/main/LICENSE)
+[![CI](https://github.com/netresearch/pforum/actions/workflows/ci.yml/badge.svg)](https://github.com/netresearch/pforum/actions/workflows/ci.yml)
+
 # TYPO3 Extension `pforum`
 
 ![Build Status](https://github.com/jweiland-net/pforum/workflows/CI/badge.svg)
