@@ -17,3 +17,5 @@ composer.lock
 .php-cs-fixer.cache
 .phplint.cache
 .phpunit.result.cache
+phpunit-report.xml
+/coverage

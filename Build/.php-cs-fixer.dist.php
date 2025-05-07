@@ -1,15 +1,6 @@
 <?php
 
 /**
- * This file is part of the package netresearch/pforum.
- *
- * For the full copyright and license information, please read the
- * LICENSE file that was distributed with this source code.
- */
-
-declare(strict_types=1);
-
-/**
  * This file represents the configuration for Code Sniffing PSR-2-related
  * automatic checks of coding guidelines
  * Install @fabpot's great php-cs-fixer tool via
@@ -30,7 +21,7 @@ if (PHP_SAPI !== 'cli') {
 }
 
 $header = <<<EOF
-This file is part of the package netresearch/pforum.
+This file is part of the package jweiland/pforum.
 
 For the full copyright and license information, please read the
 LICENSE file that was distributed with this source code.
@@ -38,6 +29,7 @@ EOF;
 
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
+    ->setParallelConfig(new PhpCsFixer\Runner\Parallel\ParallelConfig(4, 8))
     ->setRules([
         '@PSR12'                          => true,
         '@PER-CS2.0'                      => true,

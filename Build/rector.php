@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package netresearch/pforum.
+ * This file is part of the package jweiland/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -28,12 +28,12 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__ . '/../Classes',
         __DIR__ . '/../Configuration',
         __DIR__ . '/../Resources',
-        __DIR__ . '/../ext_*.php',
+        '../ext_*',
     ]);
 
     $rectorConfig->skip([
-        __DIR__ . '/../ext_emconf.php',
-        __DIR__ . '/../ext_*.sql',
+        '../ext_emconf.php',
+        '../ext_*.sql',
     ]);
 
     $rectorConfig->phpstanConfig('Build/phpstan.neon');
@@ -48,9 +48,8 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::CODING_STYLE,
         SetList::CODE_QUALITY,
         SetList::DEAD_CODE,
-
-        LevelSetList::UP_TO_PHP_81,
-        Typo3LevelSetList::UP_TO_TYPO3_11,
+        LevelSetList::UP_TO_PHP_83,
+        Typo3LevelSetList::UP_TO_TYPO3_13,
     ]);
 
     // Skip some rules
