@@ -15,7 +15,6 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
 use Rector\DeadCode\Rector\Property\RemoveUselessVarTagRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
-use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
@@ -28,12 +27,12 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__ . '/../Classes',
         __DIR__ . '/../Configuration',
         __DIR__ . '/../Resources',
-        '../ext_*',
+        __DIR__ . '../ext_*',
     ]);
 
     $rectorConfig->skip([
-        '../ext_emconf.php',
-        '../ext_*.sql',
+        __DIR__ . '../ext_emconf.php',
+        __DIR__ . '../ext_*.sql',
     ]);
 
     $rectorConfig->phpstanConfig('Build/phpstan.neon');
@@ -56,7 +55,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->skip([
         CatchExceptionNameMatchingTypeRector::class,
         ClassPropertyAssignToConstructorPromotionRector::class,
-        MixedTypeRector::class,
         NullToStrictStringFuncCallArgRector::class,
         RemoveUselessParamTagRector::class,
         RemoveUselessReturnTagRector::class,

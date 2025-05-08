@@ -13,7 +13,7 @@
          colors="true"
 >
     <testsuites>
-        <testsuite name="####EXT_NAME####">
+        <testsuite name="Pforum extension">
             <directory>../Tests/Unit</directory>
         </testsuite>
     </testsuites>
