@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Controller;
 
+use Psr\Http\Message\ResponseInterface;
 use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Helper\FrontendGroupHelper;
 
@@ -29,14 +30,15 @@ class ForumController extends AbstractController
         $this->frontendGroupHelper = $frontendGroupHelper;
     }
 
-    public function listAction(): void
+    public function listAction(): ResponseInterface
     {
         $this->postProcessAndAssignFluidVariables([
             'forums' => $this->forumRepository->findAll(),
         ]);
+        return $this->htmlResponse();
     }
 
-    public function showAction(Forum $forum): void
+    public function showAction(Forum $forum): ResponseInterface
     {
         $topics = $this->topicRepository->findByForum($forum);
         if ($this->frontendGroupHelper->uidExistsInGroupData((int) ($this->settings['uidOfAdminGroup'] ?? 0))) {
@@ -50,5 +52,6 @@ class ForumController extends AbstractController
             'forum'  => $forum,
             'topics' => $topics,
         ]);
+        return $this->htmlResponse();
     }
 }

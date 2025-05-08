@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Domain\Model;
 
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use DateTime;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
@@ -32,47 +33,45 @@ class Topic extends AbstractEntity implements TopicInterface
     protected $crdate;
 
     /**
-     * @var \JWeiland\Pforum\Domain\Model\Forum
+     * @var Forum
      */
     protected $forum;
 
     /**
      * @var string
-     *
-     * @Extbase\Validate("NotEmpty")
      */
+    #[Extbase\Validate(['validator' => 'NotEmpty'])]
     protected $title = '';
 
     /**
      * @var string
-     *
-     * @Extbase\Validate("NotEmpty")
      */
+    #[Extbase\Validate(['validator' => 'NotEmpty'])]
     protected $description = '';
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Pforum\Domain\Model\Post>
-     * @Extbase\ORM\Cascade("remove")
+     * @var ObjectStorage<Post>
      *
-     * @Extbase\ORM\Lazy
      */
+    #[Extbase\ORM\Cascade(['value' => 'remove'])]
+    #[Extbase\ORM\Lazy]
     protected $posts;
 
     /**
-     * @var \JWeiland\Pforum\Domain\Model\AnonymousUser
-     * @Extbase\ORM\Cascade("remove")
+     * @var AnonymousUser
      */
+    #[Extbase\ORM\Cascade(['value' => 'remove'])]
     protected $anonymousUser;
 
     /**
-     * @var \JWeiland\Pforum\Domain\Model\FrontendUser
+     * @var FrontendUser
      */
     protected $frontendUser;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
-     * @Extbase\ORM\Lazy
+     * @var ObjectStorage<FileReference>
      */
+    #[Extbase\ORM\Lazy]
     protected $images;
 
     public function __construct()
@@ -195,7 +194,7 @@ class Topic extends AbstractEntity implements TopicInterface
     }
 
     /**
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     * @return ObjectStorage<FileReference>
      */
     public function getImages(): ObjectStorage
     {

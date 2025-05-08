@@ -15,7 +15,6 @@ return [
         'label'                    => 'title',
         'tstamp'                   => 'tstamp',
         'crdate'                   => 'crdate',
-        'cruser_id'                => 'cruser_id',
         'delete'                   => 'deleted',
         'sortby'                   => 'sorting',
         'default_sortby'           => 'title',
@@ -85,8 +84,8 @@ return [
                 'renderType' => 'selectSingle',
                 'items'      => [
                     [
-                        '',
-                        0,
+                        'label' => '',
+                        'value' => 0,
                     ],
                 ],
                 'foreign_table'       => 'tx_pforum_domain_model_forum',
@@ -112,21 +111,13 @@ return [
                 'type'       => 'check',
                 'renderType' => 'checkboxToggle',
                 'default'    => 0,
-                'items'      => [
-                    [
-                        0 => '',
-                        1 => '',
-                    ],
-                ],
             ],
         ],
         'starttime' => [
             'exclude' => true,
             'label'   => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
             'config'  => [
-                'type'       => 'input',
-                'renderType' => 'inputDateTime',
-                'eval'       => 'datetime,int',
+                'type'       => 'datetime',
                 'default'    => 0,
                 'behaviour'  => [
                     'allowLanguageSynchronization' => true,
@@ -137,9 +128,7 @@ return [
             'exclude' => true,
             'label'   => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
             'config'  => [
-                'type'       => 'input',
-                'renderType' => 'inputDateTime',
-                'eval'       => 'datetime,int',
+                'type'       => 'datetime',
                 'default'    => 0,
                 'range'      => [
                     'upper' => mktime(
@@ -162,7 +151,8 @@ return [
             'config'  => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim,required',
+                'eval' => 'trim',
+                'required' => true,
             ],
         ],
         'teaser' => [
@@ -198,12 +188,6 @@ return [
                 'type'       => 'check',
                 'renderType' => 'checkboxToggle',
                 'default'    => 0,
-                'items'      => [
-                    [
-                        0 => '',
-                        1 => '',
-                    ],
-                ],
             ],
         ],
     ],

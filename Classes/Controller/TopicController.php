@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Controller;
 
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Domain\Model\Topic;
 use JWeiland\Pforum\Event\AfterTopicCreateEvent;
@@ -18,7 +20,6 @@ use JWeiland\Pforum\Helper\FrontendGroupHelper;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\FluidEmail;
 use TYPO3\CMS\Core\Mail\Mailer;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -28,6 +29,8 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class TopicController extends AbstractController
 {
+    public $controllerContext;
+
     /**
      * @var FrontendGroupHelper
      */
@@ -38,7 +41,7 @@ class TopicController extends AbstractController
         $this->frontendGroupHelper = $frontendGroupHelper;
     }
 
-    public function showAction(Topic $topic): void
+    public function showAction(Topic $topic): ResponseInterface
     {
         $posts = $this->postRepository->findByTopic($topic);
         if ($this->frontendGroupHelper->uidExistsInGroupData((int) ($this->settings['uidOfAdminGroup'] ?? 0))) {
@@ -52,12 +55,13 @@ class TopicController extends AbstractController
             'topic' => $topic,
             'posts' => $posts,
         ]);
+        return $this->htmlResponse();
     }
 
-    public function newAction(Forum $forum): void
+    public function newAction(Forum $forum): ?ResponseInterface
     {
         if (!$this->accessCheck()) {
-            $this->redirect('list', 'Forum', 'Pforum');
+            return $this->redirect('list', 'Forum', 'Pforum');
         }
 
         $this->deleteUploadedFilesOnValidationErrors('topic');
@@ -66,6 +70,7 @@ class TopicController extends AbstractController
             'forum' => $forum,
             'topic' => GeneralUtility::makeInstance(Topic::class),
         ]);
+        return null;
     }
 
     /**
@@ -76,7 +81,7 @@ class TopicController extends AbstractController
         $this->preProcessControllerAction();
     }
 
-    public function createAction(Forum $forum, Topic $topic): void
+    public function createAction(Forum $forum, Topic $topic): ResponseInterface
     {
         // if auth = frontend user
         if ((int) $this->settings['auth'] === 2) {
@@ -100,10 +105,11 @@ class TopicController extends AbstractController
 
         // if a preview was requested direct to preview action
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
-            $topic->setHidden(true); // topic should not be visible while previewing
+            $topic->setHidden(true);
+            // topic should not be visible while previewing
             $this->forumRepository->update($forum);
-            $this->persistenceManager->persistAll(); // we need an uid before redirecting
-            $this->redirect(
+            $this->persistenceManager->persistAll();
+            return $this->redirect(
                 'edit',
                 'Topic',
                 'Pforum',
@@ -125,7 +131,7 @@ class TopicController extends AbstractController
         }
 
         $this->addFlashMessageForCreation();
-        $this->redirect('show', 'Forum', 'Pforum', ['forum' => $forum]);
+        return $this->redirect('show', 'Forum', 'Pforum', ['forum' => $forum]);
     }
 
     /**
@@ -143,19 +149,19 @@ class TopicController extends AbstractController
      * @param bool $isPreview If is preview there will be an additional output above edit form
      * @param bool $isNew     We need the information if updateAction was called from createAction.
      *                        If so we have to passthrough this information
-     *
-     * @Extbase\IgnoreValidation("topic")
      */
+    #[Extbase\IgnoreValidation(['argumentName' => 'topic'])]
     public function editAction(
         ?Topic $topic = null,
         bool $isPreview = false,
         bool $isNew = false,
-    ): void {
+    ): ResponseInterface {
         $this->postProcessAndAssignFluidVariables([
             'topic'     => $topic,
             'isPreview' => $isPreview,
             'isNew'     => $isNew,
         ]);
+        return $this->htmlResponse();
     }
 
     /**
@@ -173,49 +179,48 @@ class TopicController extends AbstractController
      * @param bool $isNew We need the information if updateAction was called from createAction.
      *                    If so we have to add different messages
      */
-    public function updateAction(Topic $topic, bool $isNew = false): void
+    public function updateAction(Topic $topic, bool $isNew = false): ResponseInterface
     {
         $this->topicRepository->update($topic);
-
         // if a preview was requested direct to preview action
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
             $topic->setHidden(true);
-            $this->redirect(
+            return $this->redirect(
                 'edit',
                 'Topic',
                 'Pforum',
                 ['topic' => $topic, 'isPreview' => true, 'isNew' => $isNew]
             );
-        } else {
-            if ($isNew) {
-                // if is new and preview was pressed we have to check for visibility again
-                if ($this->settings['topic']['hideAtCreation']) {
-                    $topic->setHidden(true);
-                } else {
-                    $topic->setHidden(false);
-                }
+        }
 
-                $this->topicRepository->update($topic);
-                $this->persistenceManager->persistAll();
-
-                // if auth = anonymous user
-                // send a mail to the user to activate, edit or delete his entry
-                if (((int) $this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
-                    $this->mailToUser($topic);
-                }
-
-                $this->addFlashMessageForCreation();
+        if ($isNew) {
+            // if is new and preview was pressed we have to check for visibility again
+            if ($this->settings['topic']['hideAtCreation']) {
+                $topic->setHidden(true);
             } else {
-                // edited topics which are not new are visible
                 $topic->setHidden(false);
-                $this->topicRepository->update($topic);
-                $this->persistenceManager->persistAll();
-
-                $this->addFlashMessage(LocalizationUtility::translate('topicUpdated', 'pforum'));
             }
 
-            $this->redirect('show', 'Forum', 'Pforum', ['forum' => $topic->getForum()]);
+            $this->topicRepository->update($topic);
+            $this->persistenceManager->persistAll();
+
+            // if auth = anonymous user
+            // send a mail to the user to activate, edit or delete his entry
+            if (((int) $this->settings['auth'] === 1) && $this->settings['emailIsMandatory']) {
+                $this->mailToUser($topic);
+            }
+
+            $this->addFlashMessageForCreation();
+        } else {
+            // edited topics which are not new are visible
+            $topic->setHidden(false);
+            $this->topicRepository->update($topic);
+            $this->persistenceManager->persistAll();
+
+            $this->addFlashMessage(LocalizationUtility::translate('topicUpdated', 'pforum'));
         }
+
+        return $this->redirect('show', 'Forum', 'Pforum', ['forum' => $topic->getForum()]);
     }
 
     /**
@@ -229,11 +234,11 @@ class TopicController extends AbstractController
         $this->registerTopicFromRequest('topic');
     }
 
-    public function deleteAction(Topic $topic): void
+    public function deleteAction(Topic $topic): ResponseInterface
     {
         $this->topicRepository->remove($topic);
         $this->addFlashMessage(LocalizationUtility::translate('topicDeleted', 'pforum'));
-        $this->redirect('list', 'Forum', 'Pforum');
+        return $this->redirect('list', 'Forum', 'Pforum');
     }
 
     /**
@@ -250,12 +255,12 @@ class TopicController extends AbstractController
     /**
      * We need this extra action, because hidden entries can't be found in FE mode.
      */
-    public function activateAction(Topic $topic): void
+    public function activateAction(Topic $topic): ResponseInterface
     {
         $topic->setHidden(false);
         $this->topicRepository->update($topic);
         $this->addFlashMessage(LocalizationUtility::translate('topicActivated', 'pforum'));
-        $this->redirect('list', 'Forum', 'Pforum');
+        return $this->redirect('list', 'Forum', 'Pforum');
     }
 
     /**
@@ -279,7 +284,7 @@ class TopicController extends AbstractController
         }
     }
 
-    protected function addFeUserToTopic(Forum $forum, Topic $topic): void
+    protected function addFeUserToTopic(Forum $forum, Topic $topic): ResponseInterface
     {
         if (is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid']) {
             $user = $this->frontendUserRepository->findByUid(
@@ -291,9 +296,9 @@ class TopicController extends AbstractController
             $this->addFlashMessage(
                 'You must be logged in before creating a topic',
                 '',
-                AbstractMessage::WARNING
+                ContextualFeedbackSeverity::WARNING
             );
-            $this->redirect('show', 'Forum', 'Pforum', ['forum' => $forum]);
+            return $this->redirect('show', 'Forum', 'Pforum', ['forum' => $forum]);
         }
     }
 

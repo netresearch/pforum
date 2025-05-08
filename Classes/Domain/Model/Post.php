@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Domain\Model;
 
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use DateTime;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
@@ -32,7 +33,7 @@ class Post extends AbstractEntity implements PostInterface
     protected $crdate;
 
     /**
-     * @var \JWeiland\Pforum\Domain\Model\Topic
+     * @var Topic
      */
     protected $topic;
 
@@ -43,23 +44,22 @@ class Post extends AbstractEntity implements PostInterface
 
     /**
      * @var string
-     *
-     * @Extbase\Validate("NotEmpty")
      */
+    #[Extbase\Validate(['validator' => 'NotEmpty'])]
     protected $description = '';
 
     /**
-     * @var \JWeiland\Pforum\Domain\Model\AnonymousUser
+     * @var AnonymousUser
      */
     protected $anonymousUser;
 
     /**
-     * @var \JWeiland\Pforum\Domain\Model\FrontendUser
+     * @var FrontendUser
      */
     protected $frontendUser;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     * @var ObjectStorage<FileReference>
      */
     protected $images;
 
@@ -162,7 +162,7 @@ class Post extends AbstractEntity implements PostInterface
     }
 
     /**
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     * @return ObjectStorage<FileReference>
      */
     public function getImages(): ObjectStorage
     {

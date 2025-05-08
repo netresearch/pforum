@@ -161,13 +161,14 @@ class AbstractController extends ActionController
         $this->settings = $mergedSettings;
     }
 
-    public function initializeAction(): void
+    protected function initializeAction(): void
     {
         // if this value was not set, then it will be filled with 0
         // but that is not good, because UriBuilder accepts 0 as pid, so it's better to set it to NULL
         if (empty($this->settings['pidOfDetailPage'])) {
             $this->settings['pidOfDetailPage'] = null;
         }
+
         $this->checkForMisconfiguration();
     }
 
@@ -182,18 +183,19 @@ class AbstractController extends ActionController
             && empty($this->settings['emailIsMandatory'])
         ) {
             throw new RuntimeException(
-                'You can\'t hide topics at creation, deactivate admin activation and mark email as NOT mandatory.' .
+                "You can't hide topics at creation, deactivate admin activation and mark email as NOT mandatory." .
                 'This would produce hidden records which will never be visible',
                 1378371532
             );
         }
+
         if (
             $this->settings['post']['hideAtCreation']
             && empty($this->settings['post']['activateByAdmin'])
             && empty($this->settings['emailIsMandatory'])
         ) {
             throw new RuntimeException(
-                'You can\'t hide posts at creation, deactivate admin activation and mark email ' .
+                "You can't hide posts at creation, deactivate admin activation and mark email " .
                 'as NOT mandatory. This would produce hidden records which will never be visible',
                 1378371541
             );

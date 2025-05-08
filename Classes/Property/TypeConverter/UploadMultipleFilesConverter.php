@@ -125,6 +125,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
 
                 continue;
             }
+
             // Check if uploaded file returns an error
             if (!$uploadedFile['error'] === 0) {
                 return new Error(
@@ -175,7 +176,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
 
     protected function initialize(?PropertyMappingConfigurationInterface $configuration): void
     {
-        if ($configuration === null) {
+        if (!$configuration instanceof PropertyMappingConfigurationInterface) {
             throw new Exception(
                 'Missing PropertyMapper configuration in UploadMultipleFilesConverter',
                 1666698966
@@ -227,7 +228,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
         $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
         try {
             $uploadFolder = $resourceFactory->getObjectFromCombinedIdentifier($combinedUploadFolderIdentifier);
-        } catch (ResourceDoesNotExistException $resourceDoesNotExistException) {
+        } catch (ResourceDoesNotExistException) {
             [$storageUid, $folderName] = GeneralUtility::trimExplode(':', $combinedUploadFolderIdentifier);
             $resourceStorage           = $resourceFactory->getStorageObject((int) $storageUid);
             $uploadFolder              = $resourceStorage->createFolder($folderName);
@@ -260,13 +261,13 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
      */
     protected function deleteFile(?FileReference $fileReference): void
     {
-        if ($fileReference !== null) {
+        if ($fileReference instanceof FileReference) {
             $fileReference = $fileReference->getOriginalResource();
 
             if ($fileReference->getStorage()->isWithinFolder($this->uploadFolder, $fileReference)) {
                 try {
                     $fileReference->getOriginalFile()->delete();
-                } catch (Exception $exception) {
+                } catch (Exception) {
                     // Do nothing. File already deleted or not found
                 }
             }

@@ -22,9 +22,8 @@ class Forum extends AbstractEntity
 {
     /**
      * @var string
-     *
-     * @Extbase\Validate("NotEmpty")
      */
+    #[Extbase\Validate(['validator' => 'NotEmpty'])]
     protected $title = '';
 
     /**
@@ -38,9 +37,9 @@ class Forum extends AbstractEntity
     protected bool $archived = false;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Pforum\Domain\Model\Topic>
-     * @Extbase\ORM\Lazy
+     * @var ObjectStorage<Topic>
      */
+    #[Extbase\ORM\Lazy]
     protected $topics;
 
     public function __construct()

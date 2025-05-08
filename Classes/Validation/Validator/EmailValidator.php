@@ -24,7 +24,7 @@ class EmailValidator extends AbstractValidator
      *
      * @param mixed $value The value that should be validated
      */
-    public function isValid($value): void
+    protected function isValid($value): void
     {
         if (
             isset($this->settings['emailIsMandatory'])

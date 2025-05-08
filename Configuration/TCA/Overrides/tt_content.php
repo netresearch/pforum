@@ -14,17 +14,18 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 defined('TYPO3') || exit('Access denied.');
 
-call_user_func(static function () {
+call_user_func(static function (): void {
     ExtensionUtility::registerPlugin(
         'Pforum',
         'Forum',
         'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:plugin.pforum.title'
     );
 
-    $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['pforum_forum'] = 'pi_flexform';
+    ExtensionManagementUtility::addToAllTCAtypes('tt_content', '--div--;Configuration,pi_flexform,', 'pforum_forum', 'after:subheader');
 
     ExtensionManagementUtility::addPiFlexFormValue(
-        'pforum_forum',
-        'FILE:EXT:pforum/Configuration/FlexForms/Forum.xml'
+        '*',
+        'FILE:EXT:pforum/Configuration/FlexForms/Forum.xml',
+        'pforum_forum'
     );
 });

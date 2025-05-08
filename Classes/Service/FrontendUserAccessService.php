@@ -45,7 +45,7 @@ class FrontendUserAccessService
 
         $userAspect = $this->getUserAspect();
 
-        if ($userAspect === null) {
+        if (!$userAspect instanceof UserAspect) {
             return false;
         }
 

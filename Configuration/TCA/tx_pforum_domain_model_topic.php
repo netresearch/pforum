@@ -9,15 +9,12 @@
 
 declare(strict_types=1);
 
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-
 return [
     'ctrl' => [
         'title'                    => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_topic',
         'label'                    => 'title',
         'tstamp'                   => 'tstamp',
         'crdate'                   => 'crdate',
-        'cruser_id'                => 'cruser_id',
         'delete'                   => 'deleted',
         'default_sortby'           => 'tstamp DESC',
         'versioningWS'             => true,
@@ -93,8 +90,8 @@ return [
                 'renderType' => 'selectSingle',
                 'items'      => [
                     [
-                        '',
-                        0,
+                        'label' => '',
+                        'value' => 0,
                     ],
                 ],
                 'foreign_table'       => 'tx_pforum_domain_model_topic',
@@ -120,21 +117,13 @@ return [
                 'type'       => 'check',
                 'renderType' => 'checkboxToggle',
                 'default'    => 0,
-                'items'      => [
-                    [
-                        0 => '',
-                        1 => '',
-                    ],
-                ],
             ],
         ],
         'starttime' => [
             'exclude' => true,
             'label'   => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
             'config'  => [
-                'type'       => 'input',
-                'renderType' => 'inputDateTime',
-                'eval'       => 'datetime,int',
+                'type'       => 'datetime',
                 'default'    => 0,
                 'behaviour'  => [
                     'allowLanguageSynchronization' => true,
@@ -145,9 +134,7 @@ return [
             'exclude' => true,
             'label'   => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
             'config'  => [
-                'type'       => 'input',
-                'renderType' => 'inputDateTime',
-                'eval'       => 'datetime,int',
+                'type'       => 'datetime',
                 'default'    => 0,
                 'range'      => [
                     'upper' => mktime(
@@ -175,7 +162,8 @@ return [
             'config'  => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim,required',
+                'eval' => 'trim',
+                'required' => true,
             ],
         ],
         'description' => [
@@ -225,8 +213,8 @@ return [
                 'foreign_table' => 'fe_users',
                 'items'         => [
                     [
-                        '',
-                        0,
+                        'label' => '',
+                        'value' => 0,
                     ],
                 ],
                 'minitems' => 0,
@@ -237,13 +225,12 @@ return [
         'images' => [
             'exclude' => true,
             'label'   => 'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:tx_pforum_domain_model_topic.images',
-            'config'  => ExtensionManagementUtility::getFileFieldTCAConfig(
-                'images',
-                [
-                    'minitems' => 0,
-                    'maxitems' => 5,
-                ]
-            ),
+            'config'  => [
+                ### !!! Watch out for fieldName different from columnName
+                'type' => 'file',
+                'minitems' => 0,
+                'maxitems' => 5,
+            ],
         ],
         'forum' => [
             'config' => [
