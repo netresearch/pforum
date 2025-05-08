@@ -20,6 +20,9 @@ return FractorConfiguration::configure()
             __DIR__ . '/../Resources',
             __DIR__ . '/../ext_*',
         ]
-    )->withSets(
-        [Typo3LevelSetList::UP_TO_TYPO3_13]
+    )
+    ->withSets(
+        [
+            Typo3LevelSetList::UP_TO_TYPO3_13,
+        ]
     );

@@ -11,28 +11,28 @@ declare(strict_types=1);
 
 use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 use Rector\Config\RectorConfig;
+use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
 use Rector\DeadCode\Rector\Property\RemoveUselessVarTagRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
-use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
-use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector;
-use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
 use Ssch\TYPO3Rector\Set\Typo3LevelSetList;
+use Ssch\TYPO3Rector\TYPO313\v0\MigrateAddUserTSConfigToUserTsConfigFileRector;
+use Ssch\TYPO3Rector\TYPO313\v4\MigratePluginContentElementAndPluginSubtypesRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
         __DIR__ . '/../Classes',
         __DIR__ . '/../Configuration',
         __DIR__ . '/../Resources',
-        __DIR__ . '../ext_*',
+        __DIR__ . '/../ext_*.php',
     ]);
 
     $rectorConfig->skip([
-        __DIR__ . '../ext_emconf.php',
-        __DIR__ . '../ext_*.sql',
+        __DIR__ . '/../ext_emconf.php',
+        __DIR__ . '/../ext_*.sql',
     ]);
 
     $rectorConfig->phpstanConfig('Build/phpstan.neon');
@@ -42,12 +42,15 @@ return static function (RectorConfig $rectorConfig): void {
 
     // Define what rule sets will be applied
     $rectorConfig->sets([
-        SetList::EARLY_RETURN,
-        SetList::TYPE_DECLARATION,
-        SetList::CODING_STYLE,
         SetList::CODE_QUALITY,
+        SetList::CODING_STYLE,
         SetList::DEAD_CODE,
-        LevelSetList::UP_TO_PHP_83,
+        SetList::EARLY_RETURN,
+        SetList::INSTANCEOF,
+        SetList::PRIVATIZATION,
+        SetList::STRICT_BOOLEANS,
+        SetList::TYPE_DECLARATION,
+        LevelSetList::UP_TO_PHP_84,
         Typo3LevelSetList::UP_TO_TYPO3_13,
     ]);
 
@@ -55,11 +58,13 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->skip([
         CatchExceptionNameMatchingTypeRector::class,
         ClassPropertyAssignToConstructorPromotionRector::class,
-        NullToStrictStringFuncCallArgRector::class,
         RemoveUselessParamTagRector::class,
         RemoveUselessReturnTagRector::class,
         RemoveUselessVarTagRector::class,
-        TypedPropertyFromAssignsRector::class,
-        TypedPropertyFromStrictConstructorRector::class,
+        RemoveUnusedPrivateMethodParameterRector::class,
+
+        // Remove with TYPO3 v14
+        MigrateAddUserTSConfigToUserTsConfigFileRector::class,
+        MigratePluginContentElementAndPluginSubtypesRector::class,
     ]);
 };
