@@ -58,10 +58,7 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
      */
     protected $converterConfiguration;
 
-    /**
-     * @var EventDispatcher
-     */
-    protected $eventDispatcher;
+    protected EventDispatcher $eventDispatcher;
 
     /**
      * Do not inject this property, as EXT:checkfaluploads may not be loaded.

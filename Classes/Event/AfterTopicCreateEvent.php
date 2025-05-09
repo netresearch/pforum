@@ -44,7 +44,7 @@ final class AfterTopicCreateEvent
      *
      * @var array
      */
-    protected array $settings;
+    private array $settings;
 
     /**
      * Constructor.

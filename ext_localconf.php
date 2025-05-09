@@ -12,7 +12,6 @@ declare(strict_types=1);
 use JWeiland\Pforum\Controller\ForumController;
 use JWeiland\Pforum\Controller\PostController;
 use JWeiland\Pforum\Controller\TopicController;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 defined('TYPO3') || exit('Access denied.');
@@ -31,11 +30,6 @@ call_user_func(static function (): void {
             TopicController::class => 'create, update, delete, activate',
             PostController::class  => 'create, update, delete, activate',
         ]
-    );
-
-    // Add pforum plugin to new element wizard
-    ExtensionManagementUtility::addPageTSConfig(
-        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:pforum/Configuration/TSconfig/ContentElementWizard.tsconfig">'
     );
 
     $GLOBALS['TYPO3_CONF_VARS']['MAIL']['templateRootPaths'][1_666_352_112] = 'EXT:pforum/Resources/Private/Templates/Mail';

@@ -21,15 +21,9 @@ use TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration;
 
 class AssignMediaTypeConverterForTopicEventListener extends AbstractControllerEventListener
 {
-    /**
-     * @var TopicRepository
-     */
-    protected $topicRepository;
+    protected TopicRepository $topicRepository;
 
-    /**
-     * @var UploadMultipleFilesConverter
-     */
-    protected $uploadMultipleFilesConverter;
+    protected UploadMultipleFilesConverter $uploadMultipleFilesConverter;
 
     protected $allowedControllerActions = [
         'Topic' => [

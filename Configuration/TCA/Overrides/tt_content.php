@@ -21,7 +21,12 @@ call_user_func(static function (): void {
         'LLL:EXT:pforum/Resources/Private/Language/locallang_db.xlf:plugin.pforum.title'
     );
 
-    ExtensionManagementUtility::addToAllTCAtypes('tt_content', '--div--;Configuration,pi_flexform,', 'pforum_forum', 'after:subheader');
+    ExtensionManagementUtility::addToAllTCAtypes(
+        'tt_content',
+        '--div--;Configuration,pi_flexform,',
+        'pforum_forum',
+        'after:subheader'
+    );
 
     ExtensionManagementUtility::addPiFlexFormValue(
         '*',

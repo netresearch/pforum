@@ -1,39 +1,39 @@
 plugin.tx_pforum {
-  view {
-    # cat=plugin.tx_pforum/file; type=string; label=Path to template root (FE)
-    templateRootPath = EXT:pforum/Resources/Private/Templates/
-    # cat=plugin.tx_pforum/file; type=string; label=Path to template partials (FE)
-    partialRootPath = EXT:pforum/Resources/Private/Partials/
-    # cat=plugin.tx_pforum/file; type=string; label=Path to template layouts (FE)
-    layoutRootPath = EXT:pforum/Resources/Private/Layouts/
-  }
-
-  persistence {
-    # cat=plugin.tx_pforum//a; type=string; label=Default storage PID
-    storagePid =
-  }
-
-  settings {
-    # cat=plugin.tx_pforum//b; type=options[None=1,Auth=2]; label=Choose authentication
-    auth = 1
-    # cat=plugin.tx_pforum//c; type=boolean; label=Email is mandatory
-    emailIsMandatory = 0
-    # cat=plugin.tx_pforum//c; type=boolean; label=Username is mandatory
-    usernameIsMandatory = 0
-    # cat=plugin.tx_pforum//c; type=boolean; label=Enable the image upload fields
-    useImages = 0
-    # cat=plugin.tx_pforum//c; type=string; label=Allowed image mime types for image upload fields
-    imageMimeTypes = image/jpeg, image/png, image/gif
-    # cat=plugin.tx_pforum/basic/dims; type=int+; label=UID of Admin Group: Which FE-Group should act as the admin group
-    uidOfAdminGroup = 0
-    # cat=plugin.tx_pforum/basic/dims; type=int+; label=UID of User Group: Which FE-Group should act as forum members
-    uidOfUserGroup = 0
-    # cat=plugin.tx_pforum//f; type=int+; label=PID of Detail page: Leave empty to show details on current page.
-    pidOfDetailPage = 0
-
-    pageBrowser {
-      # cat=plugin.tx_pforum/basic/dims; type=int+; label=Items per page: How many items should be displayed on one page
-      itemsPerPage = 15
+    view {
+        # cat=plugin.tx_pforum/file; type=string; label=Path to template root (FE)
+        templateRootPath = EXT:pforum/Resources/Private/Templates/
+        # cat=plugin.tx_pforum/file; type=string; label=Path to template partials (FE)
+        partialRootPath = EXT:pforum/Resources/Private/Partials/
+        # cat=plugin.tx_pforum/file; type=string; label=Path to template layouts (FE)
+        layoutRootPath = EXT:pforum/Resources/Private/Layouts/
     }
-  }
+
+    persistence {
+        # cat=plugin.tx_pforum//a; type=string; label=Default storage PID
+        storagePid =
+    }
+
+    settings {
+        # cat=plugin.tx_pforum//b; type=options[None=1,Auth=2]; label=Choose authentication
+        auth = 1
+        # cat=plugin.tx_pforum//c; type=boolean; label=Email is mandatory
+        emailIsMandatory = 0
+        # cat=plugin.tx_pforum//c; type=boolean; label=Username is mandatory
+        usernameIsMandatory = 0
+        # cat=plugin.tx_pforum//c; type=boolean; label=Enable the image upload fields
+        useImages = 0
+        # cat=plugin.tx_pforum//c; type=string; label=Allowed image mime types for image upload fields
+        imageMimeTypes = image/jpeg, image/png, image/gif
+        # cat=plugin.tx_pforum/basic/dims; type=int+; label=UID of Admin Group: Which FE-Group should act as the admin group
+        uidOfAdminGroup = 0
+        # cat=plugin.tx_pforum/basic/dims; type=int+; label=UID of User Group: Which FE-Group should act as forum members
+        uidOfUserGroup = 0
+        # cat=plugin.tx_pforum//f; type=int+; label=PID of Detail page: Leave empty to show details on current page.
+        pidOfDetailPage = 0
+
+        pageBrowser {
+            # cat=plugin.tx_pforum/basic/dims; type=int+; label=Items per page: How many items should be displayed on one page
+            itemsPerPage = 15
+        }
+    }
 }

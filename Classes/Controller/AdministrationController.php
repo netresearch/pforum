@@ -32,15 +32,9 @@ class AdministrationController extends ActionController
 {
     public $controllerContext;
 
-    /**
-     * @var TopicRepository
-     */
-    protected $topicRepository;
+    protected TopicRepository $topicRepository;
 
-    /**
-     * @var PostRepository
-     */
-    protected $postRepository;
+    protected PostRepository $postRepository;
 
     public function __construct(TopicRepository $topicRepository, PostRepository $postRepository, private ModuleTemplateFactory $moduleTemplateFactory, private IconFactory $iconFactory)
     {
