@@ -6,6 +6,7 @@ services:
 
     JWeiland\Pforum\:
         resource: '../Classes/*'
+        exclude: '../Classes/Domain/Model/*'
 
     # Event listeners
     JWeiland\Pforum\EventListener\AddPaginatorEventListener:

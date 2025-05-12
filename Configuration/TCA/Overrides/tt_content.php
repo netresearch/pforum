@@ -24,13 +24,15 @@ call_user_func(static function (): void {
     ExtensionManagementUtility::addToAllTCAtypes(
         'tt_content',
         '--div--;Configuration,pi_flexform,',
-        'pforum_forum',
+        // TYPO3 v14
+        'list',  // 'pforum_forum',
         'after:subheader'
     );
 
     ExtensionManagementUtility::addPiFlexFormValue(
-        '*',
+        'pforum_forum',
         'FILE:EXT:pforum/Configuration/FlexForms/Forum.xml',
-        'pforum_forum'
+        // TYPO3 v14
+        'list'  // 'pforum_forum'
     );
 });
