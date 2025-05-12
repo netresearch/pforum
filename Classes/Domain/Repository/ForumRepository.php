@@ -21,7 +21,7 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 class ForumRepository extends Repository
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $defaultOrderings = [
         'sorting' => QueryInterface::ORDER_ASCENDING,
@@ -33,15 +33,14 @@ class ForumRepository extends Repository
     public function findAllNotArchived(): QueryResultInterface
     {
         $query = $this->createQuery();
-        $query->getQuerySettings()->setIgnoreEnableFields(true);
-        $query->getQuerySettings()->setEnableFieldsToBeIgnored(['disabled']);
-        $query->getQuerySettings()->setRespectStoragePage(false);
+        $query->getQuerySettings()
+            ->setIgnoreEnableFields(true)
+            ->setEnableFieldsToBeIgnored(['disabled'])
+            ->setRespectStoragePage(false);
 
         return $query
             ->matching(
-                $query->logicalAnd(
-                    $query->equals('archived', 0)
-                )
+                $query->equals('archived', 0)
             )
             ->execute();
     }

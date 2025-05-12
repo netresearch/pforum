@@ -11,15 +11,15 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Controller;
 
-use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Domain\Model\Topic;
 use JWeiland\Pforum\Event\AfterTopicCreateEvent;
 use JWeiland\Pforum\Helper\FrontendGroupHelper;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\FluidEmail;
 use TYPO3\CMS\Core\Mail\Mailer;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -55,6 +55,7 @@ class TopicController extends AbstractController
             'topic' => $topic,
             'posts' => $posts,
         ]);
+
         return $this->htmlResponse();
     }
 
@@ -70,6 +71,7 @@ class TopicController extends AbstractController
             'forum' => $forum,
             'topic' => GeneralUtility::makeInstance(Topic::class),
         ]);
+
         return null;
     }
 
@@ -109,6 +111,7 @@ class TopicController extends AbstractController
             // topic should not be visible while previewing
             $this->forumRepository->update($forum);
             $this->persistenceManager->persistAll();
+
             return $this->redirect(
                 'edit',
                 'Topic',
@@ -131,6 +134,7 @@ class TopicController extends AbstractController
         }
 
         $this->addFlashMessageForCreation();
+
         return $this->redirect('show', 'Forum', 'Pforum', ['forum' => $forum]);
     }
 
@@ -161,6 +165,7 @@ class TopicController extends AbstractController
             'isPreview' => $isPreview,
             'isNew'     => $isNew,
         ]);
+
         return $this->htmlResponse();
     }
 
@@ -185,6 +190,7 @@ class TopicController extends AbstractController
         // if a preview was requested direct to preview action
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
             $topic->setHidden(true);
+
             return $this->redirect(
                 'edit',
                 'Topic',
@@ -238,6 +244,7 @@ class TopicController extends AbstractController
     {
         $this->topicRepository->remove($topic);
         $this->addFlashMessage(LocalizationUtility::translate('topicDeleted', 'pforum'));
+
         return $this->redirect('list', 'Forum', 'Pforum');
     }
 
@@ -260,6 +267,7 @@ class TopicController extends AbstractController
         $topic->setHidden(false);
         $this->topicRepository->update($topic);
         $this->addFlashMessage(LocalizationUtility::translate('topicActivated', 'pforum'));
+
         return $this->redirect('list', 'Forum', 'Pforum');
     }
 
@@ -298,6 +306,7 @@ class TopicController extends AbstractController
                 '',
                 ContextualFeedbackSeverity::WARNING
             );
+
             return $this->redirect('show', 'Forum', 'Pforum', ['forum' => $forum]);
         }
     }

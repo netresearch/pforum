@@ -11,9 +11,9 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Domain\Model;
 
-use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use DateTime;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -51,7 +51,6 @@ class Topic extends AbstractEntity implements TopicInterface
 
     /**
      * @var ObjectStorage<Post>
-     *
      */
     #[Extbase\ORM\Cascade(['value' => 'remove'])]
     #[Extbase\ORM\Lazy]

@@ -11,16 +11,18 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Controller;
 
-use Psr\Http\Message\ResponseInterface;
 use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
 use JWeiland\Pforum\Domain\Model\User;
 use JWeiland\Pforum\Event\AfterPostCreateEvent;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\FluidEmail;
 use TYPO3\CMS\Core\Mail\Mailer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -33,6 +35,8 @@ class PostController extends AbstractController
     /**
      * @param Topic     $topic
      * @param Post|null $post
+     *
+     * @return ResponseInterface|null
      */
     #[Extbase\IgnoreValidation(['argumentName' => 'post'])]
     public function newAction(Topic $topic, ?Post $post = null): ?ResponseInterface
@@ -45,6 +49,7 @@ class PostController extends AbstractController
             'topic' => $topic,
             'post'  => $post,
         ]);
+
         return null;
     }
 
@@ -56,6 +61,15 @@ class PostController extends AbstractController
         $this->preProcessControllerAction();
     }
 
+    /**
+     * @param Topic $topic
+     * @param Post  $post
+     *
+     * @return ResponseInterface
+     *
+     * @throws IllegalObjectTypeException
+     * @throws UnknownObjectException
+     */
     public function createAction(Topic $topic, Post $post): ResponseInterface
     {
         // if auth = frontend user
@@ -84,6 +98,7 @@ class PostController extends AbstractController
             // post should not be visible while previewing
             $this->topicRepository->update($topic);
             $this->persistenceManager->persistAll();
+
             return $this->redirect(
                 'edit',
                 'Post',
@@ -118,6 +133,7 @@ class PostController extends AbstractController
         }
 
         $this->addFlashMessageForCreation();
+
         return $this->redirect('show', 'Topic', 'Pforum', ['topic' => $topic]);
     }
 
@@ -137,6 +153,8 @@ class PostController extends AbstractController
      * @param bool      $isPreview
      * @param bool      $isNew     We need the information if updateAction was called from createAction.
      *                             If so we have to passthrough this information
+     *
+     * @return ResponseInterface
      */
     #[Extbase\IgnoreValidation(['argumentName' => 'post'])]
     public function editAction(?Post $post = null, bool $isPreview = false, bool $isNew = false): ResponseInterface
@@ -144,6 +162,7 @@ class PostController extends AbstractController
         $this->view->assign('post', $post);
         $this->view->assign('isPreview', $isPreview);
         $this->view->assign('isNew', $isNew);
+
         return $this->htmlResponse();
     }
 
@@ -162,6 +181,11 @@ class PostController extends AbstractController
      * @param Post $post
      * @param bool $isNew We need the information if updateAction was
      *                    called from createAction. If so we have to add different messages
+     *
+     * @return ResponseInterface
+     *
+     * @throws IllegalObjectTypeException
+     * @throws UnknownObjectException
      */
     public function updateAction(Post $post, bool $isNew = false): ResponseInterface
     {
@@ -169,6 +193,7 @@ class PostController extends AbstractController
         // if a preview was requested direct to preview action
         if ($this->controllerContext->getRequest()->hasArgument('preview')) {
             $post->setHidden(true);
+
             return $this->redirect(
                 'edit',
                 'Post',
@@ -220,11 +245,16 @@ class PostController extends AbstractController
 
     /**
      * @param Post $post
+     *
+     * @return ResponseInterface
+     *
+     * @throws IllegalObjectTypeException
      */
     public function deleteAction(Post $post): ResponseInterface
     {
         $this->postRepository->remove($post);
         $this->addFlashMessage(LocalizationUtility::translate('postDeleted', 'pforum'));
+
         return $this->redirect('list', 'Forum', 'Pforum');
     }
 
@@ -247,6 +277,11 @@ class PostController extends AbstractController
      * We need this extra action, because hidden entries can't be found in FE mode.
      *
      * @param Post $post
+     *
+     * @return ResponseInterface
+     *
+     * @throws IllegalObjectTypeException
+     * @throws UnknownObjectException
      */
     public function activateAction(Post $post): ResponseInterface
     {
@@ -257,11 +292,14 @@ class PostController extends AbstractController
         $this->mailToTopicCreator($post->getTopic(), $post);
 
         $this->addFlashMessage(LocalizationUtility::translate('postActivated', 'pforum'));
+
         return $this->redirect('list', 'Forum', 'Pforum');
     }
 
     /**
      * This is a workaround to help controller actions to find (hidden) posts.
+     *
+     * @param string $argumentName
      */
     protected function registerPostFromRequest(string $argumentName): void
     {
@@ -279,6 +317,12 @@ class PostController extends AbstractController
         }
     }
 
+    /**
+     * @param Topic $topic
+     * @param Post  $post
+     *
+     * @return ResponseInterface
+     */
     protected function addFeUserToPost(Topic $topic, Post $post): ResponseInterface
     {
         if (is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid']) {
@@ -289,10 +333,16 @@ class PostController extends AbstractController
         } else {
             // normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated
             $this->addFlashMessage('You must be logged in before creating a post');
+
             return $this->redirect('show', 'Forum', 'Pforum', ['forum' => $topic->getForum()]);
         }
     }
 
+    /**
+     * @param Post $post
+     *
+     * @return void
+     */
     protected function mailToUser(Post $post): void
     {
         $email = GeneralUtility::makeInstance(FluidEmail::class);

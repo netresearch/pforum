@@ -12,9 +12,17 @@ declare(strict_types=1);
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 
 return [
+    'extension-pforum-module' => [
+        'provider' => SvgIconProvider::class,
+        'source'   => 'EXT:pforum/Resources/Public/Icons/Module.svg',
+    ],
+    'extension-pforum-module-administration' => [
+        'provider' => SvgIconProvider::class,
+        'source'   => 'EXT:pforum/Resources/Public/Icons/Module.svg',
+    ],
     'ext-pforum-wizard-icon' => [
         'provider' => SvgIconProvider::class,
-        'source'   => 'EXT:pforum/Resources/Public/Icons/module.svg',
+        'source'   => 'EXT:pforum/Resources/Public/Icons/Module.svg',
     ],
     'ext-pforum-table-forum' => [
         'provider' => SvgIconProvider::class,

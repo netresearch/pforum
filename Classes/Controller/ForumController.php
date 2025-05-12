@@ -11,9 +11,9 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Controller;
 
-use Psr\Http\Message\ResponseInterface;
 use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Helper\FrontendGroupHelper;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Main controller to list and show forum entries.
@@ -35,6 +35,7 @@ class ForumController extends AbstractController
         $this->postProcessAndAssignFluidVariables([
             'forums' => $this->forumRepository->findAll(),
         ]);
+
         return $this->htmlResponse();
     }
 
@@ -52,6 +53,7 @@ class ForumController extends AbstractController
             'forum'  => $forum,
             'topics' => $topics,
         ]);
+
         return $this->htmlResponse();
     }
 }

@@ -8,6 +8,9 @@ services:
         resource: '../Classes/*'
         exclude: '../Classes/Domain/Model/*'
 
+    JWeiland\Pforum\Controller\AdministrationController:
+        tags: [ 'backend.controller' ]
+
     # Event listeners
     JWeiland\Pforum\EventListener\AddPaginatorEventListener:
         tags:

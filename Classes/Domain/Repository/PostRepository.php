@@ -13,6 +13,7 @@ namespace JWeiland\Pforum\Domain\Repository;
 
 use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -25,34 +26,55 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 class PostRepository extends Repository implements HiddenRepositoryInterface
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $defaultOrderings = [
         'crdate' => QueryInterface::ORDER_DESCENDING,
     ];
 
+    /**
+     * @return QueryResultInterface
+     */
     public function findAllHidden(): QueryResultInterface
     {
         $query = $this->createQuery();
+        $query->getQuerySettings()
+            ->setRespectStoragePage(false)
+            ->setIgnoreEnableFields(true);
+
         $query->setOrderings([
             'title'       => QueryInterface::ORDER_ASCENDING,
             'description' => QueryInterface::ORDER_ASCENDING,
         ]);
 
-        return $query->matching($query->equals('hidden', 1))->execute();
+        return $query
+            ->matching(
+                $query->equals('hidden', 1)
+            )
+            ->execute();
     }
 
     /**
-     * @param mixed $value
+     * @param mixed  $value
+     * @param string $property
+     *
+     * @return Post|null
      */
-    public function findHiddenObject($value, string $property = 'uid'): ?Post
+    public function findHiddenObject(mixed $value, string $property = 'uid'): ?Post
     {
         $query = $this->createQuery();
-        $query->getQuerySettings()->setIgnoreEnableFields(true);
-        $query->getQuerySettings()->setEnableFieldsToBeIgnored(['disabled']);
-        $query->getQuerySettings()->setRespectStoragePage(false);
+        $query->getQuerySettings()
+            ->setIgnoreEnableFields(true)
+            ->setEnableFieldsToBeIgnored(['disabled'])
+            ->setRespectStoragePage(false);
 
-        $firstObject = $query->matching($query->equals($property, $value))->execute()->getFirst();
+        $firstObject = $query
+            ->matching(
+                $query->equals($property, $value)
+            )
+            ->execute()
+            ->getFirst();
+
         if ($firstObject instanceof Post) {
             return $firstObject;
         }

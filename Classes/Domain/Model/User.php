@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Domain\Model;
 
-use JWeiland\Pforum\Validation\Validator\UsernameValidator;
 use JWeiland\Pforum\Validation\Validator\EmailValidator;
+use JWeiland\Pforum\Validation\Validator\UsernameValidator;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2013-08-23T13:20:00Z" product-name="pforum">
-		<header/>
-		<body>
-			<trans-unit id="emailFromAddress" xml:space="preserve">
-				<source>FROM email address: The senders email address. If not given the extension tries to get one from installtool.</source>
-			</trans-unit>
-			<trans-unit id="emailFromName" xml:space="preserve">
-				<source>FROM email name: The senders email name. If not given the extension tries to get one from installtool.</source>
-			</trans-unit>
-		</body>
-	</file>
+    <file source-language="en" datatype="plaintext" original="messages" date="2013-08-23T13:20:00Z" product-name="pforum">
+        <header/>
+        <body>
+            <trans-unit id="emailFromAddress" xml:space="preserve">
+                <source>FROM email address: The senders email address. If not given the extension tries to get one from installtool.</source>
+            </trans-unit>
+            <trans-unit id="emailFromName" xml:space="preserve">
+                <source>FROM email name: The senders email name. If not given the extension tries to get one from installtool.</source>
+            </trans-unit>
+        </body>
+    </file>
 </xliff>

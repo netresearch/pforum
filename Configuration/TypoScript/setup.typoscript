@@ -1,8 +1,16 @@
 plugin.tx_pforum {
     view {
-        templateRootPaths.100 = {$plugin.tx_pforum.view.templateRootPath}
-        partialRootPaths.100 = {$plugin.tx_pforum.view.partialRootPath}
-        layoutRootPaths.100 = {$plugin.tx_pforum.view.layoutRootPath}
+        templateRootPaths {
+            100 = {$plugin.tx_pforum.view.templateRootPath}
+        }
+
+        partialRootPaths {
+            100 = {$plugin.tx_pforum.view.partialRootPath}
+        }
+
+        layoutRootPaths {
+            100 = {$plugin.tx_pforum.view.layoutRootPath}
+        }
     }
 
     persistence {
