@@ -26,6 +26,7 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Session;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Abstract class with useful methods for all other extending classes.
@@ -33,44 +34,44 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Session;
 class AbstractController extends ActionController
 {
     /**
+     * @var PersistenceManager
+     */
+    protected PersistenceManager $persistenceManager;
+
+    /**
      * @var ExtConf
      */
-    protected $extConf;
+    protected ExtConf $extConf;
 
     /**
      * @var Session
      */
-    protected $session;
+    protected Session $session;
 
     /**
      * @var ForumRepository
      */
-    protected $forumRepository;
+    protected ForumRepository $forumRepository;
 
     /**
      * @var TopicRepository
      */
-    protected $topicRepository;
+    protected TopicRepository $topicRepository;
 
     /**
      * @var PostRepository
      */
-    protected $postRepository;
+    protected PostRepository $postRepository;
 
     /**
      * @var AnonymousUserRepository
      */
-    protected $anonymousUserRepository;
+    protected AnonymousUserRepository $anonymousUserRepository;
 
     /**
      * @var FrontendUserRepository
      */
-    protected $frontendUserRepository;
-
-    /**
-     * @var PersistenceManager
-     */
-    protected $persistenceManager;
+    protected FrontendUserRepository $frontendUserRepository;
 
     /**
      * @var FrontendUserAccessService
@@ -80,12 +81,36 @@ class AbstractController extends ActionController
     /**
      * Constructor.
      *
-     * @param FrontendUserAccessService $frontendUserAccessService
+     * @param PersistenceManager            $persistenceManager
+     * @param FrontendUserAccessService     $frontendUserAccessService
+     * @param ExtConf                       $extConf
+     * @param Session                       $session
+     * @param ForumRepository               $forumRepository
+     * @param TopicRepository               $topicRepository
+     * @param PostRepository                $postRepository
+     * @param AnonymousUserRepository       $anonymousUserRepository
+     * @param FrontendUserRepository        $frontendUserRepository
      */
     public function __construct(
+        PersistenceManager $persistenceManager,
         FrontendUserAccessService $frontendUserAccessService,
+        ExtConf $extConf,
+        Session $session,
+        ForumRepository $forumRepository,
+        TopicRepository $topicRepository,
+        PostRepository $postRepository,
+        AnonymousUserRepository $anonymousUserRepository,
+        FrontendUserRepository $frontendUserRepository,
     ) {
+        $this->persistenceManager = $persistenceManager;
         $this->frontendUserAccessService = $frontendUserAccessService;
+        $this->extConf = $extConf;
+        $this->session = $session;
+        $this->forumRepository = $forumRepository;
+        $this->topicRepository = $topicRepository;
+        $this->postRepository = $postRepository;
+        $this->anonymousUserRepository = $anonymousUserRepository;
+        $this->frontendUserRepository = $frontendUserRepository;
     }
 
     /**
@@ -98,67 +123,6 @@ class AbstractController extends ActionController
                 (int) $this->settings['auth'],
                 (int) $this->settings['uidOfUserGroup']
             );
-    }
-
-    public function injectExtConf(ExtConf $extConf): void
-    {
-        $this->extConf = $extConf;
-    }
-
-    public function injectSession(Session $session): void
-    {
-        $this->session = $session;
-    }
-
-    public function injectForumRepository(ForumRepository $forumRepository): void
-    {
-        $this->forumRepository = $forumRepository;
-    }
-
-    public function injectTopicRepository(TopicRepository $topicRepository): void
-    {
-        $this->topicRepository = $topicRepository;
-    }
-
-    public function injectPostRepository(PostRepository $postRepository): void
-    {
-        $this->postRepository = $postRepository;
-    }
-
-    public function injectAnonymousUserRepository(AnonymousUserRepository $anonymousUserRepository): void
-    {
-        $this->anonymousUserRepository = $anonymousUserRepository;
-    }
-
-    public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository): void
-    {
-        $this->frontendUserRepository = $frontendUserRepository;
-    }
-
-    public function injectPersistenceManager(PersistenceManager $persistenceManager): void
-    {
-        $this->persistenceManager = $persistenceManager;
-    }
-
-    public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager): void
-    {
-        $this->configurationManager = $configurationManager;
-        $tsSettings                 = $this->configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-            'pforum',
-            'doNotLoadFlexFormSettings'
-        );
-        $mergedSettings = $this->configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
-        );
-
-        foreach ($mergedSettings as $key => $value) {
-            if (!is_array($value) && empty($value)) {
-                $mergedSettings[$key] = $tsSettings[$key] ?? '';
-            }
-        }
-
-        $this->settings = $mergedSettings;
     }
 
     protected function initializeAction(): void
