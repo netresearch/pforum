@@ -11,13 +11,38 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Helper;
 
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\Extbase\Mvc\Request;
+use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
+
+use function in_array;
+use function is_array;
 
 /**
  * Helper to check FE groups for existing UID.
  */
 class FrontendGroupHelper
 {
+    /**
+     * @var Request
+     */
+    private Request $request;
+
+    /**
+     * @param Request $request
+     *
+     * @return FrontendGroupHelper
+     */
+    public function setRequest(Request $request): FrontendGroupHelper
+    {
+        $this->request = $request;
+        return $this;
+    }
+
+    /**
+     * @param int $groupUid
+     *
+     * @return bool
+     */
     public function uidExistsInGroupData(int $groupUid): bool
     {
         if ($groupUid === 0) {
@@ -27,18 +52,25 @@ class FrontendGroupHelper
         return in_array($groupUid, $this->getGroupUidsOfCurrentUser(), true);
     }
 
+    /**
+     * @return array
+     */
     protected function getGroupUidsOfCurrentUser(): array
     {
-        $groupUids = $this->getTypoScriptFrontendController()->fe_user->groupData['uid'];
+        $groupUids = $this->getFrontendUserAuthentication()->groupData['uid'];
+
         if (!is_array($groupUids)) {
             return [];
         }
 
-        return array_map('intval', $groupUids);
+        return array_map('\intval', $groupUids);
     }
 
-    protected function getTypoScriptFrontendController(): TypoScriptFrontendController
+    /**
+     * @return FrontendUserAuthentication
+     */
+    private function getFrontendUserAuthentication(): FrontendUserAuthentication
     {
-        return $GLOBALS['TSFE'];
+        return $this->request->getAttribute('frontend.user');
     }
 }

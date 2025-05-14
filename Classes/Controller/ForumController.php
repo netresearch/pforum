@@ -87,6 +87,9 @@ class ForumController extends AbstractController
 
     public function showAction(Forum $forum): ResponseInterface
     {
+        $this->frontendGroupHelper
+            ->setRequest($this->request);
+
         $topics = $this->topicRepository->findByForum($forum);
         if ($this->frontendGroupHelper->uidExistsInGroupData((int) ($this->settings['uidOfAdminGroup'] ?? 0))) {
             $topics->getQuery()

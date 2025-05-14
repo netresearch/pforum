@@ -86,9 +86,18 @@ class TopicController extends AbstractController
         $this->frontendGroupHelper = $frontendGroupHelper;
     }
 
+    /**
+     * @param Topic $topic
+     *
+     * @return ResponseInterface
+     */
     public function showAction(Topic $topic): ResponseInterface
     {
         $posts = $this->postRepository->findByTopic($topic);
+
+        $this->frontendGroupHelper
+            ->setRequest($this->request);
+
         if ($this->frontendGroupHelper->uidExistsInGroupData((int) ($this->settings['uidOfAdminGroup'] ?? 0))) {
             $posts->getQuery()
                 ->getQuerySettings()
