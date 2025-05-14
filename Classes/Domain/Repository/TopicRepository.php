@@ -20,6 +20,8 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 /**
  * Repo to retrieve records for topics.
  *
+ * @extends Repository<Topic>
+ *
  * @method QueryResultInterface findByForum(Forum $forum)
  */
 class TopicRepository extends Repository implements HiddenRepositoryInterface

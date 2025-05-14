@@ -11,10 +11,13 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Domain\Repository;
 
+use JWeiland\Pforum\Domain\Model\AnonymousUser;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
  * Repo to handle anonymous users.
+ *
+ * @extends Repository<AnonymousUser>
  */
 class AnonymousUserRepository extends Repository
 {

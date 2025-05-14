@@ -11,12 +11,15 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Domain\Repository;
 
+use JWeiland\Pforum\Domain\Model\Forum;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
  * Main Repo to manage forum records.
+ *
+ * @extends Repository<Forum>
  */
 class ForumRepository extends Repository
 {
@@ -28,7 +31,7 @@ class ForumRepository extends Repository
     ];
 
     /**
-     * @return QueryResultInterface
+     * @return QueryResultInterface<int, Forum>
      */
     public function findAllNotArchived(): QueryResultInterface
     {
