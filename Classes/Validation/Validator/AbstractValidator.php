@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Validation\Validator;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
@@ -18,6 +19,11 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
  */
 abstract class AbstractValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator
 {
+    /**
+     * @var ConfigurationManagerInterface
+     */
+    protected ConfigurationManagerInterface $configurationManager;
+
     /**
      * This validator always needs to be executed, even if the given value is empty.
      * See AbstractValidator::validate().
@@ -27,21 +33,20 @@ abstract class AbstractValidator extends \TYPO3\CMS\Extbase\Validation\Validator
     protected $acceptsEmptyValues = false;
 
     /**
-     * @var ConfigurationManagerInterface
-     */
-    protected $configurationManager;
-
-    /**
      * Contains the settings of the current extension.
      *
-     * @var array
+     * @var array<mixed>
      */
-    protected $settings = [];
+    protected array $settings = [];
 
-    public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager): void
+    /**
+     * Constructor.
+     */
+    public function __construct()
     {
-        $this->configurationManager = $configurationManager;
-        $this->settings             = $this->configurationManager->getConfiguration(
+        $this->configurationManager = GeneralUtility::makeInstance(ConfigurationManagerInterface::class);
+
+        $this->settings = $this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
             'pforum',
             'forum'
