@@ -23,12 +23,12 @@ class UsernameValidator extends AbstractValidator
      *
      * @param mixed $value The value that should be validated
      */
-    protected function isValid($value): void
+    protected function isValid(mixed $value): void
     {
         if (
             isset($this->settings['usernameIsMandatory'])
-            && $this->settings['usernameIsMandatory'] === '1'
-            && $value === ''
+            && ($this->settings['usernameIsMandatory'] === '1')
+            && ($value === '')
         ) {
             $this->addError(
                 LocalizationUtility::translate(

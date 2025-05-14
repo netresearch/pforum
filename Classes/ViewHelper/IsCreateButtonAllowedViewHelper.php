@@ -11,20 +11,15 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\ViewHelper;
 
-use Closure;
 use JWeiland\Pforum\Service\FrontendUserAccessService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithContentArgumentAndRenderStatic;
 
 /**
  * ViewHelper to simplify the condition to show create button for topics and posts.
  */
 class IsCreateButtonAllowedViewHelper extends AbstractViewHelper
 {
-    use CompileWithContentArgumentAndRenderStatic;
-
     /**
      * Initialize the arguments.
      *
@@ -48,21 +43,14 @@ class IsCreateButtonAllowedViewHelper extends AbstractViewHelper
     }
 
     /**
-     * @param array                     $arguments
-     * @param Closure                   $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     *
      * @return bool
      */
-    public static function renderStatic(
-        array $arguments,
-        Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext,
-    ): bool {
+    public function render(): bool
+    {
         return GeneralUtility::makeInstance(FrontendUserAccessService::class)
             ->accessCheck(
-                (int) $arguments['authType'],
-                (int) $arguments['userGroupUid']
+                (int) $this->arguments['authType'],
+                (int) $this->arguments['userGroupUid']
             );
     }
 }

@@ -13,6 +13,7 @@ namespace JWeiland\Pforum\Validation\Validator;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use function is_string;
 
 /**
  * Email validator which will only executed if an fe_user created a topic or posting.
@@ -24,11 +25,11 @@ class EmailValidator extends AbstractValidator
      *
      * @param mixed $value The value that should be validated
      */
-    protected function isValid($value): void
+    protected function isValid(mixed $value): void
     {
         if (
             isset($this->settings['emailIsMandatory'])
-            && $this->settings['emailIsMandatory'] === '1'
+            && ($this->settings['emailIsMandatory'] === '1')
             && is_string($value)
         ) {
             if ($value === '') {
