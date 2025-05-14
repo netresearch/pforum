@@ -172,9 +172,9 @@ class AbstractController extends ActionController
      */
     protected function deleteUploadedFilesOnValidationErrors(string $argument): void
     {
-        if ($this->getControllerContext()->getRequest()->hasArgument($argument)) {
+        if ($this->request->hasArgument($argument)) {
             /** @var Topic $topic */
-            $topic  = $this->getControllerContext()->getRequest()->getArgument($argument);
+            $topic  = $this->request->getArgument($argument);
             $images = $topic->getImages();
             foreach ($images as $image) {
                 $image->getOriginalResource()->getOriginalFile()->delete();

@@ -30,8 +30,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class PostController extends AbstractController
 {
-    public $controllerContext;
-
     /**
      * @param Topic     $topic
      * @param Post|null $post
@@ -93,7 +91,7 @@ class PostController extends AbstractController
         );
 
         // if a preview was requested direct to preview action
-        if ($this->controllerContext->getRequest()->hasArgument('preview')) {
+        if ($this->request->hasArgument('preview')) {
             $post->setHidden(true);
             // post should not be visible while previewing
             $this->topicRepository->update($topic);
@@ -191,7 +189,7 @@ class PostController extends AbstractController
     {
         $this->postRepository->update($post);
         // if a preview was requested direct to preview action
-        if ($this->controllerContext->getRequest()->hasArgument('preview')) {
+        if ($this->request->hasArgument('preview')) {
             $post->setHidden(true);
 
             return $this->redirect(
