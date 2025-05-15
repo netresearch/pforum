@@ -6,10 +6,25 @@ services:
 
     JWeiland\Pforum\:
         resource: '../Classes/*'
-        exclude: '../Classes/Domain/Model/*'
+#        exclude: '../Classes/Domain/Model/*'
 
     JWeiland\Pforum\Controller\AdministrationController:
         tags: [ 'backend.controller' ]
+
+#    # Interface implementations
+#    JWeiland\Pforum\Domain\Model\PostInterface: '@JWeiland\Pforum\Domain\Model\Post'
+
+#    JWeiland\Pforum\Domain\Model\PostInterface:
+#        alias: JWeiland\Pforum\Domain\Model\Post
+#        public: true
+
+#    JWeiland\Pforum\Controller\PostController:
+#        public: true
+#        shared: false
+#        calls:
+#            -   method: 'createAction'
+#                arguments:
+#                    $post: '@JWeiland\Pforum\Domain\Model\Post'
 
     # Event listeners
     JWeiland\Pforum\EventListener\AddPaginatorEventListener:

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package netresearch/pforum.
+ * This file is part of the package jweiland/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -20,7 +20,9 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 /**
  * Repo to retrieve records for topics.
  *
- * @extends Repository<Topic>
+ * @template         T of Topic
+ *
+ * @template-extends Repository<T>
  *
  * @method QueryResultInterface findByForum(Forum $forum)
  */
@@ -69,17 +71,11 @@ class TopicRepository extends Repository implements HiddenRepositoryInterface
             ->setEnableFieldsToBeIgnored(['disabled'])
             ->setRespectStoragePage(false);
 
-        $firstObject = $query
+        return $query
             ->matching(
                 $query->equals($property, $value)
             )
             ->execute()
             ->getFirst();
-
-        if ($firstObject instanceof Topic) {
-            return $firstObject;
-        }
-
-        return null;
     }
 }

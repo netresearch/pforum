@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package netresearch/pforum.
+ * This file is part of the package jweiland/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -13,6 +13,7 @@ namespace JWeiland\Pforum\Validation\Validator;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+
 use function is_string;
 
 /**

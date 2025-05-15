@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package netresearch/pforum.
+ * This file is part of the package jweiland/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -24,12 +24,12 @@ class Forum extends AbstractEntity
      * @var string
      */
     #[Extbase\Validate(['validator' => 'NotEmpty'])]
-    protected $title = '';
+    protected string $title = '';
 
     /**
      * @var string
      */
-    protected $teaser = '';
+    protected string $teaser = '';
 
     /**
      * @var bool
@@ -40,7 +40,7 @@ class Forum extends AbstractEntity
      * @var ObjectStorage<Topic>
      */
     #[Extbase\ORM\Lazy]
-    protected $topics;
+    protected ObjectStorage $topics;
 
     public function __construct()
     {

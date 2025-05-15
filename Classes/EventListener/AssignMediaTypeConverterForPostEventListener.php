@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package netresearch/pforum.
+ * This file is part of the package jweiland/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -25,7 +25,7 @@ class AssignMediaTypeConverterForPostEventListener extends AbstractControllerEve
 
     protected UploadMultipleFilesConverter $uploadMultipleFilesConverter;
 
-    protected $allowedControllerActions = [
+    protected array $allowedControllerActions = [
         'Post' => [
             'create',
             'update',

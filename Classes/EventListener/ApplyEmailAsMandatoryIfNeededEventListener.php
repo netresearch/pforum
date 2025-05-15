@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package netresearch/pforum.
+ * This file is part of the package jweiland/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -13,6 +13,7 @@ namespace JWeiland\Pforum\EventListener;
 
 use JWeiland\Pforum\Event\PreProcessControllerActionEvent;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Validation\Validator\ConjunctionValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\EmailAddressValidator;
@@ -25,7 +26,10 @@ use TYPO3\CMS\Extbase\Validation\ValidatorResolver;
  */
 class ApplyEmailAsMandatoryIfNeededEventListener extends AbstractControllerEventListener
 {
-    protected $allowedControllerActions = [
+    /**
+     * @var array<string, array<int, string>>
+     */
+    protected array $allowedControllerActions = [
         'Topic' => [
             'create',
             'update',
@@ -36,16 +40,24 @@ class ApplyEmailAsMandatoryIfNeededEventListener extends AbstractControllerEvent
         ],
     ];
 
+    /**
+     * @param PreProcessControllerActionEvent $controllerActionEvent
+     *
+     * @return void
+     *
+     * @throws NoSuchArgumentException
+     */
     public function __invoke(PreProcessControllerActionEvent $controllerActionEvent): void
     {
+        $validatorResolver = GeneralUtility::makeInstance(ValidatorResolver::class);
+
         if (
             $this->isValidRequest($controllerActionEvent)
             && ($controllerActionEvent->getSettings()['emailIsMandatory'] ?? false)
-            && ($validatorResolver = GeneralUtility::makeInstance(ValidatorResolver::class))
             && ($notEmptyValidator = $validatorResolver->createValidator(NotEmptyValidator::class))
-            && $notEmptyValidator instanceof NotEmptyValidator
+            && ($notEmptyValidator instanceof NotEmptyValidator)
             && ($emailValidator = $validatorResolver->createValidator(EmailAddressValidator::class))
-            && $emailValidator instanceof EmailAddressValidator
+            && ($emailValidator instanceof EmailAddressValidator)
             && ($argumentName = $this->getArgumentName($controllerActionEvent))
         ) {
             /** @var ConjunctionValidator $eventValidator */
@@ -53,6 +65,13 @@ class ApplyEmailAsMandatoryIfNeededEventListener extends AbstractControllerEvent
                 ->getArguments()
                 ->getArgument($argumentName)
                 ->getValidator();
+
+            // DebuggerUtility::var_dump($argumentName);
+            // DebuggerUtility::var_dump($controllerActionEvent
+            //    ->getArguments()
+            //    ->getArgument($argumentName));
+            // DebuggerUtility::var_dump($eventValidator->getValidators()->count());
+            // exit;
 
             /** @var ConjunctionValidator $conjunctionValidator */
             $conjunctionValidator = $eventValidator

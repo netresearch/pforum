@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package netresearch/pforum.
+ * This file is part of the package jweiland/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -28,11 +28,11 @@ return [
         'path'                                     => '/module/pforum/administration',
         'labels'                                   => 'LLL:EXT:pforum/Resources/Private/Language/locallang_mod_administration.xlf',
         'inheritNavigationComponentFromMainModule' => false,
-        'navigationComponent'                      => '@typo3/backend/page-tree/page-tree-element',
+        'navigationComponent'                      => '@typo3/backend/tree/page-tree-element',
 
         // Extbase module configuration options
-        'extensionName'                            => 'Pforum',
-        'controllerActions'                        => [
+        'extensionName'     => 'Pforum',
+        'controllerActions' => [
             AdministrationController::class => [
                 'index',
                 'listHiddenTopics',

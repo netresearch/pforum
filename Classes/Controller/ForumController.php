@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package netresearch/pforum.
+ * This file is part of the package jweiland/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -23,7 +23,6 @@ use JWeiland\Pforum\Service\FrontendUserAccessService;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Session;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Main controller to list and show forum entries.
@@ -38,16 +37,16 @@ class ForumController extends AbstractController
     /**
      * Constructor.
      *
-     * @param PersistenceManager            $persistenceManager
-     * @param FrontendUserAccessService     $frontendUserAccessService
-     * @param ExtConf                       $extConf
-     * @param Session                       $session
-     * @param ForumRepository               $forumRepository
-     * @param TopicRepository               $topicRepository
-     * @param PostRepository                $postRepository
-     * @param AnonymousUserRepository       $anonymousUserRepository
-     * @param FrontendUserRepository        $frontendUserRepository
-     * @param FrontendGroupHelper           $frontendGroupHelper
+     * @param PersistenceManager        $persistenceManager
+     * @param FrontendUserAccessService $frontendUserAccessService
+     * @param ExtConf                   $extConf
+     * @param Session                   $session
+     * @param ForumRepository           $forumRepository
+     * @param TopicRepository           $topicRepository
+     * @param PostRepository            $postRepository
+     * @param AnonymousUserRepository   $anonymousUserRepository
+     * @param FrontendUserRepository    $frontendUserRepository
+     * @param FrontendGroupHelper       $frontendGroupHelper
      */
     public function __construct(
         PersistenceManager $persistenceManager,
@@ -76,6 +75,9 @@ class ForumController extends AbstractController
         $this->frontendGroupHelper = $frontendGroupHelper;
     }
 
+    /**
+     * @return ResponseInterface
+     */
     public function listAction(): ResponseInterface
     {
         $this->postProcessAndAssignFluidVariables([
@@ -85,18 +87,26 @@ class ForumController extends AbstractController
         return $this->htmlResponse();
     }
 
+    /**
+     * @param Forum $forum
+     *
+     * @return ResponseInterface
+     */
     public function showAction(Forum $forum): ResponseInterface
     {
         $this->frontendGroupHelper
             ->setRequest($this->request);
 
         $topics = $this->topicRepository->findByForum($forum);
+
         if ($this->frontendGroupHelper->uidExistsInGroupData((int) ($this->settings['uidOfAdminGroup'] ?? 0))) {
             $topics->getQuery()
                 ->getQuerySettings()
                 ->setIgnoreEnableFields(true)
                 ->setEnableFieldsToBeIgnored(['disabled']);
         }
+
+        $this->view->assign('forum', $forum);
 
         $this->postProcessAndAssignFluidVariables([
             'forum'  => $forum,

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package netresearch/pforum.
+ * This file is part of the package jweiland/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -13,6 +13,7 @@ namespace JWeiland\Pforum\Controller;
 
 use JWeiland\Pforum\Configuration\ExtConf;
 use JWeiland\Pforum\Domain\Model\Forum;
+use JWeiland\Pforum\Domain\Model\FrontendUser;
 use JWeiland\Pforum\Domain\Model\Topic;
 use JWeiland\Pforum\Domain\Repository\AnonymousUserRepository;
 use JWeiland\Pforum\Domain\Repository\ForumRepository;
@@ -29,11 +30,10 @@ use TYPO3\CMS\Core\Mail\Mailer;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Session;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 /**
  * Controller to list and show topics of forum.
@@ -48,16 +48,16 @@ class TopicController extends AbstractController
     /**
      * Constructor.
      *
-     * @param PersistenceManager            $persistenceManager
-     * @param FrontendUserAccessService     $frontendUserAccessService
-     * @param ExtConf                       $extConf
-     * @param Session                       $session
-     * @param ForumRepository               $forumRepository
-     * @param TopicRepository               $topicRepository
-     * @param PostRepository                $postRepository
-     * @param AnonymousUserRepository       $anonymousUserRepository
-     * @param FrontendUserRepository        $frontendUserRepository
-     * @param FrontendGroupHelper           $frontendGroupHelper
+     * @param PersistenceManager        $persistenceManager
+     * @param FrontendUserAccessService $frontendUserAccessService
+     * @param ExtConf                   $extConf
+     * @param Session                   $session
+     * @param ForumRepository           $forumRepository
+     * @param TopicRepository           $topicRepository
+     * @param PostRepository            $postRepository
+     * @param AnonymousUserRepository   $anonymousUserRepository
+     * @param FrontendUserRepository    $frontendUserRepository
+     * @param FrontendGroupHelper       $frontendGroupHelper
      */
     public function __construct(
         PersistenceManager $persistenceManager,
@@ -105,6 +105,8 @@ class TopicController extends AbstractController
                 ->setEnableFieldsToBeIgnored(['disabled']);
         }
 
+        $this->view->assign('topic', $topic);
+
         $this->postProcessAndAssignFluidVariables([
             'topic' => $topic,
             'posts' => $posts,
@@ -113,7 +115,12 @@ class TopicController extends AbstractController
         return $this->htmlResponse();
     }
 
-    public function newAction(Forum $forum): ?ResponseInterface
+    /**
+     * @param Forum $forum
+     *
+     * @return ResponseInterface
+     */
+    public function newAction(Forum $forum): ResponseInterface
     {
         if (!$this->accessCheck()) {
             return $this->redirect('list', 'Forum', 'Pforum');
@@ -126,7 +133,7 @@ class TopicController extends AbstractController
             'topic' => GeneralUtility::makeInstance(Topic::class),
         ]);
 
-        return null;
+        return $this->htmlResponse();
     }
 
     /**
@@ -141,7 +148,39 @@ class TopicController extends AbstractController
     {
         // if auth = frontend user
         if ((int) $this->settings['auth'] === 2) {
-            $this->addFeUserToTopic($forum, $topic);
+            /** @var FrontendUserAuthentication $frontendUser */
+            $frontendUser = $this->request->getAttribute('frontend.user');
+
+            if (
+                is_array($frontendUser->user)
+                && $frontendUser->user['uid']
+            ) {
+                $user = $this->frontendUserRepository
+                    ->findByUid(
+                        (int) $frontendUser->user['uid']
+                    );
+
+                if ($user instanceof FrontendUser) {
+                    $topic->setFrontendUser($user);
+                }
+            } else {
+                // normally this should never be called, because the link to create a new entry
+                // was not displayed if user was not authenticated
+                $this->addFlashMessage(
+                    'You must be logged in before creating a topic',
+                    '',
+                    ContextualFeedbackSeverity::WARNING
+                );
+
+                return $this->redirect(
+                    'show',
+                    'Forum',
+                    'Pforum',
+                    [
+                        'forum' => $forum,
+                    ]
+                );
+            }
         }
 
         $forum->addTopic($topic);

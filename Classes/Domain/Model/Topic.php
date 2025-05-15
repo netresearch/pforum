@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package netresearch/pforum.
+ * This file is part of the package jweiland/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -25,53 +25,53 @@ class Topic extends AbstractEntity implements TopicInterface
     /**
      * @var bool
      */
-    protected $hidden = false;
+    protected bool $hidden = false;
 
     /**
      * @var DateTime
      */
-    protected $crdate;
+    protected DateTime $crdate;
 
     /**
-     * @var Forum
+     * @var Forum|null
      */
-    protected $forum;
-
-    /**
-     * @var string
-     */
-    #[Extbase\Validate(['validator' => 'NotEmpty'])]
-    protected $title = '';
+    protected ?Forum $forum = null;
 
     /**
      * @var string
      */
     #[Extbase\Validate(['validator' => 'NotEmpty'])]
-    protected $description = '';
+    protected string $title = '';
+
+    /**
+     * @var string
+     */
+    #[Extbase\Validate(['validator' => 'NotEmpty'])]
+    protected string $description = '';
 
     /**
      * @var ObjectStorage<Post>
      */
     #[Extbase\ORM\Cascade(['value' => 'remove'])]
     #[Extbase\ORM\Lazy]
-    protected $posts;
+    protected ObjectStorage $posts;
 
     /**
-     * @var AnonymousUser
+     * @var AnonymousUser|null
      */
     #[Extbase\ORM\Cascade(['value' => 'remove'])]
-    protected $anonymousUser;
+    protected ?AnonymousUser $anonymousUser = null;
 
     /**
-     * @var FrontendUser
+     * @var FrontendUser|null
      */
-    protected $frontendUser;
+    protected ?FrontendUser $frontendUser = null;
 
     /**
      * @var ObjectStorage<FileReference>
      */
     #[Extbase\ORM\Lazy]
-    protected $images;
+    protected ObjectStorage $images;
 
     public function __construct()
     {
@@ -176,9 +176,9 @@ class Topic extends AbstractEntity implements TopicInterface
      */
     public function getUser(): ?User
     {
-        if (!empty($this->anonymousUser)) {
+        if ($this->anonymousUser instanceof AnonymousUser) {
             $user = $this->getAnonymousUser();
-        } elseif (!empty($this->frontendUser)) {
+        } elseif ($this->frontendUser instanceof FrontendUser) {
             $user = $this->getFrontendUser();
         } else {
             $user = null;

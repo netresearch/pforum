@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package netresearch/pforum.
+ * This file is part of the package jweiland/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -24,19 +24,19 @@ class User extends AbstractEntity
     /**
      * @var string
      */
-    protected $name = '';
+    protected string $name = '';
 
     /**
      * @var string
      */
     #[Extbase\Validate(['validator' => UsernameValidator::class])]
-    protected $username = '';
+    protected string $username = '';
 
     /**
      * @var string
      */
     #[Extbase\Validate(['validator' => EmailValidator::class])]
-    protected $email = '';
+    protected string $email = '';
 
     public function getName(): string
     {

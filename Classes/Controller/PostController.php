@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package netresearch/pforum.
+ * This file is part of the package jweiland/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Controller;
 
+use JWeiland\Pforum\Domain\Model\FrontendUser;
 use JWeiland\Pforum\Domain\Model\Post;
 use JWeiland\Pforum\Domain\Model\Topic;
 use JWeiland\Pforum\Domain\Model\User;
@@ -24,6 +25,9 @@ use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
+
+use function is_array;
 
 /**
  * Controller to manage (list and show) postings.
@@ -34,10 +38,10 @@ class PostController extends AbstractController
      * @param Topic     $topic
      * @param Post|null $post
      *
-     * @return ResponseInterface|null
+     * @return ResponseInterface
      */
     #[Extbase\IgnoreValidation(['argumentName' => 'post'])]
-    public function newAction(Topic $topic, ?Post $post = null): ?ResponseInterface
+    public function newAction(Topic $topic, ?Post $post = null): ResponseInterface
     {
         if (!$this->accessCheck()) {
             return $this->redirect('list', 'Forum', 'Pforum');
@@ -48,7 +52,7 @@ class PostController extends AbstractController
             'post'  => $post,
         ]);
 
-        return null;
+        return $this->htmlResponse();
     }
 
     /**
@@ -59,20 +63,37 @@ class PostController extends AbstractController
         $this->preProcessControllerAction();
     }
 
-    /**
-     * @param Topic $topic
-     * @param Post  $post
-     *
-     * @return ResponseInterface
-     *
-     * @throws IllegalObjectTypeException
-     * @throws UnknownObjectException
-     */
     public function createAction(Topic $topic, Post $post): ResponseInterface
     {
         // if auth = frontend user
         if ((int) $this->settings['auth'] === 2) {
-            $this->addFeUserToPost($topic, $post);
+            /** @var FrontendUserAuthentication $frontendUser */
+            $frontendUser = $this->request->getAttribute('frontend.user');
+
+            if (
+                is_array($frontendUser->user)
+                && $frontendUser->user['uid']
+            ) {
+                $user = $this->frontendUserRepository
+                    ->findByUid((int) $frontendUser->user['uid']);
+
+                if ($user instanceof FrontendUser) {
+                    $post->setFrontendUser($user);
+                }
+            } else {
+                // Normally this should never be called, because the link to create a new entry
+                // was not displayed if user was not authenticated
+                $this->addFlashMessage('You must be logged in before creating a post');
+
+                return $this->redirect(
+                    'show',
+                    'Forum',
+                    'Pforum',
+                    [
+                        'forum' => $topic->getForum(),
+                    ]
+                );
+            }
         }
 
         $topic->addPost($post);
@@ -312,27 +333,6 @@ class PostController extends AbstractController
 
         if ($post instanceof Post) {
             $this->session->registerObject($post, $post->getUid());
-        }
-    }
-
-    /**
-     * @param Topic $topic
-     * @param Post  $post
-     *
-     * @return ResponseInterface
-     */
-    protected function addFeUserToPost(Topic $topic, Post $post): ResponseInterface
-    {
-        if (is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid']) {
-            $user = $this->frontendUserRepository->findByUid(
-                (int) $GLOBALS['TSFE']->fe_user->user['uid']
-            );
-            $post->setFrontendUser($user);
-        } else {
-            // normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated
-            $this->addFlashMessage('You must be logged in before creating a post');
-
-            return $this->redirect('show', 'Forum', 'Pforum', ['forum' => $topic->getForum()]);
         }
     }
 

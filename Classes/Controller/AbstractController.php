@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package netresearch/pforum.
+ * This file is part of the package jweiland/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -22,11 +22,9 @@ use JWeiland\Pforum\Event\PostProcessFluidVariablesEvent;
 use JWeiland\Pforum\Event\PreProcessControllerActionEvent;
 use JWeiland\Pforum\Service\FrontendUserAccessService;
 use RuntimeException;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Session;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Abstract class with useful methods for all other extending classes.
@@ -81,15 +79,15 @@ class AbstractController extends ActionController
     /**
      * Constructor.
      *
-     * @param PersistenceManager            $persistenceManager
-     * @param FrontendUserAccessService     $frontendUserAccessService
-     * @param ExtConf                       $extConf
-     * @param Session                       $session
-     * @param ForumRepository               $forumRepository
-     * @param TopicRepository               $topicRepository
-     * @param PostRepository                $postRepository
-     * @param AnonymousUserRepository       $anonymousUserRepository
-     * @param FrontendUserRepository        $frontendUserRepository
+     * @param PersistenceManager        $persistenceManager
+     * @param FrontendUserAccessService $frontendUserAccessService
+     * @param ExtConf                   $extConf
+     * @param Session                   $session
+     * @param ForumRepository           $forumRepository
+     * @param TopicRepository           $topicRepository
+     * @param PostRepository            $postRepository
+     * @param AnonymousUserRepository   $anonymousUserRepository
+     * @param FrontendUserRepository    $frontendUserRepository
      */
     public function __construct(
         PersistenceManager $persistenceManager,
@@ -102,15 +100,15 @@ class AbstractController extends ActionController
         AnonymousUserRepository $anonymousUserRepository,
         FrontendUserRepository $frontendUserRepository,
     ) {
-        $this->persistenceManager = $persistenceManager;
+        $this->persistenceManager        = $persistenceManager;
         $this->frontendUserAccessService = $frontendUserAccessService;
-        $this->extConf = $extConf;
-        $this->session = $session;
-        $this->forumRepository = $forumRepository;
-        $this->topicRepository = $topicRepository;
-        $this->postRepository = $postRepository;
-        $this->anonymousUserRepository = $anonymousUserRepository;
-        $this->frontendUserRepository = $frontendUserRepository;
+        $this->extConf                   = $extConf;
+        $this->session                   = $session;
+        $this->forumRepository           = $forumRepository;
+        $this->topicRepository           = $topicRepository;
+        $this->postRepository            = $postRepository;
+        $this->anonymousUserRepository   = $anonymousUserRepository;
+        $this->frontendUserRepository    = $frontendUserRepository;
     }
 
     /**

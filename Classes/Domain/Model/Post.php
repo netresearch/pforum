@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the package netresearch/pforum.
+ * This file is part of the package jweiland/pforum.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
@@ -25,43 +25,43 @@ class Post extends AbstractEntity implements PostInterface
     /**
      * @var bool
      */
-    protected $hidden = false;
+    protected bool $hidden = false;
 
     /**
      * @var DateTime
      */
-    protected $crdate;
+    protected DateTime $crdate;
 
     /**
-     * @var Topic
+     * @var Topic|null
      */
-    protected $topic;
+    protected ?Topic $topic = null;
 
     /**
      * @var string
      */
-    protected $title = '';
+    protected string $title = '';
 
     /**
      * @var string
      */
     #[Extbase\Validate(['validator' => 'NotEmpty'])]
-    protected $description = '';
+    protected string $description = '';
 
     /**
-     * @var AnonymousUser
+     * @var AnonymousUser|null
      */
-    protected $anonymousUser;
+    protected ?AnonymousUser $anonymousUser = null;
 
     /**
-     * @var FrontendUser
+     * @var FrontendUser|null
      */
-    protected $frontendUser;
+    protected ?FrontendUser $frontendUser = null;
 
     /**
      * @var ObjectStorage<FileReference>
      */
-    protected $images;
+    protected ObjectStorage $images;
 
     public function __construct()
     {
@@ -145,9 +145,9 @@ class Post extends AbstractEntity implements PostInterface
      */
     public function getUser(): ?User
     {
-        if (!empty($this->anonymousUser)) {
+        if ($this->anonymousUser instanceof AnonymousUser) {
             $user = $this->getAnonymousUser();
-        } elseif (!empty($this->frontendUser)) {
+        } elseif ($this->frontendUser instanceof FrontendUser) {
             $user = $this->getFrontendUser();
         } else {
             $user = null;
