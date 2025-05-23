@@ -82,11 +82,11 @@ class ApplyUsernameAsMandatoryIfNeededEventListener extends AbstractControllerEv
             return '';
         }
 
-        if (array_key_exists('anonymousUser', $requestedArgument)) {
+        if (\array_key_exists('anonymousUser', $requestedArgument)) {
             return 'anonymousUser.username';
         }
 
-        if (array_key_exists('frontendUser', $requestedArgument)) {
+        if (\array_key_exists('frontendUser', $requestedArgument)) {
             return 'frontendUser.username';
         }
 

@@ -36,28 +36,31 @@ class UploadMultipleFilesConverter extends AbstractTypeConverter
     /**
      * @var array<string>
      */
-    protected $sourceTypes = ['array'];
+    protected array $sourceTypes = ['array'];
 
     /**
      * @var string
      */
-    protected $targetType = ObjectStorage::class;
+    protected string $targetType = ObjectStorage::class;
 
     /**
      * @var int
      */
-    protected $priority = 2;
+    protected int $priority = 2;
 
     /**
      * @var Folder
      */
-    protected $uploadFolder;
+    protected Folder $uploadFolder;
 
     /**
      * @var PropertyMappingConfigurationInterface
      */
-    protected $converterConfiguration;
+    protected PropertyMappingConfigurationInterface $converterConfiguration;
 
+    /**
+     * @var EventDispatcher
+     */
     protected EventDispatcher $eventDispatcher;
 
     /**

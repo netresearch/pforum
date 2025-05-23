@@ -66,13 +66,6 @@ class ApplyEmailAsMandatoryIfNeededEventListener extends AbstractControllerEvent
                 ->getArgument($argumentName)
                 ->getValidator();
 
-            // DebuggerUtility::var_dump($argumentName);
-            // DebuggerUtility::var_dump($controllerActionEvent
-            //    ->getArguments()
-            //    ->getArgument($argumentName));
-            // DebuggerUtility::var_dump($eventValidator->getValidators()->count());
-            // exit;
-
             /** @var ConjunctionValidator $conjunctionValidator */
             $conjunctionValidator = $eventValidator
                 ->getValidators()
@@ -108,11 +101,11 @@ class ApplyEmailAsMandatoryIfNeededEventListener extends AbstractControllerEvent
             return '';
         }
 
-        if (array_key_exists('anonymousUser', $requestedArgument)) {
+        if (\array_key_exists('anonymousUser', $requestedArgument)) {
             return 'anonymousUser.email';
         }
 
-        if (array_key_exists('frontendUser', $requestedArgument)) {
+        if (\array_key_exists('frontendUser', $requestedArgument)) {
             return 'frontendUser.email';
         }
 

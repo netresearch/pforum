@@ -332,7 +332,7 @@ class PostController extends AbstractController
         }
 
         if ($post instanceof Post) {
-            $this->session->registerObject($post, $post->getUid());
+            $this->session->registerObject($post, (string) $post->getUid());
         }
     }
 

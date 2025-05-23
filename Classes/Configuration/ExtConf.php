@@ -24,18 +24,18 @@ class ExtConf implements SingletonInterface
     /**
      * @var string
      */
-    protected $emailFromAddress;
+    protected string $emailFromAddress;
 
     /**
      * @var string
      */
-    protected $emailFromName;
+    protected string $emailFromName;
 
     public function __construct()
     {
         // Get global configuration
         $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('pforum');
-        if (is_array($extConf)) {
+        if (\is_array($extConf)) {
             // Call setter method foreach configuration entry
             foreach ($extConf as $key => $value) {
                 $methodName = 'set' . ucfirst($key);

@@ -152,7 +152,7 @@ class TopicController extends AbstractController
             $frontendUser = $this->request->getAttribute('frontend.user');
 
             if (
-                is_array($frontendUser->user)
+                \is_array($frontendUser->user)
                 && $frontendUser->user['uid']
             ) {
                 $user = $this->frontendUserRepository
@@ -372,7 +372,7 @@ class TopicController extends AbstractController
     protected function registerTopicFromRequest(string $argumentName): void
     {
         $argument = $this->request->getArgument($argumentName);
-        if (is_array($argument)) {
+        if (\is_array($argument)) {
             // get topic from form ($_POST)
             $topic = $this->topicRepository->findHiddenObject((int) $argument['__identity']);
         } else {
@@ -381,26 +381,7 @@ class TopicController extends AbstractController
         }
 
         if ($topic instanceof Topic) {
-            $this->session->registerObject($topic, $topic->getUid());
-        }
-    }
-
-    protected function addFeUserToTopic(Forum $forum, Topic $topic): ResponseInterface
-    {
-        if (is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid']) {
-            $user = $this->frontendUserRepository->findByUid(
-                (int) $GLOBALS['TSFE']->fe_user->user['uid']
-            );
-            $topic->setFrontendUser($user);
-        } else {
-            // normally this should never be called, because the link to create a new entry was not displayed if user was not authenticated
-            $this->addFlashMessage(
-                'You must be logged in before creating a topic',
-                '',
-                ContextualFeedbackSeverity::WARNING
-            );
-
-            return $this->redirect('show', 'Forum', 'Pforum', ['forum' => $forum]);
+            $this->session->registerObject($topic, (string) $topic->getUid());
         }
     }
 
