@@ -14,6 +14,7 @@ parameters:
         - %currentWorkingDirectory%/Classes/
         - %currentWorkingDirectory%/Configuration/
         - %currentWorkingDirectory%/Resources/
+        - %currentWorkingDirectory%/Tests/
         - %currentWorkingDirectory%/ext_localconf.php
 
     excludePaths:

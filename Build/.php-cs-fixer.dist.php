@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file represents the configuration for Code Sniffing PSR-2-related
  * automatic checks of coding guidelines

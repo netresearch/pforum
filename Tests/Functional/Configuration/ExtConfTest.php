@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Tests\Functional\Configuration;
 
-use Doctrine\DBAL\DBALException;
 use JWeiland\Pforum\Configuration\ExtConf;
+use PHPUnit\Framework\Attributes\Test;
 use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -37,8 +37,6 @@ class ExtConfTest extends FunctionalTestCase
 
     /**
      * @return void
-     *
-     * @throws DBALException
      */
     protected function setUp(): void
     {
@@ -53,23 +51,21 @@ class ExtConfTest extends FunctionalTestCase
     protected function tearDown(): void
     {
         unset($this->subject);
+
         $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'] = '';
         $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromName']    = '';
+
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getEmailFromAddressInitiallyThrowsException(): void
     {
         $this->expectExceptionCode(1604694223);
         $this->subject->getEmailFromAddress();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getEmailFromAddressInitiallyReturnsEmailFromInstallTool(): void
     {
         $email                                                        = 'info@example.com';
@@ -80,9 +76,7 @@ class ExtConfTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setEmailFromAddressSetsEmailAddress(): void
     {
         $email = 'abc@example.com';
@@ -94,18 +88,14 @@ class ExtConfTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getEmailFromNameInitiallyThrowsException(): void
     {
         $this->expectExceptionCode(1604694279);
         $this->subject->getEmailFromName();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getEmailFromNameInitiallyReturnsEmailNameFromInstallTool(): void
     {
         $name                                                      = 'stefan';
@@ -116,9 +106,7 @@ class ExtConfTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setEmailFromNameSetsEmailName(): void
     {
         $name = 'stefan';

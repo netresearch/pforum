@@ -11,15 +11,14 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Tests\Functional\Validation\Validator;
 
-use Doctrine\DBAL\DBALException;
 use JWeiland\Pforum\Validation\Validator\UsernameValidator;
+use PHPUnit\Framework\Attributes\Test;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Error\Result;
 use TYPO3\CMS\Extbase\Validation\Error;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -50,8 +49,6 @@ class UsernameValidatorTest extends FunctionalTestCase
 
     /**
      * @return void
-     *
-     * @throws DBALException
      */
     protected function setUp(): void
     {
@@ -69,12 +66,11 @@ class UsernameValidatorTest extends FunctionalTestCase
     protected function tearDown(): void
     {
         unset($this->subject);
+
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validateWillNotAddAnyErrorIfUsernameIsNotMandatory(): void
     {
         $this->setUsernameIsMandatory(false);
@@ -85,9 +81,7 @@ class UsernameValidatorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validateWillNotAddAnyErrorIfUsernameIsNotString(): void
     {
         $this->setUsernameIsMandatory(true);
@@ -98,9 +92,7 @@ class UsernameValidatorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validateWillNotAddAnyErrorIfUsernameIsNotEmpty(): void
     {
         $this->setUsernameIsMandatory(true);
@@ -111,9 +103,7 @@ class UsernameValidatorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validateWillAddErrorIfUsernameIsEmpty(): void
     {
         $this->setUsernameIsMandatory(true);
@@ -136,8 +126,6 @@ class UsernameValidatorTest extends FunctionalTestCase
      * @param bool $isMandatory
      *
      * @return void
-     *
-     * @throws InvalidConfigurationTypeException
      */
     protected function setUsernameIsMandatory(bool $isMandatory): void
     {

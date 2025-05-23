@@ -13,6 +13,9 @@ namespace JWeiland\Pforum\Tests\Unit\Domain\Model;
 
 use JWeiland\Pforum\Domain\Model\Forum;
 use JWeiland\Pforum\Domain\Model\Topic;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
@@ -20,6 +23,8 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 /**
  * Test case.
  */
+#[CoversClass(Forum::class)]
+#[UsesClass(Topic::class)]
 class ForumTest extends UnitTestCase
 {
     use ProphecyTrait;
@@ -45,9 +50,7 @@ class ForumTest extends UnitTestCase
         unset($this->subject);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getTitleInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
@@ -56,9 +59,7 @@ class ForumTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setTitleSetsTitle(): void
     {
         $this->subject->setTitle('foo bar');
@@ -69,9 +70,7 @@ class ForumTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getTeaserInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
@@ -80,9 +79,7 @@ class ForumTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setTeaserSetsTeaser(): void
     {
         $this->subject->setTeaser('foo bar');
@@ -93,9 +90,7 @@ class ForumTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getTopicsInitiallyReturnsObjectStorage(): void
     {
         self::assertEquals(
@@ -104,9 +99,7 @@ class ForumTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setTopicsSetsTopics(): void
     {
         $object        = new Topic();
@@ -120,9 +113,7 @@ class ForumTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addTopicAddsOneTopic(): void
     {
         $objectStorage = new ObjectStorage();
@@ -139,9 +130,7 @@ class ForumTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function removeTopicRemovesOneTopic(): void
     {
         $object        = new Topic();

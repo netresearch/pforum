@@ -11,15 +11,14 @@ declare(strict_types=1);
 
 namespace JWeiland\Pforum\Tests\Functional\Validation\Validator;
 
-use Doctrine\DBAL\DBALException;
 use JWeiland\Pforum\Validation\Validator\EmailValidator;
+use PHPUnit\Framework\Attributes\Test;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Error\Result;
 use TYPO3\CMS\Extbase\Validation\Error;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -50,8 +49,6 @@ class EmailValidatorTest extends FunctionalTestCase
 
     /**
      * @return void
-     *
-     * @throws DBALException
      */
     protected function setUp(): void
     {
@@ -68,12 +65,11 @@ class EmailValidatorTest extends FunctionalTestCase
     protected function tearDown(): void
     {
         unset($this->subject);
+
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validateWillNotAddAnyErrorIfEmailIsNotMandatory(): void
     {
         $this->setEmailIsMandatory(false);
@@ -84,9 +80,7 @@ class EmailValidatorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validateWillNotAddAnyErrorIfEmailIsNotString(): void
     {
         $this->setEmailIsMandatory(true);
@@ -97,9 +91,7 @@ class EmailValidatorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validateWillNotAddAnyErrorIfEmailIsValidAndIsString(): void
     {
         $this->setEmailIsMandatory(true);
@@ -110,9 +102,7 @@ class EmailValidatorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validateWillAddErrorIfEmailIsStringAndEmpty(): void
     {
         $this->setEmailIsMandatory(true);
@@ -131,9 +121,7 @@ class EmailValidatorTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validateWillAddErrorIfEmailIsStringAndNotValid(): void
     {
         $this->setEmailIsMandatory(true);
@@ -156,8 +144,6 @@ class EmailValidatorTest extends FunctionalTestCase
      * @param bool $isMandatory
      *
      * @return void
-     *
-     * @throws InvalidConfigurationTypeException
      */
     protected function setEmailIsMandatory(bool $isMandatory): void
     {
