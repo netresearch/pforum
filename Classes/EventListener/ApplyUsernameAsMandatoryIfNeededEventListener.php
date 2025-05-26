@@ -19,6 +19,8 @@ use TYPO3\CMS\Extbase\Validation\Validator\GenericObjectValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\NotEmptyValidator;
 use TYPO3\CMS\Extbase\Validation\ValidatorResolver;
 
+use function array_key_exists;
+
 /**
  * Add validator for username in topic/post records, if it is was configured in typoscript.
  */
@@ -82,11 +84,11 @@ class ApplyUsernameAsMandatoryIfNeededEventListener extends AbstractControllerEv
             return '';
         }
 
-        if (\array_key_exists('anonymousUser', $requestedArgument)) {
+        if (array_key_exists('anonymousUser', $requestedArgument)) {
             return 'anonymousUser.username';
         }
 
-        if (\array_key_exists('frontendUser', $requestedArgument)) {
+        if (array_key_exists('frontendUser', $requestedArgument)) {
             return 'frontendUser.username';
         }
 

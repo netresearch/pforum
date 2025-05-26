@@ -207,6 +207,7 @@ return [
                 'type'     => 'file',
                 'minitems' => 0,
                 'maxitems' => 5,
+                'allowed'  => ['jpg', 'png', 'gif', 'pdf'],
             ],
         ],
         'topic' => [

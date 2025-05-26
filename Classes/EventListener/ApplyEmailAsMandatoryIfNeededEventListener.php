@@ -21,6 +21,8 @@ use TYPO3\CMS\Extbase\Validation\Validator\GenericObjectValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\NotEmptyValidator;
 use TYPO3\CMS\Extbase\Validation\ValidatorResolver;
 
+use function array_key_exists;
+
 /**
  * Add validator for email in topic/post records, if it is was configured in typoscript.
  */
@@ -101,11 +103,11 @@ class ApplyEmailAsMandatoryIfNeededEventListener extends AbstractControllerEvent
             return '';
         }
 
-        if (\array_key_exists('anonymousUser', $requestedArgument)) {
+        if (array_key_exists('anonymousUser', $requestedArgument)) {
             return 'anonymousUser.email';
         }
 
-        if (\array_key_exists('frontendUser', $requestedArgument)) {
+        if (array_key_exists('frontendUser', $requestedArgument)) {
             return 'frontendUser.email';
         }
 

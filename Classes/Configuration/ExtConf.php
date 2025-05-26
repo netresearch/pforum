@@ -16,6 +16,8 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+use function is_array;
+
 /**
  * Class ExtConf.
  */
@@ -35,7 +37,7 @@ class ExtConf implements SingletonInterface
     {
         // Get global configuration
         $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('pforum');
-        if (\is_array($extConf)) {
+        if (is_array($extConf)) {
             // Call setter method foreach configuration entry
             foreach ($extConf as $key => $value) {
                 $methodName = 'set' . ucfirst($key);

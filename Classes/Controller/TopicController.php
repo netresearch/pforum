@@ -35,6 +35,8 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Session;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
+use function is_array;
+
 /**
  * Controller to list and show topics of forum.
  */
@@ -152,7 +154,7 @@ class TopicController extends AbstractController
             $frontendUser = $this->request->getAttribute('frontend.user');
 
             if (
-                \is_array($frontendUser->user)
+                is_array($frontendUser->user)
                 && $frontendUser->user['uid']
             ) {
                 $user = $this->frontendUserRepository
@@ -372,7 +374,7 @@ class TopicController extends AbstractController
     protected function registerTopicFromRequest(string $argumentName): void
     {
         $argument = $this->request->getArgument($argumentName);
-        if (\is_array($argument)) {
+        if (is_array($argument)) {
             // get topic from form ($_POST)
             $topic = $this->topicRepository->findHiddenObject((int) $argument['__identity']);
         } else {
