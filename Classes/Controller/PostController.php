@@ -111,7 +111,7 @@ class PostController extends AbstractController
             )
         );
 
-        // if a preview was requested direct to preview action
+        // if a preview was requested redirect to preview action
         if ($this->request->hasArgument('preview')) {
             $post->setHidden(true);
             // post should not be visible while previewing
@@ -209,6 +209,7 @@ class PostController extends AbstractController
     public function updateAction(Post $post, bool $isNew = false): ResponseInterface
     {
         $this->postRepository->update($post);
+
         // if a preview was requested direct to preview action
         if ($this->request->hasArgument('preview')) {
             $post->setHidden(true);
@@ -345,6 +346,7 @@ class PostController extends AbstractController
     {
         $email = GeneralUtility::makeInstance(FluidEmail::class);
         $email
+            ->setRequest($this->request)
             ->to(new Address($post->getUser()->getEmail(), $post->getUser()->getName()))
             ->from(new Address($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName()))
             ->subject(LocalizationUtility::translate('email.post.subject', 'pforum'))

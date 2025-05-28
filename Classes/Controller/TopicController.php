@@ -282,6 +282,7 @@ class TopicController extends AbstractController
     public function updateAction(Topic $topic, bool $isNew = false): ResponseInterface
     {
         $this->topicRepository->update($topic);
+
         // if a preview was requested direct to preview action
         if ($this->request->hasArgument('preview')) {
             $topic->setHidden(true);
@@ -391,6 +392,7 @@ class TopicController extends AbstractController
     {
         $email = GeneralUtility::makeInstance(FluidEmail::class);
         $email
+            ->setRequest($this->request)
             ->to(new Address($topic->getUser()->getEmail(), $topic->getUser()->getName()))
             ->from(new Address($this->extConf->getEmailFromAddress(), $this->extConf->getEmailFromName()))
             ->subject(LocalizationUtility::translate('email.topic.subject', 'pforum'))
